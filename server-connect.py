@@ -31,8 +31,7 @@ def main():
     print(tokenPayload)
 
     # Query server state
-    response = postJSONRequest(
-        baseUrl, headers, {"function": "QueryServerState"})
+    response = postJSONRequest(baseUrl, headers, {"function": "QueryServerState"})
     print(response.status_code)
     print(response.content)
 
@@ -52,6 +51,10 @@ def passwordlessLogin(url: str, headers: dict) -> tuple:
     headers.update({"Content-Type": "application/json"})
     print(json.dumps(payload))
     # Uses data=payload not, json=payload
+    tempReq = requests.Request(
+        method="POST", url=url, headers=headers, data=payload
+    ).prepare()
+
     response = requests.post(url, headers=headers, data=payload, verify=False)
     # response = postJSONRequest(url, headers, payload)
     print(response.status_code)
@@ -65,4 +68,5 @@ def passwordlessLogin(url: str, headers: dict) -> tuple:
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    return "Test"
