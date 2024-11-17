@@ -3,7 +3,7 @@ import json
 import base64
 from sys import exit as sys_ex
 
-# Factor into init and run sections?
+# Factor into class
 
 
 def main():
@@ -25,9 +25,9 @@ def main():
     # Check auth level
     token = auth[1].split(".")
     tokenPayload = token[0]
-    tokenFingerprint = token[1]
+    # tokenFingerprint = token[1]
 
-    tokenPayload = base64.b64decode(tokenPayload)
+    tokenPayload = json.loads(base64.b64decode(token[0]))["pl"]
     print(tokenPayload)
 
     # Query server state
@@ -49,15 +49,9 @@ def passwordlessLogin(url: str, headers: dict) -> tuple:
         }
     )
     headers.update({"Content-Type": "application/json"})
-    print(json.dumps(payload))
     # Uses data=payload not, json=payload
-    tempReq = requests.Request(
-        method="POST", url=url, headers=headers, data=payload
-    ).prepare()
-
-    response = requests.post(url, headers=headers, data=payload, verify=False)
-    # response = postJSONRequest(url, headers, payload)
-    print(response.status_code)
+    # Wrong - response = postJSONRequest(url, headers, payload)
+    response = requests.post(url=url, data=payload, headers=headers, verify=False)
     if response.status_code == requests.codes.ok:
         # Strip out auth token
         respJSON = response.json()
@@ -68,5 +62,4 @@ def passwordlessLogin(url: str, headers: dict) -> tuple:
 
 
 if __name__ == "__main__":
-    # main()
-    return "Test"
+    main()
