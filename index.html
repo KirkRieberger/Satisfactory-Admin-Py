@@ -15,73 +15,36 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-md sticky-top border-bottom">
-            <div class="container-fluid">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a href="#" class="nav-link">Link #1</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Link #2</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Link #3</a></li>
+        <header class="container-fluid">
+            <div class="row justify-content-center">
+                <h1 class="col-4 text-center">
+                    SERVER NAME
+                </h1>
+            </div>
+            <div class="row justify-content-center">
+                <h2 class="col-4 text-center">
+                    Session Name
+                </h2>
+            </div>
+            <div class="row">
+                <ul class="nav nav-tabs col">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link #1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link #2</a>
+                    </li>
                 </ul>
             </div>
-        </nav>
-        <button type="button" onclick="pythonGetData()">Click</button>
+        </header>
 
         <!-- Bootstrap main script -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
-
-        <script>
-            function pythonGetData() {
-                const url = "https://192.168.1.17:7777/api/v1";
-                let response = $.post(
-                    url
-                ).done(function (o) {
-                    alert(o);
-                });
-
-                // let response = $.ajax({
-                //     url: "server-connect.py",
-                //     context: document.body,
-                // }).done(function (o) {
-                //     alert(o);
-                // });
-            }
-
-            async function getData() {
-                const url = "https://192.168.1.17:7777/api/v1";
-
-                // const headers = new Headers();
-                // headers.append("Encoding", "utf-8");
-                // headers.append("Content-Type", "application/json");
-                // headers.append("Access-Control-Allow-Origin", "*");
-                // const url = "https://192.168.1.17";
-
-                // console.log(headers.get("Content-Type"));
-
-                try {
-                    let response = await fetch(url, {
-                        // mode: "no-cors",
-                        method: "POST",
-                        headers: {
-                            "Encoding": "utf-8",
-                            "Content-Type": "application/json"
-                        },
-                        body: {
-                            "function": "PasswordlessLogin",
-                            "data": { "MinimumPrivilegeLevel": "client" }
-                        }
-                    });
-                    if (!response.ok) {
-                        throw new Error(`Response status: ${response.status}`)
-                    }
-
-                    let json = await response.json();
-                } catch (error) {
-                    console.log(error);
-                }
-            }
-        </script>
     </body>
 
 </html>
