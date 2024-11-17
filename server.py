@@ -26,7 +26,7 @@ class SatisfactoryServer:
             filename="serverConnect.log", encoding="utf-8", level=logging.DEBUG
         )
         # Do initial connection, verify token
-        self.address = address + ":" + str(port) + "/api/v1"
+        self.address = "https://" + address + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
         if len(key.split(".")) > 1:
             # payload + token
@@ -51,9 +51,9 @@ class SatisfactoryServer:
         self.headers = {"Encoding": "utf-8", "Authorization": f"Bearer {key}"}
         initResponse = self._postJSONRequest(
             self.headers,
-            payload=json.dumps({"function": "VerifyAuthenticationToken"}),
+            payload={"function": "VerifyAuthenticationToken"},
         )
-        if initResponse.status_code == requests.status_codes.no_content:
+        if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
             self.logger.info(f"Authenticated with {authLevel} privilege")
         else:
@@ -118,7 +118,14 @@ class SatisfactoryServer:
             return (0, response.status_code)
 
 
-server = SatisfactoryServer("192.168.1.17", 7777, "ewoJInAiOiAiQVBJVG9rZW4iCn0=")
+server = SatisfactoryServer(
+    "192.168.1.17",
+    7777,
+    "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
+)
+print(
+    server._postJSONRequest(server.headers, {"function": "enumerateSessions"}).content
+)
 
 # server = SatisfactoryServer(
 #     "192.168.1.17",
