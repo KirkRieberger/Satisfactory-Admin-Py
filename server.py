@@ -8,18 +8,19 @@ from sys import exit as sys_ex
 
 
 class SatisfactoryServer:
-    """_summary_"""
+    """Contains a reference to a running Satisfactory Dedicated Server. Provides certain management functions"""
 
-    def __init__(self, address: str, port: int, key: str):
-        """_summary_
+    def __init__(self, address: str, key: str, port: int = 7777):
+        """
+        Initializes a new instance of the server object
 
         Args:
-            address (str): _description_
-            port (int): _description_
-            key (str): _description_
+            address (str): The IP address (or FQDN) of the dedicated server
+            key (str): The API key to be used when accessing the server. Can be either the API key + payload, or the bare key.
+            port (int, optional): The port the server is running on. Defaults to 7777.
 
         Raises:
-            ConnectionError: _description_
+            ConnectionError: Raised if 
         """
         self.logger = logging.getLogger("Server-Connect")
         logging.basicConfig(
@@ -53,6 +54,7 @@ class SatisfactoryServer:
             self.headers,
             payload={"function": "VerifyAuthenticationToken"},
         )
+        # TODO: Raise different exception based on HTTP code
         if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
             self.logger.info(f"Authenticated with {authLevel} privilege")
@@ -64,24 +66,30 @@ class SatisfactoryServer:
                 f"Connection to {address} failed with status {initResponse.status_code}!"
             )
 
-    def __str__(self):
-        """_summary_"""
-        pass
-
-    def __repr__(self):
-        """_summary_
+    def __str__(self) -> str:
+        """Retuns a human-readable string representation of the current object
 
         Returns:
-            _type_: _description_
+            str: A string representation of the current object
+        """
+        return f"Satisfactory Server management instance for server at {self.address}"
+
+    def __repr__(self) -> str:
+        """
+        Returns object constructor representation of the current object
+
+        Returns:
+           str: Object constructor representation of the current object
         """
         return f"SatisfactoryServer('{self.address}', '{self.key}')"
 
     def _postJSONRequest(self, headers: dict, payload: dict) -> requests.Response:
-        """_summary_
+        """
+        Sends an HTTP request to the server using a JSON formatted payload
 
         Args:
-            headers (dict): _description_
-            payload (dict): _description_
+            headers (dict): A dict of standard HTTP headers to be included with the request
+            payload (dict): A dict of dedicated server function data
 
         Returns:
             requests.Response: _description_
