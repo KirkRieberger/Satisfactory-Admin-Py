@@ -100,13 +100,14 @@ class SatisfactoryServer:
         return response
 
     def passwordlessLogin(self, headers: dict) -> tuple:
-        """_summary_
+        """
+        Performs a passwordless login to the server. Grants User level access.
 
         Args:
-            headers (dict): _description_
+            headers (dict): Default HTTP headers of calling object
 
         Returns:
-            tuple: _description_
+            tuple (int, string): (1, authToken) on success, (0, responseCode) on failure
         """
         payload = json.dumps(
             {
