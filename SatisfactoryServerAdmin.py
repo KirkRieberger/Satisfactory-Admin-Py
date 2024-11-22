@@ -6,11 +6,15 @@ from sys import exit as sys_ex
 
 # Possible to connect with payload+token and just token
 
+__author__ = "Kirk Rieberger"
+__version__ = "0.0.1"
+__date__ = "Nov 21, 2024"
 
-class SatisfactoryServer:
+
+class SatisfactoryServerAdmin:
     """Contains a reference to a running Satisfactory Dedicated Server. Provides certain management functions"""
 
-    def __init__(self, address: str, key: str, port: int = 7777):
+    def __init__(self, address: str = None, token: str = None, port: int = 7777):
         """
         Initializes a new instance of the server object
 
@@ -22,49 +26,19 @@ class SatisfactoryServer:
         Raises:
             ConnectionError: Raised if
         """
+        if address is None:
+            print("No address given! Creating empty object")
+            # TODO: Initialize params
+            self.address = None
+            self.key = None
+            return
+
         self.logger = logging.getLogger("Server-Connect")
         logging.basicConfig(
             filename="serverConnect.log", encoding="utf-8", level=logging.DEBUG
         )
         # Do initial connection, verify token
-        self.address = "https://" + address + ":" + str(port) + "/api/v1"
-        self.logger.info(f"Connecting to {self.address}...")
-        if len(key.split(".")) > 1:
-            # payload + token
-            tokenPayload = key.split(".")[0]
-
-            try:
-                decodedPayload = base64.b64decode(tokenPayload)
-            except "binascii.Error":
-                self.logger.fatal(
-                    "Provided token payload is not Base 64 encoded. Exiting..."
-                )
-                sys_ex()
-
-            try:
-                authLevel = json.loads(decodedPayload)["pl"]
-            except KeyError:
-                self.logger.fatal(
-                    "Provided token payload is invalid. Did you provide a Satisfactory Server API Token?"
-                )
-                sys_ex()
-
-        self.headers = {"Encoding": "utf-8", "Authorization": f"Bearer {key}"}
-        initResponse = self._postJSONRequest(
-            self.headers,
-            payload={"function": "VerifyAuthenticationToken"},
-        )
-        # TODO: Raise different exception based on HTTP code
-        if initResponse.status_code == requests.codes.no_content:
-            self.logger.info("Connection Successful")
-            self.logger.info(f"Authenticated with {authLevel} privilege")
-        else:
-            self.logger.error(
-                f"Connection to {address} failed with status {initResponse.status_code}!"
-            )
-            raise ConnectionError(
-                f"Connection to {address} failed with status {initResponse.status_code}!"
-            )
+        self.login(address, token, port)
 
     def __str__(self) -> str:
         """Retuns a human-readable string representation of the current object
@@ -82,6 +56,51 @@ class SatisfactoryServer:
            str: Object constructor representation of the current object
         """
         return f"SatisfactoryServer('{self.address}', '{self.key}')"
+
+    def login(self, address: str = None, token: str = None, port: int = 7777):
+        self.address = "https://" + address + ":" + str(port) + "/api/v1"
+        self.logger.info(f"Connecting to {self.address}...")
+        # Split token into payload and key
+        if len(token.split(".")) > 1:
+            # payload + token
+            token = token.split(".")
+            tokenPayload = token[0]
+            key = token[1]
+            try:
+                decodedPayload = base64.b64decode(tokenPayload)
+            except "binascii.Error":
+                self.logger.fatal(
+                    "Provided token payload is not Base 64 encoded. Exiting..."
+                )
+                sys_ex()
+
+            try:
+                authLevel = json.loads(decodedPayload)["pl"]
+            except KeyError:
+                self.logger.fatal(
+                    "Provided token payload is invalid. Did you provide a Satisfactory Server API Token?"
+                )
+                sys_ex()
+        # else, assume just key in token
+        else:
+            key = token
+
+        self.headers = {"Encoding": "utf-8", "Authorization": f"Bearer {key}"}
+        initResponse = self._postJSONRequest(
+            self.headers,
+            payload={"function": "VerifyAuthenticationToken"},
+        )
+        # TODO: Raise different exception based on HTTP code
+        if initResponse.status_code == requests.codes.no_content:
+            self.logger.info("Connection Successful")
+            self.logger.info(f"Authenticated with {authLevel} privilege")
+        else:
+            self.logger.error(
+                f"Connection to {address} failed with status {initResponse.status_code}!"
+            )
+            raise ConnectionError(
+                f"Connection to {address} failed with status {initResponse.status_code}!"
+            )
 
     def _postJSONRequest(self, headers: dict, payload: dict) -> requests.Response:
         """
@@ -128,11 +147,12 @@ class SatisfactoryServer:
 
 
 if __name__ == "__main__":
-    server = SatisfactoryServer(
-        "192.168.1.17",
-        "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
-        7777,
-    )
+    # server = SatisfactoryServerAdmin(
+    #     "192.168.1.17",
+    #     "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
+    #     7777,
+    # )
+    server = SatisfactoryServerAdmin()
     print(
         server._postJSONRequest(
             server.headers, {"function": "enumerateSessions"}

@@ -1,14 +1,14 @@
 import webview
-from webview.window import Window
-
-import server
+from SatisfactoryServerAdmin import SatisfactoryServerAdmin
 
 
-def test(window: Window):
-    window.evaluate_js("alert('Works!');")
+def test(window):
+    window.evaluate_js(
+        """
+        """
+    )
 
 
-with open("index.html", "rt") as page:
-    page = page.read()
-window = webview.create_window(title="Test", html=page)
+server = SatisfactoryServerAdmin()
+window = webview.create_window("Test", "./index.html")
 webview.start(test, window)
