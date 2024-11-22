@@ -26,19 +26,20 @@ class SatisfactoryServerAdmin:
         Raises:
             ConnectionError: Raised if
         """
-        if address is None:
-            print("No address given! Creating empty object")
-            # TODO: Initialize params
-            self.address = None
-            self.key = None
-            return
-
         self.logger = logging.getLogger("Server-Connect")
         logging.basicConfig(
             filename="serverConnect.log", encoding="utf-8", level=logging.DEBUG
         )
-        # Do initial connection, verify token
-        self.login(address, token, port)
+
+        if address is None:
+            self.logger.info("No address given! Creating empty object")
+            # TODO: Initialize params
+            self.address = None
+            self.key = None
+            return
+        else:
+            # Do initial connection, verify token
+            self.login(address, token, port)
 
     def __str__(self) -> str:
         """Retuns a human-readable string representation of the current object
@@ -153,6 +154,16 @@ if __name__ == "__main__":
     #     7777,
     # )
     server = SatisfactoryServerAdmin()
+    # server.login(
+    #     "192.168.1.17",
+    #     "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
+    #     7777,
+    # )
+    server.login(
+        "a",
+        "a",
+        7777,
+    )
     print(
         server._postJSONRequest(
             server.headers, {"function": "enumerateSessions"}
