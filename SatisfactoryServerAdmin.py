@@ -20,7 +20,7 @@ class SatisfactoryServer:
             port (int, optional): The port the server is running on. Defaults to 7777.
 
         Raises:
-            ConnectionError: Raised if 
+            ConnectionError: Raised if
         """
         self.logger = logging.getLogger("Server-Connect")
         logging.basicConfig(
@@ -127,14 +127,17 @@ class SatisfactoryServer:
             return (0, response.status_code)
 
 
-server = SatisfactoryServer(
-    "192.168.1.17",
-    7777,
-    "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
-)
-print(
-    server._postJSONRequest(server.headers, {"function": "enumerateSessions"}).content
-)
+if __name__ == "__main__":
+    server = SatisfactoryServer(
+        "192.168.1.17",
+        "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
+        7777,
+    )
+    print(
+        server._postJSONRequest(
+            server.headers, {"function": "enumerateSessions"}
+        ).content
+    )
 
 # server = SatisfactoryServer(
 #     "192.168.1.17",
