@@ -98,14 +98,27 @@
 
         <!-- Modals and miscellaneous pop-ups -->
 
-        <section class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="" aria-hidden="true">
+        <!-- Login Modal -->
+
+        <section class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-
+                        <h1 class="modal-title">Login</h1>
                     </div>
                     <div class="modal-body">
-                        
+                        <!-- Login Form -->
+                        <form action="" id="loginForm">
+                            <label for="address">Server Address</label>
+                            <input id="address" name="address" type="text">
+                            <br />
+                            <label for="key">API Key</label>
+                            <input id="key" name="key" type="password">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="loginButton" type="button" class="btn btn-success">Login</button>
                     </div>
                 </div>
             </div>
@@ -115,6 +128,21 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
+
+        <script>
+            // Wait for Python API to be initialized
+            window.addEventListener('pywebviewready', function () {
+                const loginModal = new bootstrap.Modal('#loginModal');
+                loginModal.show();
+
+                document.getElementById('loginButton').addEventListener('click', function () {
+                    let key = $("#key").val();
+                    let adr = $("#address").val();
+                    loginModal.hide();
+                    alert(`Address: ${adr}\nKey: ${key}`);
+                });
+            });
+        </script>
     </body>
 
 </html>
