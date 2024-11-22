@@ -9,6 +9,5 @@ def test(window):
     )
 
 
-server = SatisfactoryServerAdmin()
-window = webview.create_window("Test", "./index.html")
-webview.start(test, window)
+window = webview.create_window("Test", "./index.html", js_api=SatisfactoryServerAdmin())
+webview.start(test, window, debug=False)
