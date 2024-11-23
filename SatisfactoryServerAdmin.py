@@ -14,6 +14,76 @@ __date__ = "Nov 21, 2024"
 class SatisfactoryServerAdmin:
     """Contains a reference to a running Satisfactory Dedicated Server. Provides certain management functions"""
 
+    prettyPhase = {
+        "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_1.GP_Project_Assembly_Phase_1'": "Distribution Platform",
+        "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_2.GP_Project_Assembly_Phase_2'": "Construction Dock",
+        "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_3.GP_Project_Assembly_Phase_3'": "Main Body",
+        "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_4.GP_Project_Assembly_Phase_4'": "Propulsion",
+        "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_5.GP_Project_Assembly_Phase_5'": "Assembly",
+    }
+
+    functions = [
+        "HealthCheck",
+        # Not useful - Returns if tick rate > 10
+        "VerifyAuthenticationToken",
+        # Returns nothing if healthy, insufficient_scope if bad
+        "QueryServerState",
+        # Returns general game info, requires auth
+        "GetServerOptions",
+        # Returns server management settings
+        "GetAdvancedGameSettings",
+        # Returns AGS, requires auth
+        "ApplyAdvancedGameSettings",
+        # Requires dict of settings to change
+        "ClaimServer",
+        # Returns new auth token without initial admin privileges.
+        # Requires InitialAdmin privilege level, which can only be acquired by
+        #   attempting passwordless login while the server does not have an
+        #   Admin Password set. Requires new server name and admin password.
+        "RenameServer",
+        # Returns nothing on success.
+        # Requires new server name
+        "SetClientPassword",
+        # Returns nothing on success.
+        # Requires new client password IN PLAIN TEXT
+        "SetAdminPassword",
+        # Returns nothing on success.
+        # Requires new admin password IN PLAIN TEXT and new token to use
+        "SetAutoLoadSessionName",
+        # Returns nothing on success.
+        # Requires name of session to load
+        "Run Command",
+        # Returns output of command
+        # Requires console command to run.
+        "Shutdown",
+        # Returns nothing on success.
+        "ApplyServerOptions",
+        # Requires dict of settings to change
+        "CreateNewGame",
+        # Returns nothing on success.
+        # Requires dict of setup options
+        "SaveGame",
+        # Returns nothing on success.
+        # Requires name of new save file
+        "DeleteSaveFile",
+        # Returns nothing on success.
+        # Requires name of save file to delete
+        "DeleteSaveSession",
+        # Returns nothing on success.
+        # Requires name of game session to delete
+        "EnumerateSessions",
+        # Returns array of sessions on server and index of loaded session.
+        "LoadGame",
+        # Returns nothing on success.
+        # Requires name of save file to load and AGS enable bool
+        "UploadSaveGame",
+        # Requires name of save to upload, immediate load bool, AGS bool, and save
+        #   file as multipart form request
+        "DownloadSaveGame",
+        # Returns save file.
+        # Requires name of save file to download
+    ]
+
     def __init__(self, address: str = None, token: str = None, port: int = 7777):
         """
         Initializes a new instance of the server object
@@ -26,6 +96,7 @@ class SatisfactoryServerAdmin:
         Raises:
             ConnectionError: Raised if
         """
+        # Initialize logger
         self.logger = logging.getLogger("Server-Connect")
         logging.basicConfig(
             filename="serverConnect.log", encoding="utf-8", level=logging.DEBUG
@@ -66,7 +137,7 @@ class SatisfactoryServerAdmin:
             # payload + token
             token = token.split(".")
             tokenPayload = token[0]
-            key = token[1]
+            key = token[0] + "." + token[1]
             try:
                 decodedPayload = base64.b64decode(tokenPayload)
             except "binascii.Error":
@@ -91,10 +162,15 @@ class SatisfactoryServerAdmin:
             self.headers,
             payload={"function": "VerifyAuthenticationToken"},
         )
+        # Check if connection successful
+        if initResponse == 523:
+            # Unable to contact server at given address
+            raise ConnectionError(f"Connection to {address} failed with no response!")
         # TODO: Raise different exception based on HTTP code
         if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
             self.logger.info(f"Authenticated with {authLevel} privilege")
+            return 204  # No Content
         else:
             self.logger.error(
                 f"Connection to {address} failed with status {initResponse.status_code}!"
@@ -114,10 +190,15 @@ class SatisfactoryServerAdmin:
         Returns:
             requests.Response: _description_
         """
-        response = requests.post(
-            self.address, headers=headers, json=payload, verify=False
-        )
-        return response
+        try:
+            response = requests.post(
+                self.address, headers=headers, json=payload, verify=False
+            )
+            return response
+        except requests.exceptions.ConnectionError:
+            self.logger.critical("Unable to contact server")
+            # CloudFlare HTTP response 523: Origin Unreachable
+            return 523
 
     def passwordlessLogin(self, headers: dict) -> tuple:
         """
@@ -146,6 +227,18 @@ class SatisfactoryServerAdmin:
         else:
             return (0, response.status_code)
 
+    def queryServerState(self):
+        response = self._postJSONRequest(self.headers, {"function": "QueryServerState"})
+
+        print(response.status_code)
+        content = json.loads(response.content)["data"]["serverGameState"]
+        phase = content["gamePhase"]
+        print(phase)
+        if phase in self.prettyPhase:
+            content["gamePhase"] = self.prettyPhase[phase]
+
+        print(content)
+
 
 if __name__ == "__main__":
     # server = SatisfactoryServerAdmin(
@@ -154,16 +247,16 @@ if __name__ == "__main__":
     #     7777,
     # )
     server = SatisfactoryServerAdmin()
-    # server.login(
-    #     "192.168.1.17",
-    #     "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
-    #     7777,
-    # )
     server.login(
-        "a",
-        "a",
+        "192.168.1.17",
+        "ewoJInBsIjogIkFQSVRva2VuIgp9.r8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
         7777,
     )
+    # server.login(
+    #     "a",
+    #     "a",
+    #     7777,
+    # )
     print(
         server._postJSONRequest(
             server.headers, {"function": "enumerateSessions"}
