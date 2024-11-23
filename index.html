@@ -136,12 +136,31 @@
                 loginModal.show();
 
                 document.getElementById('loginButton').addEventListener('click', function () {
-                    let key = $("#key").val();
                     let adr = $("#address").val();
+                    let key = $("#key").val();
+                    let port = 7777;
+                    response = pywebview.api.login(adr, key, port);
+
+                    response.catch(function () {
+                        showResponse("Error!");
+                    });
+
+                    response.then(
+                        function (response) {
+                            showResponse("Positive");
+                        });
+                    if (response == 523) {
+                        // Bad address
+
+                    }
                     loginModal.hide();
-                    alert(`Address: ${adr}\nKey: ${key}`);
+
                 });
             });
+
+            function showResponse(response) {
+                alert(response);
+            }
         </script>
     </body>
 
