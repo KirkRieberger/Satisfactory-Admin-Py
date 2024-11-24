@@ -246,8 +246,10 @@ class SatisfactoryServerAdmin:
         respVer = int.from_bytes(data[3:4])  # Should be 0x01
         respCookie = hex(int.from_bytes(data[4:12], byteorder="little"))
         respState = hex(int.from_bytes(data[12:13]))
+        # TODO: Server state emun
         respCL = hex(int.from_bytes(data[13:17], byteorder="little"))
         respFlags = hex(int.from_bytes(data[17:25], byteorder="little"))
+        # TODO: Flag enum
         respNumStates = int.from_bytes(data[25:26])
         respStates = data[26 : 26 + (3 * respNumStates)]
         respNameLen = int.from_bytes(
