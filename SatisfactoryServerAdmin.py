@@ -1,6 +1,4 @@
-from os import error
 from random import randint
-from threading import Thread
 import numpy
 import requests
 import socket
