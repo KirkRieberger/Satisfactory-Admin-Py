@@ -20,13 +20,14 @@
         <header class="container-fluid">
             <div class="row justify-content-center">
                 <h1 class="col-4 text-center">
-                    SERVER NAME <small id="status" class="bi bi-play-circle-fill text-success"></small><small
-                        class="bi bi-pause-circle-fill text-warning d-none"></small><small
-                        class="bi bi-stop-circle-fill text-danger d-none"></small>
+                    <span id="server">SERVER NAME</span>&nbsp;
+                    <small id="status" class="bi bi-play-circle-fill text-success"></small>
+                    <small class="bi bi-pause-circle-fill text-warning d-none"></small>
+                    <small class="bi bi-stop-circle-fill text-danger d-none"></small>
                 </h1>
             </div>
             <div class="row justify-content-center">
-                <h2 class="col-4 text-center">
+                <h2 id="session" class="col-4 text-center">
                     Session Name
                 </h2>
             </div>
@@ -52,9 +53,9 @@
                             <h3>Game Info</h3>
                         </header>
                         <div class="card-body">
-                            <p class="card-text"><b>Phase:&nbsp;</b>3</p>
-                            <p class="card-text"><b>Tier:&nbsp;</b>5</p>
-                            <p class="card-text"><b>Schematic:&nbsp;</b>None</p>
+                            <p class="card-text"><b>Phase:&nbsp;</b><span id="phase">3</span></p>
+                            <p class="card-text"><b>Tier:&nbsp;</b><span id="tier">5</span></p>
+                            <p class="card-text"><b>Schematic:&nbsp;</b><span id="schem">None</span></p>
                         </div>
                     </section>
                 </div>
@@ -64,10 +65,11 @@
                             <h3>Server State</h3>
                         </header>
                         <div class="card-body">
-                            <p class="card-text"><span>#</span>/<span>#</span> players</p>
+                            <p class="card-text"><span id="curPlayers">#</span>/<span id="maxPlayers">#</span> players
+                            </p>
                             <!-- Pie Chart? https://www.w3schools.com/howto/howto_google_charts.asp 
                                  Line Chart of tickrate over time? -->
-                            <p class="card-text">27/30 Ticks per second</p>
+                            <p class="card-text"><span id="ticks">27</span>/30 Ticks per second</p>
                         </div>
                     </section>
                 </div>
@@ -141,20 +143,17 @@
                     let port = 7777;
                     response = pywebview.api.login(adr, key, port);
 
-                    response.catch(function () {
-                        showResponse("Error!");
+                    response.then(value => {
+                        showResponse(value);
+                        loginModal.hide();
+                    }).catch(error => {
+                        showResponse(error);
                     });
-
-                    response.then(
-                        function (response) {
-                            showResponse("Positive");
-                        });
+                    // Error
                     if (response == 523) {
                         // Bad address
 
                     }
-                    loginModal.hide();
-
                 });
             });
 
