@@ -84,6 +84,10 @@ class SatisfactoryServerAdmin:
         # Requires name of save file to download
     ]
 
+    address = None
+
+    loggedIn = False
+
     def __init__(self, address: str = None, token: str = None, port: int = 7777):
         """
         Initializes a new instance of the server object
@@ -106,14 +110,13 @@ class SatisfactoryServerAdmin:
             self.logger.info("No address given! Creating empty object")
             # TODO: Initialize params
             self.address = None
-            self.key = None
             return
         else:
             # Do initial connection, verify token
             self.login(address, token, port)
 
     def __str__(self) -> str:
-        """Retuns a human-readable string representation of the current object
+        """Returns a human-readable string representation of the current object
 
         Returns:
             str: A string representation of the current object
@@ -137,7 +140,7 @@ class SatisfactoryServerAdmin:
             # payload + token
             token = token.split(".")
             tokenPayload = token[0]
-            key = token[0] + "." + token[1]
+            key = str(token[0]) + "." + str(token[1])
             try:
                 decodedPayload = base64.b64decode(tokenPayload)
             except "binascii.Error":
@@ -170,10 +173,12 @@ class SatisfactoryServerAdmin:
         if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
             self.logger.info(f"Authenticated with {authLevel} privilege")
+            self.loggedIn = True
             return 204  # No Content
         else:
             self.logger.error(
-                f"Connection to {address} failed with status {initResponse.status_code}!"
+                f"Connection to {address} failed with status {initResponse.status_code}!\
+                    \nResponse: {initResponse.content}"
             )
             raise ConnectionError(
                 f"Connection to {address} failed with status {initResponse.status_code}!"
@@ -190,6 +195,8 @@ class SatisfactoryServerAdmin:
         Returns:
             requests.Response: _description_
         """
+        if not self.loggedIn:
+            self.logger.error("")
         try:
             response = requests.post(
                 self.address, headers=headers, json=payload, verify=False
@@ -230,14 +237,14 @@ class SatisfactoryServerAdmin:
     def queryServerState(self):
         response = self._postJSONRequest(self.headers, {"function": "QueryServerState"})
 
-        print(response.status_code)
+        self.logger.info(f"Received {response.status_code} response from server")
         content = json.loads(response.content)["data"]["serverGameState"]
         phase = content["gamePhase"]
-        print(phase)
         if phase in self.prettyPhase:
             content["gamePhase"] = self.prettyPhase[phase]
 
-        print(content)
+        self.logger.info(content)
+        return content
 
 
 if __name__ == "__main__":
@@ -249,7 +256,7 @@ if __name__ == "__main__":
     server = SatisfactoryServerAdmin()
     server.login(
         "192.168.1.17",
-        "ewoJInBsIjogIkFQSVRva2VuIgp9.r8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
+        "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
         7777,
     )
     # server.login(
@@ -257,11 +264,8 @@ if __name__ == "__main__":
     #     "a",
     #     7777,
     # )
-    print(
-        server._postJSONRequest(
-            server.headers, {"function": "enumerateSessions"}
-        ).content
-    )
+    print(server.queryServerState())
+    print(str(server))
 
 # server = SatisfactoryServer(
 #     "192.168.1.17",
