@@ -251,6 +251,7 @@ class SatisfactoryServerAdmin:
         respFlags = hex(int.from_bytes(data[17:25], byteorder="little"))
         # TODO: Flag enum
         respNumStates = int.from_bytes(data[25:26])
+        # TODO: Iterate over each response state
         respStates = data[26 : 26 + (3 * respNumStates)]
         respNameLen = int.from_bytes(
             data[26 + (3 * respNumStates) : 26 + (3 * respNumStates) + 2],
