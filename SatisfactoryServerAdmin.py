@@ -1,4 +1,9 @@
+from os import error
+from random import randint
+from threading import Thread
+import numpy
 import requests
+import socket
 import json
 import base64
 import logging
@@ -85,7 +90,7 @@ class SatisfactoryServerAdmin:
     ]
 
     address = None
-
+    headers = None
     loggedIn = False
 
     def __init__(self, address: str = None, token: str = None, port: int = 7777):
@@ -133,6 +138,8 @@ class SatisfactoryServerAdmin:
         return f"SatisfactoryServer('{self.address}', '{self.key}')"
 
     def login(self, address: str = None, token: str = None, port: int = 7777):
+        self.ip = address
+        self.port = port
         self.address = "https://" + address + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
         # Split token into payload and key
@@ -207,6 +214,56 @@ class SatisfactoryServerAdmin:
             # CloudFlare HTTP response 523: Origin Unreachable
             return 523
 
+    def _LightweightQuery(self):
+        protocolMagic = numpy.uint16(0xF6D5)
+        messageType = numpy.uint8(0)
+        protocolVersion = numpy.uint8(1)
+        lowerBound = 0
+        upperBound = 2**64 - 1
+        payload = numpy.uint64(randint(lowerBound, upperBound))
+        terminatorByte = numpy.uint8(0x1)
+        print(hex(payload))
+
+        message = b"".join(
+            [protocolMagic, messageType, protocolVersion, payload, terminatorByte]
+        )
+
+        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        sock.bind(("", 7777))
+        sock.sendto(message, (self.ip, self.port))
+
+        try:
+            data, addr = sock.recvfrom(1024)
+            print(f"Message Received from {addr}: {data}")
+        except socket.error:
+            pass
+        finally:
+            sock.close()
+
+        # Parse response
+        respMagic = hex(
+            int.from_bytes(data[0:2], byteorder="little")
+        )  # Should be 0xf6d5
+        respType = int.from_bytes(data[2:3])  # Should be 0x01
+        respVer = int.from_bytes(data[3:4])  # Should be 0x01
+        respCookie = hex(int.from_bytes(data[4:12], byteorder="little"))
+        respState = hex(int.from_bytes(data[12:13]))
+        respCL = hex(int.from_bytes(data[13:17], byteorder="little"))
+        respFlags = hex(int.from_bytes(data[17:25], byteorder="little"))
+        respNumStates = int.from_bytes(data[25:26])
+        respStates = data[26 : 26 + (3 * respNumStates)]
+        respNameLen = int.from_bytes(
+            data[26 + (3 * respNumStates) : 26 + (3 * respNumStates) + 2],
+            byteorder="little",
+        )
+        respName = data[
+            26 + (3 * respNumStates) + 2 : 26 + (3 * respNumStates) + 2 + respNameLen
+        ].decode("utf-8")
+
+        # Terminator 0x01
+
+        # TODO: Do something with output
+
     def passwordlessLogin(self, headers: dict) -> tuple:
         """
         Performs a passwordless login to the server. Grants User level access.
@@ -265,7 +322,7 @@ if __name__ == "__main__":
     #     7777,
     # )
     print(server.queryServerState())
-    print(str(server))
+    server._LightweightQuery()
 
 # server = SatisfactoryServer(
 #     "192.168.1.17",
