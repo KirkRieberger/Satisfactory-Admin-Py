@@ -1,10 +1,10 @@
-from random import randint
 import numpy
 import requests
 import socket
 import json
 import base64
 import logging
+from random import randint
 from sys import exit as sys_ex
 
 # Possible to connect with payload+token and just token
@@ -17,12 +17,74 @@ __date__ = "Nov 21, 2024"
 class SatisfactoryServerAdmin:
     """Contains a reference to a running Satisfactory Dedicated Server. Provides certain management functions"""
 
+    # Static class variables
     prettyPhase = {
         "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_1.GP_Project_Assembly_Phase_1'": "Distribution Platform",
         "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_2.GP_Project_Assembly_Phase_2'": "Construction Dock",
         "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_3.GP_Project_Assembly_Phase_3'": "Main Body",
         "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_4.GP_Project_Assembly_Phase_4'": "Propulsion",
         "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_5.GP_Project_Assembly_Phase_5'": "Assembly",
+    }
+
+    prettySchematic = {
+        # Tier 0 - Onboarding
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_0-1.Schematic_0-1_C'": "HUB Upgrade 1",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_0-2.Schematic_0-2_C'": "HUB Upgrade 2",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_0-3.Schematic_0-3_C'": "HUB Upgrade 3",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_0-4.Schematic_0-4_C'": "HUB Upgrade 4",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_0-5.Schematic_0-5_C'": "HUB Upgrade 5",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_0-6.Schematic_0-6_C'": "HUB Upgrade 6",
+        # Phase 0 - Tier 1
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_1-1.Schematic_1-1_C'": "Base Building",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_1-2.Schematic_1-2_C'": "Logistics",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_1-3.Schematic_1-3_C'": "Field Research",
+        # Phase 0 - Tier 2
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_2-1.Schematic_2-1_C'": "Part Assembly",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_2-2.Schematic_2-2_C'": "Obstacle Clearing",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_2-3.Schematic_2-3_C'": "Jump Pads",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_2-4.Schematic_2-4_C'": "Resource Sink Bonus Program",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_2-5.Schematic_2-5_C'": "Logistics Mk.2",
+        # Phase 1 - Tier 3 - Distribution Platform
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_3-1.Schematic_3-1_C'": "Coal Power",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_3-2.Schematic_3-2_C'": "Vehicular Transport",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_3-3.Schematic_3-3_C'": "Basic Steel Production",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_3-4.Schematic_3-4_C'": "Enhanced Asset Security",
+        # Phase 1 - Tier 4 - Distribution Platform
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_4-1.Schematic_4-1_C'": "FICSIT Blueprints",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_4-2.Schematic_4-2_C'": "Logistics Mk.3",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_4-3.Schematic_4-3_C'": "Advanced Steel Production",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_4-4.Schematic_4-4_C'": "Expanded Power Infrastructure",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_4-5.Schematic_4-5_C'": "Hypertubes",
+        # Phase 2 - Tier 5 - Construction Dock
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_5-1.Schematic_5-1_C'": "Jetpack",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_5-2.Schematic_5-2_C'": "Oil Processing",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_5-3.Schematic_5-3_C'": "Logistics Mk.4",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_5-4.Schematic_5-4_C'": "Fluid Packaging",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_5-5.Schematic_5-5_C'": "Petroleum Power",
+        # Phase 2 - Tier 6 - Construction Dock
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_6-1.Schematic_6-1_C'": "Industrial Manufacturing",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_6-2.Schematic_6-2_C'": "Monorail Train Technology",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_6-3.Schematic_6-3_C'": "Railway Signaling",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_6-4.Schematic_6-4_C'": "Pipeline Engineering Mk.2",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_6-5.Schematic_6-5_C'": "FICSIT Blueprints Mk.2",
+        # Phase 3 - Tier 7 - Main Body
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_7-1.Schematic_7-1_C'": "Bauxite Refinement",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_7-2.Schematic_7-2_C'": "Hoverpack",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_7-3.Schematic_7-3_C'": "Logistics Mk.5",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_7-4.Schematic_7-4_C'": "Hazmat Suit",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_7-5.Schematic_7-5_C'": "Control System Development",
+        # Phase 3 - Tier 8 - Main Body
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_8-1.Schematic_8-1_C'": "Aeronautical Engineering",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_8-2.Schematic_8-2_C'": "Nuclear Power",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_8-3.Schematic_8-3_C'": "Advanced Aluminum Production",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_8-4.Schematic_8-4_C'": "Leading-edge Production",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_8-5.Schematic_8-5_C'": "Particle Enrichment",
+        # Phase 4 - Tier 9 - Propulsion
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_9-1.Schematic_9-1_C'": "Matter Conversion",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_9-2.Schematic_9-2_C'": "Quantum Encoding",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_9-3.Schematic_9-3_C'": "Ficsit Blueprints Mk.3",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_9-4.Schematic_9-4_C'": "Spatial Energy Regulation",
+        "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_9-5.Schematic_9-5_C'": "Peak Efficiency",
     }
 
     functions = [
@@ -87,36 +149,58 @@ class SatisfactoryServerAdmin:
         # Requires name of save file to download
     ]
 
-    address = None
-    headers = None
-    loggedIn = False
-
-    def __init__(self, address: str = None, token: str = None, port: int = 7777):
+    def __init__(self, ip: str = None, token: str = None, port: int = 7777):
         """
         Initializes a new instance of the server object
 
         Args:
-            address (str): The IP address (or FQDN) of the dedicated server
+            ip (str): The IP address (or FQDN) of the dedicated server
             key (str): The API key to be used when accessing the server. Can be either the API key + payload, or the bare key.
             port (int, optional): The port the server is running on. Defaults to 7777.
 
         Raises:
             ConnectionError: Raised if
         """
+
+        # Instance variables
+        #  Class state
+        self.address = None
+        self.ip = None
+        self.port = None
+        self.headers = None
+        self.loggedIn = False
+        self.subStates = {}
+
+        #  Displayed values
+        #   Header
+        self.serverName = None
+        self.sessionName = None
+        self.serverState = None
+        #   Game Info
+        self.gamePhase = None  # Number
+        self.tier = None  # String
+        self.schematic = None  # String
+        #   Server State
+        self.numPlayers = None
+        self.maxPlayers = None
+        self.tickRate = None
+        self.autoSessionName = None
+        self.paused = None
+        #   Save Info
+        self.duration = None
+
         # Initialize logger
         self.logger = logging.getLogger("Server-Connect")
         logging.basicConfig(
             filename="serverConnect.log", encoding="utf-8", level=logging.DEBUG
         )
 
-        if address is None:
+        if ip is None:
             self.logger.info("No address given! Creating empty object")
-            # TODO: Initialize params
-            self.address = None
             return
         else:
             # Do initial connection, verify token
-            self.login(address, token, port)
+            self.login(ip, token, port)
 
     def __str__(self) -> str:
         """Returns a human-readable string representation of the current object
@@ -135,10 +219,24 @@ class SatisfactoryServerAdmin:
         """
         return f"SatisfactoryServer('{self.address}', '{self.key}')"
 
-    def login(self, address: str = None, token: str = None, port: int = 7777):
-        self.ip = address
+    def login(self, ip: str = None, token: str = None, port: int = 7777) -> int:
+        """_summary_
+
+        Args:
+            ip (str, optional): The IP address (or FQDN) of the dedicated server. Defaults to None.
+            token (str, optional): The API key to be used when accessing the server. Can be either the API key + payload, or the bare key. Defaults to None.
+            port (int, optional): The port the server is running on. Defaults to 7777.
+
+        Raises:
+            TimeoutError: If the connection to the specified address times out
+            ConnectionError: If another error occurs during token validation
+
+        Returns:
+            int: HTTP status code 204 if successful
+        """
+        self.ip = ip
         self.port = port
-        self.address = "https://" + address + ":" + str(port) + "/api/v1"
+        self.address = "https://" + ip + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
         # Split token into payload and key
         if len(token.split(".")) > 1:
@@ -173,7 +271,7 @@ class SatisfactoryServerAdmin:
         # Check if connection successful
         if initResponse == 523:
             # Unable to contact server at given address
-            raise ConnectionError(f"Connection to {address} failed with no response!")
+            raise TimeoutError(f"Connection to {self.address} failed with no response!")
         # TODO: Raise different exception based on HTTP code
         if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
@@ -182,11 +280,11 @@ class SatisfactoryServerAdmin:
             return 204  # No Content
         else:
             self.logger.error(
-                f"Connection to {address} failed with status {initResponse.status_code}!\
+                f"Connection to {self.address} failed with status {initResponse.status_code}!\
                     \nResponse: {initResponse.content}"
             )
             raise ConnectionError(
-                f"Connection to {address} failed with status {initResponse.status_code}!"
+                f"Connection to {self.address} failed with status {initResponse.status_code}!"
             )
 
     def _postJSONRequest(self, headers: dict, payload: dict) -> requests.Response:
@@ -212,18 +310,22 @@ class SatisfactoryServerAdmin:
             # CloudFlare HTTP response 523: Origin Unreachable
             return 523
 
-    def _LightweightQuery(self):
-        protocolMagic = numpy.uint16(0xF6D5)
-        messageType = numpy.uint8(0)
-        protocolVersion = numpy.uint8(1)
-        lowerBound = 0
-        upperBound = 2**64 - 1
-        payload = numpy.uint64(randint(lowerBound, upperBound))
-        terminatorByte = numpy.uint8(0x1)
-        print(hex(payload))
+    def _LightweightQuery(self) -> list:
+        serverStates = {0: "offline", 1: "idle", 2: "loading", 3: "playing"}
+        subStateStatus = [0, 0, 0, 0]
+        # Server State, Server Options, AGS, Save Sessions
+
+        # Query identifier
+        payload = numpy.uint64(randint(0, 2**64 - 1))
 
         message = b"".join(
-            [protocolMagic, messageType, protocolVersion, payload, terminatorByte]
+            [
+                numpy.uint16(0xF6D5),  # protocolMagic
+                numpy.uint8(0),  # messageType
+                numpy.uint8(1),  # protocolVersion
+                payload,  # payload
+                numpy.uint8(0x1),  # terminator
+            ]
         )
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -232,42 +334,82 @@ class SatisfactoryServerAdmin:
 
         try:
             data, addr = sock.recvfrom(1024)
-            print(f"Message Received from {addr}: {data}")
+            self.logger.debug(f"Message Received from {addr}: {data}")
         except socket.error:
             pass
         finally:
             sock.close()
 
         # Parse response
-        respMagic = hex(
-            int.from_bytes(data[0:2], byteorder="little")
-        )  # Should be 0xf6d5
+
+        respMagic = int.from_bytes(data[0:2], byteorder="little")  # Should be 0xf6d5
+        if respMagic != 0xF6D5:
+            self.logger.error("Invalid lightweight query magic number!")
+            # Update self if necessary
+
         respType = int.from_bytes(data[2:3])  # Should be 0x01
+        if respType != 0x01:
+            self.logger.error("Invalid lightweight query response type!")
+
         respVer = int.from_bytes(data[3:4])  # Should be 0x01
+        if respVer != 0x01:
+            self.logger.error("Invalid lightweight query response version!")
+
         respCookie = hex(int.from_bytes(data[4:12], byteorder="little"))
-        respState = hex(int.from_bytes(data[12:13]))
-        # TODO: Server state emun
-        respCL = hex(int.from_bytes(data[13:17], byteorder="little"))
-        respFlags = hex(int.from_bytes(data[17:25], byteorder="little"))
-        # TODO: Flag enum
-        respNumStates = int.from_bytes(data[25:26])
-        # TODO: Iterate over each response state
-        respStates = data[26 : 26 + (3 * respNumStates)]
+
+        respState = int.from_bytes(data[12:13])
+        if respState not in range(0, 4):
+            self.logger.error("Invalid lightweight query server state!")
+        else:
+            self.serverState = serverStates[respState]
+
+        respChangeList = hex(int.from_bytes(data[13:17], byteorder="little"))
+
+        respFlags = int.from_bytes(data[17:25], byteorder="little")
+        if (respFlags & 0x8000000000000000) != 0:  # Bitmask for 64th (modded flag) bit
+            # Server is modded
+            self.logger.warning(
+                "Server appears modded! Some features might not work as expected!"
+            )
+
+        numStates = int.from_bytes(data[25:26])
+        # Substate is a counter incremented each time a relevant setting is changed
+
+        # respStates = data[26 : 26 + (3 * numStates)]
+        i = 26  # Base offset of state array
+        while i < (26 + numStates * 3):
+            stateId = int.from_bytes(
+                data[i : i + 1]
+            )  # Single byte - Order not necessary
+            stateData = int.from_bytes(data[i + 1 : i + 4], byteorder="little")
+
+            if stateId in self.subStates:
+                if stateData != self.subStates[stateId]:
+                    # Settings changed
+                    subStateStatus[stateId] = 1
+            else:
+                # Initial run
+                self.subStates[stateId] = stateData
+                subStateStatus[stateId] = 1
+
+            i += 3
+
         respNameLen = int.from_bytes(
-            data[26 + (3 * respNumStates) : 26 + (3 * respNumStates) + 2],
+            data[26 + (3 * numStates) : 26 + (3 * numStates) + 2],
             byteorder="little",
         )
-        respName = data[
-            26 + (3 * respNumStates) + 2 : 26 + (3 * respNumStates) + 2 + respNameLen
+        self.serverName = data[
+            26 + (3 * numStates) + 2 : 26 + (3 * numStates) + 2 + respNameLen
         ].decode("utf-8")
 
         # Terminator 0x01
 
-        # TODO: Do something with output
+        return subStateStatus
 
     def passwordlessLogin(self, headers: dict) -> tuple:
         """
         Performs a passwordless login to the server. Grants User level access.
+        Should not be used for third-party app logins
 
         Args:
             headers (dict): Default HTTP headers of calling object
@@ -292,17 +434,57 @@ class SatisfactoryServerAdmin:
         else:
             return (0, response.status_code)
 
-    def queryServerState(self):
+    def _queryServerState(self) -> None:
+        # Get response
         response = self._postJSONRequest(self.headers, {"function": "QueryServerState"})
-
         self.logger.info(f"Received {response.status_code} response from server")
         content = json.loads(response.content)["data"]["serverGameState"]
-        phase = content["gamePhase"]
-        if phase in self.prettyPhase:
-            content["gamePhase"] = self.prettyPhase[phase]
 
+        # Update instance variables
+        self.sessionName = content["activeSessionName"]
+        self.numPlayers = content["numConnectedPlayers"]
+        self.maxPlayers = content["playerLimit"]
+        self.tier = content["techTier"]
+
+        # Prettify phase and schematic
+        self.schematic = content["activeSchematic"]
+        if self.schematic in self.prettySchematic:
+            self.schematic = self.prettySchematic[self.schematic]
+
+        self.gamePhase = content["gamePhase"]
+        if self.gamePhase in self.prettyPhase:
+            self.gamePhase = self.prettyPhase[self.gamePhase]
+
+        self.duration = content["totalGameDuration"]
+        self.tickRate = round(content["averageTickRate"], 2)
+        self.paused = content["isGamePaused"]
+        self.autoSessionName = content["autoLoadSessionName"]
         self.logger.info(content)
-        return content
+        return content  # Temp
+
+    def _queryServerOptions(self) -> None:
+        pass
+
+    def _queryAdvancedGameSettings(self) -> None:
+        pass
+
+    def pollServerState(self) -> None:
+        changeList = self._LightweightQuery()
+        if changeList[0]:
+            # Server State
+            self._queryServerState()
+        if changeList[1]:
+            # Server Options
+            self._queryServerOptions()
+        if changeList[2]:
+            # AGS
+            self._queryAdvancedGameSettings()
+        if changeList[3]:
+            # Enumerate Sessions
+            pass
+        pass
+        # Determine if update is necessary
+        # Query parts that need updating
 
 
 if __name__ == "__main__":
@@ -317,15 +499,5 @@ if __name__ == "__main__":
         "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
         7777,
     )
-    # server.login(
-    #     "a",
-    #     "a",
-    #     7777,
-    # )
-    print(server.queryServerState())
-    server._LightweightQuery()
-
-# server = SatisfactoryServer(
-#     "192.168.1.17",
-#     "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
-# )
+    # print(server.queryServerState())
+    # server._LightweightQuery()
