@@ -313,7 +313,7 @@ class SatisfactoryServerAdmin:
 
     def _LightweightQuery(self) -> list:
         serverStates = {0: "offline", 1: "idle", 2: "loading", 3: "playing"}
-        subStateStatus = [0, 0, 0, 0]
+        subStateStatus = [0, 0, 0, 0]  # Returned value
         # Server State, Server Options, AGS, Save Sessions
 
         # Query identifier
@@ -334,18 +334,26 @@ class SatisfactoryServerAdmin:
         sock.sendto(message, (self.ip, self.port))
 
         try:
-            ready = select.select([sock], [], [], 0.5)
+            # Timeout of ~0.15 - 0.2 for virtual machine/host connection
+            ready = select.select([sock], [], [], 0.018)
             if ready[0]:
                 data, addr = sock.recvfrom(1024)
                 self.logger.debug(f"Message Received from {addr}: {data}")
-        except socket.error:
-            pass
+            else:
+                raise TimeoutError("UDP response timed out")
+        except TimeoutError:
+            # UDP response timed out, assume no change
+            # Don't need to close socket because "finally" is respected
+            self.logger.warning()
+            return subStateStatus
         finally:
             sock.close()
 
         # Parse response
 
-        respMagic = int.from_bytes(data[0:2], byteorder="little")  # Should be 0xf6d5
+        respMagic = int.from_bytes(
+            data[0:2], byteorder="little"
+        )  # Should be 0xf6d5  -  Unbound local
         if respMagic != 0xF6D5:
             self.logger.error("Invalid lightweight query magic number!")
             # Update self if necessary
@@ -367,7 +375,8 @@ class SatisfactoryServerAdmin:
         else:
             self.serverState = serverStates[respState]
 
-        respChangeList = hex(int.from_bytes(data[13:17], byteorder="little"))
+        # Server version
+        respChangeList = int.from_bytes(data[13:17], byteorder="little")
 
         respFlags = int.from_bytes(data[17:25], byteorder="little")
         if (respFlags & 0x8000000000000000) != 0:  # Bitmask for 64th (modded flag) bit
