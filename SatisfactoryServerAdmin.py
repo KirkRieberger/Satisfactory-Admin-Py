@@ -1,6 +1,7 @@
 import numpy
 import requests
 import socket
+import select
 import json
 import base64
 import logging
@@ -333,8 +334,10 @@ class SatisfactoryServerAdmin:
         sock.sendto(message, (self.ip, self.port))
 
         try:
-            data, addr = sock.recvfrom(1024)
-            self.logger.debug(f"Message Received from {addr}: {data}")
+            ready = select.select([sock], [], [], 0.5)
+            if ready[0]:
+                data, addr = sock.recvfrom(1024)
+                self.logger.debug(f"Message Received from {addr}: {data}")
         except socket.error:
             pass
         finally:
@@ -355,7 +358,8 @@ class SatisfactoryServerAdmin:
         if respVer != 0x01:
             self.logger.error("Invalid lightweight query response version!")
 
-        respCookie = hex(int.from_bytes(data[4:12], byteorder="little"))
+        # Current time in Unreal Engine game ticks. Not terribly useful
+        # respCookie = hex(int.from_bytes(data[4:12], byteorder="little"))
 
         respState = int.from_bytes(data[12:13])
         if respState not in range(0, 4):
@@ -499,5 +503,6 @@ if __name__ == "__main__":
         "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
         7777,
     )
+    server.pollServerState()
     # print(server.queryServerState())
     # server._LightweightQuery()
