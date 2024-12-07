@@ -159,7 +159,7 @@ class SatisfactoryServerAdmin:
             key (str): The API key to be used when accessing the server. Can be either the API key + payload, or the bare key.
             port (int, optional): The port the server is running on. Defaults to 7777.
 
-        Raises:
+        Raises: TODO:
             ConnectionError: Raised if
         """
 
@@ -222,7 +222,7 @@ class SatisfactoryServerAdmin:
         return f"SatisfactoryServer('{self.address}', '{self.key}')"
 
     def login(self, ip: str = None, token: str = None, port: int = 7777) -> int:
-        """_summary_
+        """TODO: _summary_
 
         Args:
             ip (str, optional): The IP address (or FQDN) of the dedicated server. Defaults to None.
@@ -298,7 +298,7 @@ class SatisfactoryServerAdmin:
             payload (dict): A dict of dedicated server function data
 
         Returns:
-            requests.Response: _description_
+            requests.Response: TODO: _description_
         """
         if not self.loggedIn:
             self.logger.error("")
@@ -313,6 +313,15 @@ class SatisfactoryServerAdmin:
             return 523
 
     def _LightweightQuery(self) -> list:
+        # TODO:
+        """_summary_
+
+        Raises:
+            TimeoutError: _description_
+
+        Returns:
+            list: _description_
+        """
         serverStates = {0: "offline", 1: "idle", 2: "loading", 3: "playing"}
         subStateStatus = [0, 0, 0, 0]  # Returned value
         # Server State, Server Options, AGS, Save Sessions
@@ -449,6 +458,12 @@ class SatisfactoryServerAdmin:
             return (0, response.status_code)
 
     def _queryServerState(self) -> None:
+        # TODO:
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
         # Get response
         response = self._postJSONRequest(self.headers, {"function": "QueryServerState"})
         self.logger.info(f"Received {response.status_code} response from server")
@@ -477,12 +492,16 @@ class SatisfactoryServerAdmin:
         return content  # Temp
 
     def _queryServerOptions(self) -> None:
+        # TODO:
         pass
 
     def _queryAdvancedGameSettings(self) -> None:
+        # TODO:
         pass
 
     def pollServerState(self) -> None:
+        # TODO:
+        """_summary_"""
         changeList = self._LightweightQuery()
         if changeList[0]:
             # Server State
@@ -496,23 +515,13 @@ class SatisfactoryServerAdmin:
         if changeList[3]:
             # Enumerate Sessions
             pass
-        pass
         # Determine if update is necessary
         # Query parts that need updating
 
 
 if __name__ == "__main__":
-    # server = SatisfactoryServerAdmin(
-    #     "192.168.1.17",
-    #     "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
-    #     7777,
-    # )
     server = SatisfactoryServerAdmin()
-    server.login(
-        "192.168.1.17",
-        "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
-        7777,
-    )
+    server.login("IP", "Key", 7777)
     server.pollServerState()
     # print(server.queryServerState())
     # server._LightweightQuery()
