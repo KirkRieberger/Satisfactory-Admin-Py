@@ -1,0 +1,5 @@
+footer>p {
+    position: fixed;
+    bottom: 2em;
+    left: 2em;
+}
