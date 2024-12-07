@@ -335,7 +335,7 @@ class SatisfactoryServerAdmin:
 
         try:
             # Timeout of ~0.15 - 0.2 for virtual machine/host connection
-            ready = select.select([sock], [], [], 0.018)
+            ready = select.select([sock], [], [], 0.1)
             if ready[0]:
                 data, addr = sock.recvfrom(1024)
                 self.logger.debug(f"Message Received from {addr}: {data}")
@@ -344,7 +344,7 @@ class SatisfactoryServerAdmin:
         except TimeoutError:
             # UDP response timed out, assume no change
             # Don't need to close socket because "finally" is respected
-            self.logger.warning()
+            self.logger.warning("UDP response timed out. Skipping this cycle")
             return subStateStatus
         finally:
             sock.close()
@@ -375,7 +375,7 @@ class SatisfactoryServerAdmin:
         else:
             self.serverState = serverStates[respState]
 
-        # Server version
+        # Server version - matches game version cl#______
         respChangeList = int.from_bytes(data[13:17], byteorder="little")
 
         respFlags = int.from_bytes(data[17:25], byteorder="little")
