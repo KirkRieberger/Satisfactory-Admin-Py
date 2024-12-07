@@ -187,6 +187,7 @@ class SatisfactoryServerAdmin:
         self.tickRate = None
         self.autoSessionName = None
         self.paused = None
+        self.clientVersion = None
         #   Save Info
         self.duration = None
 
@@ -376,7 +377,7 @@ class SatisfactoryServerAdmin:
             self.serverState = serverStates[respState]
 
         # Server version - matches game version cl#______
-        respChangeList = int.from_bytes(data[13:17], byteorder="little")
+        self.clientVersion = int.from_bytes(data[13:17], byteorder="little")
 
         respFlags = int.from_bytes(data[17:25], byteorder="little")
         if (respFlags & 0x8000000000000000) != 0:  # Bitmask for 64th (modded flag) bit
