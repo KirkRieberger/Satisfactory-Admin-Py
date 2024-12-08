@@ -49,44 +49,64 @@
             </div>
         </header>
         <main class="container">
-
-            <div class="row mt-4">
-                <div class="col-4">
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Game Info</h3>
-                        </header>
-                        <div class="card-body">
-                            <p class="card-text"><b>Phase:&nbsp;</b><span id="phase">3</span></p>
-                            <p class="card-text"><b>Tier:&nbsp;</b><span id="tier">5</span></p>
-                            <p class="card-text"><b>Schematic:&nbsp;</b><span id="schem">None</span></p>
-                        </div>
-                    </section>
-                </div>
-                <div class="col-4">
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Server State</h3>
-                        </header>
-                        <div class="card-body">
-                            <p class="card-text"><span id="curPlayers">#</span>/<span id="maxPlayers">#</span> players
-                            </p>
-                            <!-- Pie Chart? https://www.w3schools.com/howto/howto_google_charts.asp 
+            <section id="dashboard" class="">
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Game Info</h3>
+                            </header>
+                            <div class="card-body">
+                                <p class="card-text"><b>Phase:&nbsp;</b><span id="phase">3</span></p>
+                                <p class="card-text"><b>Tier:&nbsp;</b><span id="tier">5</span></p>
+                                <p class="card-text"><b>Schematic:&nbsp;</b><span id="schem">None</span></p>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-4">
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Server State</h3>
+                            </header>
+                            <div class="card-body">
+                                <p class="card-text"><span id="curPlayers">#</span>/<span id="maxPlayers">#</span>
+                                    players
+                                </p>
+                                <!-- Pie Chart? https://www.w3schools.com/howto/howto_google_charts.asp 
                                  Line Chart of tickrate over time? -->
-                            <p class="card-text"><span id="ticks">27</span>/30 Ticks per second</p>
-                        </div>
-                    </section>
+                                <p class="card-text"><span id="ticks">27</span>/30 Ticks per second</p>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-4">
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Server Options</h3>
+                            </header>
+                            <div class="card-body">
+                            </div>
+                        </section>
+                    </div>
                 </div>
-                <div class="col-4">
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Server Options</h3>
-                        </header>
-                        <div class="card-body">
-                        </div>
-                    </section>
+            </section>
+            <section id="settings" class="d-none">
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <section class="card h-100"></section>
+                    </div>
+                    <div class="col-4">
+                        <section class="card h-100"></section>
+                    </div>
+                    <div class="col-4">
+                        <section class="card h-100"></section>
+                    </div>
                 </div>
-            </div>
+            </section>
+            <section id="console" class="d-none">
+                <div class="row mt-4">
+                    <div class="col-12"></div>
+                </div>
+            </section>
         </main>
         <footer class="container">
             <p><b>Version:</b> CL#<span id="version">12345</span></p>
