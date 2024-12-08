@@ -3,7 +3,7 @@ import webview
 from SatisfactoryServerAdmin import SatisfactoryServerAdmin
 
 
-def init(window: webview.Window):
+def loop(window: webview.Window):
     # Setup visual fields
     serverName = window.dom.get_element("#server")
     sessionName = window.dom.get_element("#session")
@@ -55,11 +55,11 @@ def init(window: webview.Window):
 
             sleep(10)
         else:
-            sleep(10)
+            sleep(1)
 
 
 server = SatisfactoryServerAdmin()
 window = webview.create_window(
     "Satisfactory Server Administrator V0.0.1", "./index.html", js_api=server
 )
-webview.start(init, window, debug=False)  # Blocking after start
+webview.start(loop, window, debug=False)  # Blocking after start
