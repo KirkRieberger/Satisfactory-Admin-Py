@@ -17,7 +17,7 @@ def loop(window: webview.Window):
     # Window Update Loop
     while True:  # TODO: Use LW Query to determine if update is needed
         if server.loggedIn:
-            server.pollServerState(window, server.serverState)
+            server.pollServerState()
             serverName.text = server.serverName
             phase.text = server.gamePhase
             sessionName.text = server.sessionName
@@ -26,7 +26,7 @@ def loop(window: webview.Window):
             playerCount.text = server.numPlayers
             maxCount.text = server.maxPlayers
             tickRate.text = server.tickRate
-
+            updateStatusDisp(window, server.serverState)
             sleep(10)
         else:
             sleep(1)
