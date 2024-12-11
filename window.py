@@ -58,8 +58,9 @@ def loop(window: webview.Window):
             sleep(1)
 
 
-server = SatisfactoryServerAdmin()
-window = webview.create_window(
-    "Satisfactory Server Administrator V0.0.1", "./index.html", js_api=server
-)
-webview.start(loop, window, debug=False)  # Blocking after start
+if __name__ == "__main__":
+    server = SatisfactoryServerAdmin()
+    window = webview.create_window(
+        "Satisfactory Server Administrator V0.0.1", "./index.html", js_api=server
+    )
+    webview.start(loop, window, debug=False)  # Blocking after start
