@@ -140,11 +140,23 @@
                     </div>
                     <div class="modal-body">
                         <!-- Login Form -->
-                        <form action="" id="loginForm">
-                            <label for="address" class="form-label">Server Address</label>
-                            <input id="address" name="address" type="text" class="form-control">
-                            <label for="key" class="form-label">API Key</label>
-                            <input id="key" name="key" type="password" class="form-control">
+                        <form action="" id="loginForm" class="conatiner">
+                            <div class="row">
+                                <div class="col-8">
+                                    <label for="address" class="form-label">Server Address</label>
+                                    <input id="address" name="address" type="text" class="form-control">
+                                </div>
+                                <div class="col-4">
+                                    <label for="port" class="form-label">Server Port</label>
+                                    <input id="port" name="port" type="text" class="form-control" value="7777">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="key" class="form-label">API Key</label>
+                                    <input id="key" name="key" type="password" class="form-control">
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">

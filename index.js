@@ -21,12 +21,24 @@ const loginModal = new bootstrap.Modal('#loginModal');
             login();
         }
     });
+
+    $('#port').on({
+        'keypress': (event) => {
+            if (event.key === "Enter") {
+                login();
+            }
+        },
+        'focus': () => {
+        $('#port').select();
+        }
+    });
  });
 
 function login() {
     let adr = $("#address").val();
     let key = $("#key").val();
-    let port = 7777;
+    let port = $("#port").val();
+    alert(`Address: ${adr}:${port}`);
     let response = pywebview.api.login(adr, key, port);
 
     response.then(value => {
@@ -36,6 +48,7 @@ function login() {
         // Clear fields
         $("#address").val("");
         $("#key").val("");
+        $("#port").val("");
     });
 }
 
