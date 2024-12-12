@@ -140,27 +140,31 @@
                     </div>
                     <div class="modal-body">
                         <!-- Login Form -->
-                        <form action="" id="loginForm" class="conatiner">
+                        <form action="javascript:login()" id="loginForm" class="container needs-validation" novalidate>
                             <div class="row">
                                 <div class="col-8">
                                     <label for="address" class="form-label">Server Address</label>
-                                    <input id="address" name="address" type="text" class="form-control">
+                                    <input id="address" name="address" type="text" class="form-control" required>
+                                    <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="col-4">
                                     <label for="port" class="form-label">Server Port</label>
-                                    <input id="port" name="port" type="text" class="form-control" value="7777">
+                                    <input id="port" name="port" type="text" class="form-control" value="7777" required>
+                                    <div class="invalid-feedback"></div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <label for="key" class="form-label">API Key</label>
-                                    <input id="key" name="key" type="password" class="form-control">
+                                    <input id="key" name="key" type="password" class="form-control" required>
+                                    <div class="invalid-feedback"></div>
                                 </div>
                             </div>
+                            <input type="submit" hidden>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button id="loginButton" type="button" class="btn btn-success">Login</button>
+                        <button id="loginButton" type="submit" form="loginForm" class="btn btn-success">Login</button>
                     </div>
                 </div>
             </div>

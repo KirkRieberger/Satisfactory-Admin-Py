@@ -1,37 +1,27 @@
 const loginModal = new bootstrap.Modal('#loginModal');
- 
+const loginForm = document.getElementById('loginForm');
  // Wait for Python API to be initialized
  window.addEventListener('pywebviewready', function () {
     loginModal.show();
 
     // Login modal submit listeners
 
-    $('#loginButton').on('click', () => {
-        login();
-    });
+    loginForm.addEventListener('submit', event => {
+        if (!loginForm.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        } 
 
-    $('#address').on('keypress', (event) => {
-        if (event.key === "Enter") {
-            login();
-        }
-    });
-
-    $('#key').on('keypress', (event) => {
-        if (event.key === "Enter") {
-            login();
-        }
-    });
+        loginForm.classList.add('was-validated');
+    }, false)
 
     $('#port').on({
-        'keypress': (event) => {
-            if (event.key === "Enter") {
-                login();
-            }
-        },
         'focus': () => {
         $('#port').select();
         }
     });
+
+    // Form Validation
  });
 
 function login() {
