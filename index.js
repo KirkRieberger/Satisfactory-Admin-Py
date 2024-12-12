@@ -6,7 +6,7 @@ const loginModal = new bootstrap.Modal('#loginModal');
 
     // Login modal submit listeners
 
-    $('#loginButton').on('click', function () {
+    $('#loginButton').on('click', () => {
         login();
     });
 
