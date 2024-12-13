@@ -250,7 +250,7 @@ class SatisfactoryServerAdmin:
                 self.logger.fatal(
                     "Provided token payload is not Base 64 encoded. Exiting..."
                 )
-                sys_ex()
+                sys_ex()  # TODO: Shouldn't exit. Should raise exception for UI to handle
 
             try:
                 authLevel = json.loads(decodedPayload)["pl"]
