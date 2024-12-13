@@ -156,11 +156,8 @@ class SatisfactoryServerAdmin:
 
         Args:
             ip (str): The IP address (or FQDN) of the dedicated server
-            key (str): The API key to be used when accessing the server. Can be either the API key + payload, or the bare key.
+            token (str): The API key to be used when accessing the server. Can be either the API key + payload, or the bare key.
             port (int, optional): The port the server is running on. Defaults to 7777.
-
-        Raises: TODO:
-            ConnectionError: Raised if
         """
 
         # Instance variables
@@ -222,7 +219,8 @@ class SatisfactoryServerAdmin:
         return f"SatisfactoryServer('{self.address}', '{self.key}')"
 
     def login(self, ip: str = None, token: str = None, port: str = "7777") -> int:
-        """TODO: _summary_
+        """
+        Attempts to perform an API key login with the specified server.
 
         Args:
             ip (str, optional): The IP address (or FQDN) of the dedicated server. Defaults to None.
@@ -298,7 +296,8 @@ class SatisfactoryServerAdmin:
             payload (dict): A dict of dedicated server function data
 
         Returns:
-            requests.Response: TODO: _description_
+            requests.Response: The HTTP response body if successful
+            int: Cloudflare HTTP response 523 - Destination Unreachable on timeout
         """
         if not self.loggedIn:
             self.logger.error("")
@@ -313,14 +312,14 @@ class SatisfactoryServerAdmin:
             return 523
 
     def _LightweightQuery(self) -> list:
-        # TODO:
-        """_summary_
+        """
+        Determines the server changelist by performing a lightweight UDP query of the connected server
 
         Raises:
-            TimeoutError: _description_
+            TimeoutError: Non-fatal error if response isn't received from server in time
 
         Returns:
-            list: _description_
+            list: Bitmask of changed states: [Server State, Server Options, Advanced Game Settings, Save Sessions]
         """
         serverStates = {0: "offline", 1: "idle", 2: "loading", 3: "playing"}
         subStateStatus = [0, 0, 0, 0]  # Returned value
@@ -458,14 +457,10 @@ class SatisfactoryServerAdmin:
             return (0, response.status_code)
 
     def _queryServerState(self) -> None:
-        # TODO:
-        """_summary_
-
-        Returns:
-            _type_: _description_
-        """
+        """Query the server's state endpoint, and update class members"""
         # Get response
         response = self._postJSONRequest(self.headers, {"function": "QueryServerState"})
+        # TODO: Check if valid response
         self.logger.info(f"Received {response.status_code} response from server")
         content = json.loads(response.content)["data"]["serverGameState"]
 
@@ -500,8 +495,8 @@ class SatisfactoryServerAdmin:
         pass
 
     def pollServerState(self) -> None:
-        # TODO:
-        """_summary_"""
+        """Poll the lightweight query API to determine if a call to the HTTP
+        API is required, then poll the required APIs"""
         changeList = self._LightweightQuery()
         if changeList[0]:
             # Server State
