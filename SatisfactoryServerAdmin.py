@@ -238,8 +238,6 @@ class SatisfactoryServerAdmin:
         """
         self.ip = ip
         self.port = port
-
-        # TODO: Regex to verify valid FQDN or IP
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
         # Split token into payload and key
