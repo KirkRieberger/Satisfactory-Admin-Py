@@ -21,7 +21,6 @@ const loginForm = document.getElementById('loginForm');
         }
     });
 
-    // Form Validation
  });
 
 function login() {
