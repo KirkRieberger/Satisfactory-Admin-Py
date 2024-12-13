@@ -143,9 +143,10 @@
                         <form action="javascript:login()" id="loginForm" class="container needs-validation" novalidate>
                             <div class="row">
                                 <div class="col-8">
-                                    <!-- TODO: Pattern validation for FQDN or IP -->
                                     <label for="address" class="form-label">Server Address</label>
-                                    <input id="address" name="address" type="text" class="form-control" required>
+                                    <input id="address" name="address" type="text" class="form-control"
+                                        pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)+([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                                        required>
                                     <div class="invalid-feedback"></div>
                                 </div>
                                 <div class="col-4">
@@ -157,9 +158,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <!-- TODO: Pattern validation for Base64 encoded token or token + payload -->
                                     <label for="key" class="form-label">API Key</label>
-                                    <input id="key" name="key" type="password" class="form-control" required>
+                                    <input id="key" name="key" type="password" class="form-control"
+                                        pattern="^([0-9A-Za-z+/=]+[.])?[0-9A-F]{128}$" required>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
