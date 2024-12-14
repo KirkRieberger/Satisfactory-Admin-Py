@@ -300,7 +300,7 @@ class SatisfactoryServerAdmin:
             int: Cloudflare HTTP response 523 - Destination Unreachable on timeout
         """
         if not self.loggedIn:
-            self.logger.error("")
+            self.logger.error("")  # TODO: Can't error. used for login
         try:
             response = requests.post(
                 self.address, headers=headers, json=payload, verify=False
@@ -488,6 +488,10 @@ class SatisfactoryServerAdmin:
 
     def _queryServerOptions(self) -> None:
         # TODO:
+        response = self._postJSONRequest(self.headers, {"function": "GetServerOptions"})
+        # TODO: Check if valid response
+        self.logger.info(f"Received {response.status_code} response from server")
+        content = json.loads(response.content)
         pass
 
     def _queryAdvancedGameSettings(self) -> None:
@@ -516,7 +520,12 @@ class SatisfactoryServerAdmin:
 
 if __name__ == "__main__":
     server = SatisfactoryServerAdmin()
-    server.login("IP", "Key", 7777)
-    server.pollServerState()
+    # server.login("IP", "Key", 7777)
+    server.login(
+        "192.168.1.17",
+        "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
+        7777,
+    )
+    server._queryServerOptions()
     # print(server.queryServerState())
     # server._LightweightQuery()
