@@ -71,7 +71,8 @@ prettySchematic = {
 
 def getSchematic(serverSchematic: str):
     """
-        docstring
+        Converts given Satisfactory Dedicated Server format schematic
+        string to a human-readable form
     """
     if serverSchematic in prettySchematic:
         return prettySchematic[serverSchematic]
@@ -81,7 +82,8 @@ def getSchematic(serverSchematic: str):
 
 def getPhase(serverPhase: str):
     """
-        docstring
+        Converts given Satisfactory Dedicated Server format phase string
+        to a human-readable form
     """
     if serverPhase in prettyPhase:
         return prettyPhase[serverPhase]
