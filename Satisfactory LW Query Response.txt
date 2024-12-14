@@ -3,19 +3,23 @@ Lightweight API Response
 Raw: d5 f6 01 01 52 0b 95 6e 71 d2 ea 52 03 ba c9 05 00 00 00 00 00 00 00 00 00 04 00 44 00 01 01 00 03 21 00 02 02 00 0f 00 52 49 45 42 45 52 47 45 52 2d 4c 4f 43 41 4c 01
 Python Bytes: b'd5 f6 01 01/=\x12\xd6\x15&SD\x03\xba\xc9\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x04\x00B\x00\x01\x01\x00\x03 \x00\x02\x02\x00\x0f\x00RIEBERGER-LOCAL\x01'
 
+Header:
+=======
 Magic: d5 f6
 Type: 01
 Ver: 01
+
 Server State:
-Cookie: 52 0b 95 6e 71 d2 ea 52
-State: 03
-Change List: ba c9 05 00
-Flags: 00 00 00 00 00 00 00 00
-Num SubStates: 04
-SubStates: 00 44 00 - ServerGameState
-	   01 01 00 - ServerOptions
-	   03 21 00 - SaveCollection
-	   02 02 00 - AdvancedGameSettings
+=============
+Cookie: 52 0b 95 6e 71 d2 ea 52  // Unreal engine ticks
+State: 03                        // Running or not
+Change List: ba c9 05 00         // Server game version
+Flags: 00 00 00 00 00 00 00 00   // Only used if modded
+Num SubStates: 04                // Each is a counter incremented when a setting changes
+SubStates: 00 44 00              // ServerGameState
+	   01 01 00                  // ServerOptions
+	   03 21 00                  // SaveCollection
+	   02 02 00                  // AdvancedGameSettings
 Name Length: 0f 00
 Name: 52 49 45 42 45 52 47 45 52 2d 4c 4f 43 41 4c 
 Terminator: 01
