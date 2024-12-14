@@ -12,7 +12,7 @@ from sys import exit as sys_ex
 # Possible to connect with payload+token and just token
 
 __author__ = "Kirk Rieberger"
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __date__ = "Nov 21, 2024"
 
 
