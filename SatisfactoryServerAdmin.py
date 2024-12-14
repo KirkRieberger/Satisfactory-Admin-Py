@@ -17,7 +17,9 @@ __date__ = "Nov 21, 2024"
 
 
 class SatisfactoryServerAdmin:
-    """Contains a reference to a running Satisfactory Dedicated Server. Provides certain management functions"""
+    """Contains a reference to a running Satisfactory Dedicated
+    Server. Provides certain management functions
+    """
 
     # Static class variables
     functions = [
@@ -35,9 +37,10 @@ class SatisfactoryServerAdmin:
         # Requires dict of settings to change
         "ClaimServer",
         # Returns new auth token without initial admin privileges.
-        # Requires InitialAdmin privilege level, which can only be acquired by
-        #   attempting passwordless login while the server does not have an
-        #   Admin Password set. Requires new server name and admin password.
+        # Requires InitialAdmin privilege level, which can only be
+        #   acquired by attempting passwordless login while the server
+        #   does not have an Admin Password set. Requires new server
+        #   name and admin password.
         "RenameServer",
         # Returns nothing on success.
         # Requires new server name
@@ -46,7 +49,8 @@ class SatisfactoryServerAdmin:
         # Requires new client password IN PLAIN TEXT
         "SetAdminPassword",
         # Returns nothing on success.
-        # Requires new admin password IN PLAIN TEXT and new token to use
+        # Requires new admin password IN PLAIN TEXT and new token to
+        #   use
         "SetAutoLoadSessionName",
         # Returns nothing on success.
         # Requires name of session to load
@@ -70,13 +74,14 @@ class SatisfactoryServerAdmin:
         # Returns nothing on success.
         # Requires name of game session to delete
         "EnumerateSessions",
-        # Returns array of sessions on server and index of loaded session.
+        # Returns array of sessions on server and index of loaded
+        #   session.
         "LoadGame",
         # Returns nothing on success.
         # Requires name of save file to load and AGS enable bool
         "UploadSaveGame",
-        # Requires name of save to upload, immediate load bool, AGS bool, and save
-        #   file as multipart form request
+        # Requires name of save to upload, immediate load bool,
+        #   AGS bool, and save file as multipart form request
         "DownloadSaveGame",
         # Returns save file.
         # Requires name of save file to download
@@ -88,8 +93,10 @@ class SatisfactoryServerAdmin:
 
         Args:
             ip (str): The IP address (or FQDN) of the dedicated server
+
             token (str): The API key to be used when accessing the
             server.
+
             port (int, optional): The port the server is running on.
             Defaults to 7777.
         """
@@ -146,12 +153,17 @@ class SatisfactoryServerAdmin:
             self.login(ip, token, port)
 
     def __str__(self) -> str:
-        """Returns a human-readable string representation of the current object
+        """
+        Returns a human-readable string representation of the current
+        object
 
         Returns:
             str: A string representation of the current object
         """
-        return f"Satisfactory Server management instance for server at {self.address}"
+        return (
+            f"Satisfactory Server management instance for server at {
+                self.address}"
+        )
 
     def __repr__(self) -> str:
         """
@@ -169,8 +181,10 @@ class SatisfactoryServerAdmin:
         Args:
             ip (str, optional): The IP address (or FQDN) of the
             dedicated server. Defaults to None.
-            token (str, optional): The API key to be used when accessing
-            the server. Defaults to None.
+
+            token (str, optional): The API key to be used when
+            accessing the server. Defaults to None.
+
             port (int, optional): The port the server is running on.
             Defaults to 7777.
 
@@ -198,7 +212,8 @@ class SatisfactoryServerAdmin:
                 self.logger.fatal(
                     "Provided token payload is not Base 64 encoded. Exiting..."
                 )
-                sys_ex()  # TODO: Shouldn't exit. Should raise exception for UI to handle
+                # TODO: Shouldn't exit. Should raise exception for UI to handle
+                sys_ex()
 
             try:
                 authLevel = json.loads(decodedPayload)["pl"]
@@ -207,6 +222,7 @@ class SatisfactoryServerAdmin:
                     "Provided token payload is invalid. Did you provide a\
                         Satisfactory Server API Token?"
                 )
+                # TODO: Shouldn't exit. Should raise exception for UI to handle
                 sys_ex()
         # else, assume just key in token
         else:
@@ -230,8 +246,8 @@ class SatisfactoryServerAdmin:
             return 204  # No Content
         else:
             self.logger.error(
-                f"Connection to {self.address} failed with status {initResponse.status_code}!\
-                    \nResponse: {initResponse.content}"
+                f"Connection to {self.address} failed with status \
+                {initResponse.status_code}! \nResponse: {initResponse.content}"
             )
             raise ConnectionError(
                 f"Connection to {self.address} failed with status {
@@ -267,13 +283,16 @@ class SatisfactoryServerAdmin:
 
     def _LightweightQuery(self) -> list:
         """
-        Determines the server changelist by performing a lightweight UDP query of the connected server
+        Determines the server changelist by performing a lightweight
+        UDP query of the connected server
 
         Raises:
-            TimeoutError: Non-fatal error if response isn't received from server in time
+            TimeoutError: Non-fatal error if response isn't received
+            from server in time
 
         Returns:
-            list: Bitmask of changed states: [Server State, Server Options, Advanced Game Settings, Save Sessions]
+            list: Bitmask of changed states: [Server State, Server
+            Options, Advanced Game Settings, Save Sessions]
         """
         serverStates = {0: "offline", 1: "idle", 2: "loading", 3: "playing"}
         subStateStatus = [0, 0, 0, 0]  # Returned value
@@ -342,14 +361,16 @@ class SatisfactoryServerAdmin:
         self.clientVersion = int.from_bytes(data[13:17], byteorder="little")
 
         respFlags = int.from_bytes(data[17:25], byteorder="little")
-        if (respFlags & 0x8000000000000000) != 0:  # Bitmask for 64th (modded flag) bit
+        # Bitmask for 64th (modded flag) bit
+        if (respFlags & 0x8000000000000000) != 0:
             # Server is modded
             self.logger.warning(
                 "Server appears modded! Some features might not work as expected!"
             )
 
         numStates = int.from_bytes(data[25:26])
-        # Substate is a counter incremented each time a relevant setting is changed
+        # Substate is a counter incremented each time a relevant
+        #   setting is changed
 
         # respStates = data[26 : 26 + (3 * numStates)]
         i = 26  # Base offset of state array
@@ -384,14 +405,15 @@ class SatisfactoryServerAdmin:
 
     def passwordlessLogin(self, headers: dict) -> tuple:
         """
-        Performs a passwordless login to the server. Grants User level access.
-        Should not be used for third-party app logins
+        Performs a passwordless login to the server. Grants User level
+        access. Should not be used for third-party app logins
 
         Args:
             headers (dict): Default HTTP headers of calling object
 
         Returns:
-            tuple (int, string): (1, authToken) on success, (0, responseCode) on failure
+            tuple (int, string): (1, authToken) on success,
+            (0, responseCode) on failure
         """
         payload = json.dumps(
             {
@@ -411,7 +433,9 @@ class SatisfactoryServerAdmin:
             return (0, response.status_code)
 
     def _queryServerState(self) -> None:
-        """Query the server's state endpoint, and update class members"""
+        """
+        Query the server's state endpoint, and update class members
+        """
         # Get response
         response = self._postJSONRequest(
             self.headers, {"function": "QueryServerState"})
@@ -460,8 +484,10 @@ class SatisfactoryServerAdmin:
         pass
 
     def pollServerState(self) -> None:
-        """Poll the lightweight query API to determine if a call to the HTTP
-        API is required, then poll the required APIs"""
+        """
+        Poll the lightweight query API to determine if a call to the
+        HTTP API is required, then poll the required APIs
+        """
         changeList = self._LightweightQuery()
         if changeList[0]:
             # Server State
