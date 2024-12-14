@@ -26,7 +26,7 @@ class SatisfactoryServerAdmin:
         "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_4.GP_Project_Assembly_Phase_4'": "Propulsion",
         "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_5.GP_Project_Assembly_Phase_5'": "Assembly",
     }
-
+    # This LUT hurts me
     prettySchematic = {
         # Tier 0 - Onboarding
         "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_0-1.Schematic_0-1_C'": "HUB Upgrade 1",
@@ -156,8 +156,10 @@ class SatisfactoryServerAdmin:
 
         Args:
             ip (str): The IP address (or FQDN) of the dedicated server
-            token (str): The API key to be used when accessing the server. Can be either the API key + payload, or the bare key.
-            port (int, optional): The port the server is running on. Defaults to 7777.
+            token (str): The API key to be used when accessing the
+            server.
+            port (int, optional): The port the server is running on.
+            Defaults to 7777.
         """
 
         # Instance variables
@@ -167,23 +169,33 @@ class SatisfactoryServerAdmin:
         self.port = None
         self.headers = None
         self.loggedIn = False
-        self.subStates = {}
+        self.subStates = {}      # substate ID: state changelist
 
-        #  Displayed values
+        #  Dashboard
         #   Header
         self.serverName = None
         self.sessionName = None
-        self.serverState = None
+        self.serverState = None       # Lightweight Query
+        self.paused = None            # HTTPS Query
         #   Game Info
-        self.gamePhase = None  # Number
-        self.tier = None  # String
-        self.schematic = None  # String
+        self.gamePhase = None         # Number
+        self.tier = None              # String
+        self.schematic = None         # String
         #   Server State
         self.numPlayers = None
         self.maxPlayers = None
         self.tickRate = None
+        #  Server Options
+        self.autoPause = None
+        self.saveOnDisconnect = None
+        self.autosaveInterval = None  # In seconds
+        self.restartTime = None       # In minutes
+        self.sendGameplayData = None
+        self.networkQuality = None
+
         self.autoSessionName = None
-        self.paused = None
+
+        # Persistent
         self.clientVersion = None
         #   Save Info
         self.duration = None
@@ -223,9 +235,12 @@ class SatisfactoryServerAdmin:
         Attempts to perform an API key login with the specified server.
 
         Args:
-            ip (str, optional): The IP address (or FQDN) of the dedicated server. Defaults to None.
-            token (str, optional): The API key to be used when accessing the server. Can be either the API key + payload, or the bare key. Defaults to None.
-            port (int, optional): The port the server is running on. Defaults to 7777.
+            ip (str, optional): The IP address (or FQDN) of the
+            dedicated server. Defaults to None.
+            token (str, optional): The API key to be used when accessing
+            the server. Defaults to None.
+            port (int, optional): The port the server is running on.
+            Defaults to 7777.
 
         Raises:
             TimeoutError: If the connection to the specified address times out
@@ -234,6 +249,7 @@ class SatisfactoryServerAdmin:
         Returns:
             int: HTTP status code 204 if successful
         """
+        # TODO: Verify input before attempting connect
         self.ip = ip
         self.port = port
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
@@ -256,7 +272,8 @@ class SatisfactoryServerAdmin:
                 authLevel = json.loads(decodedPayload)["pl"]
             except KeyError:
                 self.logger.fatal(
-                    "Provided token payload is invalid. Did you provide a Satisfactory Server API Token?"
+                    "Provided token payload is invalid. Did you provide a\
+                        Satisfactory Server API Token?"
                 )
                 sys_ex()
         # else, assume just key in token
@@ -271,7 +288,8 @@ class SatisfactoryServerAdmin:
         # Check if connection successful
         if initResponse == 523:
             # Unable to contact server at given address
-            raise TimeoutError(f"Connection to {self.address} failed with no response!")
+            raise TimeoutError(
+                f"Connection to {self.address} failed with no response!")
         # TODO: Raise different exception based on HTTP code
         if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
@@ -284,20 +302,24 @@ class SatisfactoryServerAdmin:
                     \nResponse: {initResponse.content}"
             )
             raise ConnectionError(
-                f"Connection to {self.address} failed with status {initResponse.status_code}!"
+                f"Connection to {self.address} failed with status {
+                    initResponse.status_code}!"
             )
 
     def _postJSONRequest(self, headers: dict, payload: dict) -> requests.Response:
         """
-        Sends an HTTP request to the server using a JSON formatted payload
+        Sends an HTTP request to the server using a JSON formatted
+        payload
 
         Args:
-            headers (dict): A dict of standard HTTP headers to be included with the request
+            headers (dict): A dict of standard HTTP headers to be
+            included with the request
             payload (dict): A dict of dedicated server function data
 
         Returns:
             requests.Response: The HTTP response body if successful
-            int: Cloudflare HTTP response 523 - Destination Unreachable on timeout
+            int: Cloudflare HTTP response 523 - Destination Unreachable
+            on timeout
         """
         if not self.loggedIn:
             self.logger.error("")  # TODO: Can't error. used for login
@@ -401,9 +423,9 @@ class SatisfactoryServerAdmin:
         i = 26  # Base offset of state array
         while i < (26 + numStates * 3):
             stateId = int.from_bytes(
-                data[i : i + 1]
+                data[i: i + 1]
             )  # Single byte - Order not necessary
-            stateData = int.from_bytes(data[i + 1 : i + 4], byteorder="little")
+            stateData = int.from_bytes(data[i + 1: i + 4], byteorder="little")
 
             if stateId in self.subStates:
                 if stateData != self.subStates[stateId]:
@@ -417,11 +439,11 @@ class SatisfactoryServerAdmin:
             i += 3
 
         respNameLen = int.from_bytes(
-            data[26 + (3 * numStates) : 26 + (3 * numStates) + 2],
+            data[26 + (3 * numStates): 26 + (3 * numStates) + 2],
             byteorder="little",
         )
         self.serverName = data[
-            26 + (3 * numStates) + 2 : 26 + (3 * numStates) + 2 + respNameLen
+            26 + (3 * numStates) + 2: 26 + (3 * numStates) + 2 + respNameLen
         ].decode("utf-8")
 
         # Terminator 0x01
@@ -459,9 +481,11 @@ class SatisfactoryServerAdmin:
     def _queryServerState(self) -> None:
         """Query the server's state endpoint, and update class members"""
         # Get response
-        response = self._postJSONRequest(self.headers, {"function": "QueryServerState"})
+        response = self._postJSONRequest(
+            self.headers, {"function": "QueryServerState"})
         # TODO: Check if valid response
-        self.logger.info(f"Received {response.status_code} response from server")
+        self.logger.info(
+            f"Received {response.status_code} response from server")
         content = json.loads(response.content)["data"]["serverGameState"]
 
         # Update instance variables
@@ -488,9 +512,11 @@ class SatisfactoryServerAdmin:
 
     def _queryServerOptions(self) -> None:
         # TODO:
-        response = self._postJSONRequest(self.headers, {"function": "GetServerOptions"})
+        response = self._postJSONRequest(
+            self.headers, {"function": "GetServerOptions"})
         # TODO: Check if valid response
-        self.logger.info(f"Received {response.status_code} response from server")
+        self.logger.info(
+            f"Received {response.status_code} response from server")
         content = json.loads(response.content)
         pass
 
