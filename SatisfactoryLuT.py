@@ -1,5 +1,5 @@
 # Tables to look up from
-prettyPhase = {
+_prettyPhase = {
     "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_1.GP_Project_Assembly_Phase_1'": "Distribution Platform",
     "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_2.GP_Project_Assembly_Phase_2'": "Construction Dock",
     "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_3.GP_Project_Assembly_Phase_3'": "Main Body",
@@ -7,7 +7,7 @@ prettyPhase = {
     "/Script/FactoryGame.FGGamePhase'/Game/FactoryGame/GamePhases/GP_Project_Assembly_Phase_5.GP_Project_Assembly_Phase_5'": "Assembly",
 }
 # This LUT hurts me
-prettySchematic = {
+_prettySchematic = {
     # Tier 0 - Onboarding
     "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_0-1.Schematic_0-1_C'": "HUB Upgrade 1",
     "/Script/Engine.BlueprintGeneratedClass'/Game/FactoryGame/Schematics/Progression/Schematic_0-2.Schematic_0-2_C'": "HUB Upgrade 2",
@@ -74,8 +74,8 @@ def getSchematic(serverSchematic: str):
         Converts given Satisfactory Dedicated Server format schematic
         string to a human-readable form
     """
-    if serverSchematic in prettySchematic:
-        return prettySchematic[serverSchematic]
+    if serverSchematic in _prettySchematic:
+        return _prettySchematic[serverSchematic]
     else:
         return None
 
@@ -85,7 +85,7 @@ def getPhase(serverPhase: str):
         Converts given Satisfactory Dedicated Server format phase string
         to a human-readable form
     """
-    if serverPhase in prettyPhase:
-        return prettyPhase[serverPhase]
+    if serverPhase in _prettyPhase:
+        return _prettyPhase[serverPhase]
     else:
         return None
