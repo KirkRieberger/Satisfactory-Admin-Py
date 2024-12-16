@@ -112,45 +112,45 @@ class SatisfactoryServerAdmin:
 
         #  Dashboard
         #   Header
-        self.serverName = None
-        self.sessionName = None
-        self.serverState = None       # Lightweight Query
-        self.paused = None            # HTTPS Query
+        self.serverName = None           # ✔
+        self.sessionName = None          # ✔
+        self.serverState = None          # Lightweight Query ✔
+        self.paused = None               # HTTPS Query ✔
         #   Game Info
-        self.gamePhase = None         # Number
-        self.tier = None              # String
-        self.schematic = None         # String
-        self.duration = None
+        self.gamePhase = None            # Number ✔
+        self.tier = None                 # String ✔
+        self.schematic = None            # String ✔
+        self.duration = None             #
         #   Server State
-        self.numPlayers = None
-        self.maxPlayers = None
-        self.tickRate = None
-        self.autoSessionName = None
+        self.numPlayers = None           # ✔
+        self.maxPlayers = None           # ✔
+        self.tickRate = None             # ✔
+        self.autoSessionName = None      #
 
         # Settings
         #  Server Options
-        self.autoPause = None
-        self.saveOnDisconnect = None
-        self.autosaveInterval = None  # In seconds
-        self.restartTime = None       # In minutes
-        self.sendGameplayData = None
-        self.networkQuality = None
+        self.autoPause = None            #
+        self.saveOnDisconnect = None     #
+        self.autosaveInterval = None     # In seconds
+        self.restartTime = None          # In minutes
+        self.sendGameplayData = None     #
+        self.networkQuality = None       #
         #  AGS
-        self.creativeMode = None
-        self.noPower = None
-        self.disableArachnids = None
-        self.noUnlock = None
-        self.setPhase = None
-        self.allTiers = None
-        self.unlockAllSchematics = None
-        self.unlockAllAlts = None
-        self.unlockAllShop = None
-        self.noBuildCost = None
-        self.godMode = None
-        self.flightMode = None
+        self.creativeMode = None         #
+        self.noPower = None              #
+        self.disableArachnids = None     #
+        self.noUnlock = None             #
+        self.allTiers = None             #
+        self.setPhase = None             #
+        self.unlockAllSchematics = None  #
+        self.unlockAllAlts = None        #
+        self.unlockAllShop = None        #
+        self.noBuildCost = None          #
+        self.godMode = None              #
+        self.flightMode = None           #
 
         # Persistent
-        self.clientVersion = None  # Lightweight Query
+        self.clientVersion = None        # Lightweight Query ✔
 
         # Initialize logger
         self.logger = logging.getLogger("Server-Connect")
