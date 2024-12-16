@@ -53,7 +53,7 @@
             <!-- Dashboard Tab -->
             <section id="dashboard" class="">
                 <div class="row mt-4">
-                    <div class="col-4">
+                    <div class="col-6">
                         <section class="card h-100">
                             <header class="card-header">
                                 <h3>Game Info</h3>
@@ -65,7 +65,7 @@
                             </div>
                         </section>
                     </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <section class="card h-100">
                             <header class="card-header">
                                 <h3>Server State</h3>
@@ -80,28 +80,25 @@
                             </div>
                         </section>
                     </div>
-                    <div class="col-4">
-                        <section class="card h-100">
+
+                </div>
+            </section>
+            <!-- Settings Tab -->
+            <section id="settings" class="d-none">
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <section class="card h-100 mt-4">
                             <header class="card-header">
                                 <h3>Server Options</h3>
                             </header>
                             <div class="card-body">
                             </div>
                         </section>
-                    </div>
-                </div>
-            </section>
-            <!-- Settings Tab -->
-            <section id="settings" class="d-none">
-                <div class="row mt-4">
-                    <div class="col-4">
-                        <section class="card h-100"></section>
-                    </div>
-                    <div class="col-4">
-                        <section class="card h-100"></section>
-                    </div>
-                    <div class="col-4">
-                        <section class="card h-100"></section>
+                        <section class="card h-100 mt-4">
+                            <header class="card-header">
+                                <h3>AGS</h3>
+                            </header>
+                        </section>
                     </div>
                 </div>
             </section>
@@ -160,7 +157,7 @@
                                 <div class="col-12">
                                     <label for="key" class="form-label">API Key</label>
                                     <input id="key" name="key" type="password" class="form-control"
-                                        pattern="[0-9A-Za-z+/=]+[.][0-9A-F]{128}$" required>
+                                        pattern="^[0-9A-Za-z+/=]+[.][0-9A-F]{128}$" required>
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
