@@ -15,6 +15,8 @@ __author__ = "Kirk Rieberger"
 __version__ = "0.0.3"
 __date__ = "Dec 15, 2024"
 
+# Test folder rename
+
 
 class SatisfactoryServerAdmin:
     """Contains a reference to a running Satisfactory Dedicated
