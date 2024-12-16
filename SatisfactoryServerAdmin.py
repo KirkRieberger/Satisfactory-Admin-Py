@@ -202,8 +202,10 @@ class SatisfactoryServerAdmin:
             Defaults to 7777.
 
         Raises:
-            TimeoutError: If the connection to the specified address times out
-            ConnectionError: If another error occurs during token validation
+            TimeoutError: If the connection to the specified address
+            times out
+            ConnectionError: If another error occurs during token
+            validation
 
         Returns:
             int: HTTP status code 204 if successful
