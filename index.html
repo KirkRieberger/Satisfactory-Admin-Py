@@ -51,68 +51,72 @@
         </header>
         <main class="container">
             <!-- Dashboard Tab -->
-            <section id="dashboard" class="">
-                <div class="row mt-4">
-                    <div class="col-6">
-                        <section class="card h-100">
-                            <header class="card-header">
-                                <h3>Game Info</h3>
-                            </header>
-                            <div class="card-body">
-                                <p class="card-text"><b>Phase:&nbsp;</b><span id="phase">3</span></p>
-                                <p class="card-text"><b>Tier:&nbsp;</b><span id="tier">5</span></p>
-                                <p class="card-text"><b>Schematic:&nbsp;</b><span id="schem">None</span></p>
-                            </div>
-                        </section>
-                    </div>
-                    <div class="col-6">
-                        <section class="card h-100">
-                            <header class="card-header">
-                                <h3>Server State</h3>
-                            </header>
-                            <div class="card-body">
-                                <p class="card-text"><span id="curPlayers">#</span>/<span id="maxPlayers">#</span>
-                                    players
-                                </p>
-                                <!-- Pie Chart? https://www.w3schools.com/howto/howto_google_charts.asp 
+            <section id="dashboard" class="row mt-4">
+                <div class="col-6">
+                    <section class="card h-100">
+                        <header class="card-header">
+                            <h3>Game Info</h3>
+                        </header>
+                        <div class="card-body">
+                            <p class="card-text"><b>Phase:&nbsp;</b><span id="phase">3</span></p>
+                            <p class="card-text"><b>Tier:&nbsp;</b><span id="tier">5</span></p>
+                            <p class="card-text"><b>Schematic:&nbsp;</b><span id="schem">None</span></p>
+                        </div>
+                    </section>
+                </div>
+                <div class="col-6">
+                    <section class="card h-100">
+                        <header class="card-header">
+                            <h3>Server State</h3>
+                        </header>
+                        <div class="card-body">
+                            <p class="card-text"><span id="curPlayers">#</span>/<span id="maxPlayers">#</span>
+                                players
+                            </p>
+                            <!-- Pie Chart? https://www.w3schools.com/howto/howto_google_charts.asp 
                                  Line Chart of tickrate over time? -->
-                                <p class="card-text"><span id="ticks">27</span>/30 Ticks per second</p>
-                            </div>
-                        </section>
-                    </div>
-
+                            <p class="card-text"><span id="ticks">27</span>/30 Ticks per second</p>
+                        </div>
+                    </section>
                 </div>
             </section>
             <!-- Settings Tab -->
             <section id="settings" class="d-none">
-                <div class="row justify-content-center">
+                <div class="row mt-4 justify-content-center">
                     <div class="col-6">
-                        <section class="card h-100 mt-4">
+                        <section class="card h-100">
                             <header class="card-header">
                                 <h3>Server Options</h3>
                             </header>
                             <div class="card-body">
                             </div>
                         </section>
-                        <section class="card h-100 mt-4">
+                    </div>
+                </div>
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-6">
+                        <section class="card h-100">
                             <header class="card-header">
                                 <h3>AGS</h3>
                             </header>
+                            <div class="card-body">
+                            </div>
                         </section>
                     </div>
                 </div>
             </section>
             <!-- Console Tab -->
-            <section id="console" class="d-none">
-                <div class="row mt-4">
-                    <div class="col-12"></div>
-                </div>
+            <section id="console" class="row mt-4">
+                <div class="col-12"></div>
             </section>
         </main>
         <footer class="container">
-            <p><b>Version:</b> CL#<span id="version">12345</span></p>
-            <div class="row justify-content-end">
-                <div class="col-2 align-items-end">
+            <div class="row justify-content-between">
+                <div class="col-2">
+                    <p><b>Version:</b> CL#<span id="version">12345</span></p>
+                </div>
+
+                <div class="col-2">
                     <label for="UpdateRate">Update rate: </label>
                     <select name="UpdateRate" id="updateRate">
                         <option value="1">1</option>
