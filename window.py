@@ -13,6 +13,7 @@ def loop(window: webview.Window):
     playerCount = window.dom.get_element("#curPlayers")
     maxCount = window.dom.get_element("#maxPlayers")
     tickRate = window.dom.get_element("#ticks")
+    updateRate = window.dom.get_element("#updateRate")
 
     # Window Update Loop
     while True:  # TODO: Use LW Query to determine if update is needed
@@ -27,7 +28,7 @@ def loop(window: webview.Window):
             maxCount.text = server.maxPlayers
             tickRate.text = server.tickRate
             updateStatusDisp(window, server.serverState)
-            sleep(10)
+            sleep(updateRate.value)
         else:
             sleep(1)
 
