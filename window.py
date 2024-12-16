@@ -5,14 +5,19 @@ from SatisfactoryServerAdmin import SatisfactoryServerAdmin
 
 def loop(window: webview.Window):
     # Setup visual fields
+    #  Header
     serverName = window.dom.get_element("#server")
     sessionName = window.dom.get_element("#session")
+    #  Dashboard
+    #   Game Info
     phase = window.dom.get_element("#phase")
     tier = window.dom.get_element("#tier")
     schematic = window.dom.get_element("#schem")
+    #   Server State
     playerCount = window.dom.get_element("#curPlayers")
     maxCount = window.dom.get_element("#maxPlayers")
     tickRate = window.dom.get_element("#ticks")
+    #  Persistent
     updateRate = window.dom.get_element("#updateRate")
 
     # Window Update Loop
