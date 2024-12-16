@@ -12,8 +12,8 @@ from sys import exit as sys_ex
 # Possible to connect with payload+token and just token
 
 __author__ = "Kirk Rieberger"
-__version__ = "0.0.2"
-__date__ = "Nov 21, 2024"
+__version__ = "0.0.3"
+__date__ = "Dec 15, 2024"
 
 
 class SatisfactoryServerAdmin:
@@ -196,8 +196,11 @@ class SatisfactoryServerAdmin:
             int: HTTP status code 204 if successful
         """
         # TODO: Verify input before attempting connect
+        if not port.isnumeric():
+            raise ValueError("Provided port is not numeric")
+
         self.ip = ip
-        self.port = port
+        self.port = int(port)
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
         # Split token into payload and key
