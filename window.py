@@ -26,15 +26,15 @@ def loop(window: webview.Window):
         if server.loggedIn:
             server.pollServerState()
             serverName.text = server.serverName
-            phase.text = server.gamePhase
             sessionName.text = server.sessionName
+            updateStatusDisp(window, server.serverState)
+            phase.text = server.gamePhase
             tier.text = server.tier
             schematic.text = server.schematic
             playerCount.text = server.numPlayers
             maxCount.text = server.maxPlayers
             tickRate.text = server.tickRate
             changeList.text = server.clientVersion
-            updateStatusDisp(window, server.serverState)
             sleep(updateRate.value)
         else:
             sleep(1)
