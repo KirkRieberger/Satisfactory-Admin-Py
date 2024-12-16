@@ -18,6 +18,7 @@ def loop(window: webview.Window):
     maxCount = window.dom.get_element("#maxPlayers")
     tickRate = window.dom.get_element("#ticks")
     #  Persistent
+    changeList = window.dom.get_element("#version")
     updateRate = window.dom.get_element("#updateRate")
 
     # Window Update Loop
@@ -32,6 +33,7 @@ def loop(window: webview.Window):
             playerCount.text = server.numPlayers
             maxCount.text = server.maxPlayers
             tickRate.text = server.tickRate
+            changeList.text = server.clientVersion
             updateStatusDisp(window, server.serverState)
             sleep(updateRate.value)
         else:
