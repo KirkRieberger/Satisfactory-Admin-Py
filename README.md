@@ -4,7 +4,7 @@ THIS REPO IS A WORK IN PROGRESS! ONLY RUDIMENTARY FUNCTIONALITY EXISTS!
 
 This project aims to implement most* of the Satisfactory Dedicated Server API functions in an easy-to-use interface.
 
-### TODO:
+## TODO:
 #### Lightweight Query API
 - [x] Server State
 - [x] Change List
