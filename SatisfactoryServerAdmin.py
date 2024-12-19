@@ -488,14 +488,23 @@ class SatisfactoryServerAdmin:
         return content  # Temp
 
     def _queryServerOptions(self) -> None:
-        # TODO:
+        """
+        Query the server's options endpoint, and update class members
+        """
         response = self._postJSONRequest(
             self.headers, {"function": "GetServerOptions"})
         # TODO: Check if valid response
         self.logger.info(
             f"Received {response.status_code} response from server")
-        content = json.loads(response.content)
-        pass
+        currentOptions = json.loads(response.content)["data"]["serverOptions"]
+        pendingOptions = json.loads(response.content)["data"]["pendingOptions"]
+
+        self.autoPause = currentOptions["FG.DSAutoPause"]
+        self.saveOnDisconnect = currentOptions["FG.DSAutoSaveOnDisconnect"]
+        self.autosaveInterval = currentOptions["FG.DSAutosaveInterval"]
+        self.restartTime = currentOptions["FG.ServerRestartTimeSlot"]
+        self.sendGameplayData = currentOptions["FG.SendGameplayData"]
+        self.networkQuality = currentOptions["FG.NetworkQuality"]
 
     def _queryAdvancedGameSettings(self) -> None:
         # TODO:
@@ -529,7 +538,7 @@ if __name__ == "__main__":
     server.login(
         "192.168.1.17",
         "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
-        7777,
+        "7777",
     )
     server._queryServerOptions()
     # print(server.queryServerState())
