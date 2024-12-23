@@ -36,29 +36,31 @@
             </div>
             <!-- Tab List -->
             <div class="row">
-                <ul role="tablist" class="nav nav-tabs col">
-                    <li class="nav-item">
-                        <a role="tab" id="dashLink" class="nav-link active" href="#" onclick="showDash();"
-                            aria-selected="true" aria-controls="tabContainer" tabindex="0">Dashboard</a>
+                <ul role="tablist" class="nav nav-tabs">
+                    <li role="presentation" class="nav-item">
+                        <button role="tab" id="dashLink" class="nav-link active" type="button"
+                            data-bs-target="#dashboard" data-bs-toggle="tab" aria-selected="true"
+                            aria-controls="tabContainer">Dashboard</button>
                     </li>
                     <li class="nav-item">
-                        <a role="tab" id="settingsLink" class="nav-link" href="#" onclick="showSettings();"
-                            aria-selected="false" aria-controls="tabContainer" tabindex="-1">Settings</a>
+                        <button role="tab" id="settingsLink" class="nav-link" type="button" data-bs-target="#settings"
+                            data-bs-toggle="tab" aria-selected="false" aria-controls="tabContainer">Dashboard</button>
                     </li>
                     <li class="nav-item">
-                        <a role="tab" id="sessionsLink" class="nav-link" href="#" onclick="showSessions();"
-                            aria-selected="false" aria-controls="tabContainer" tabindex="-1">Sessions</a>
+                        <button role="tab" id="sessionsLink" class="nav-link" type="button" data-bs-target="#sessions"
+                            data-bs-toggle="tab" aria-selected="true" aria-controls="tabContainer">Dashboard</button>
                     </li>
                     <li class="nav-item">
-                        <a role="tab" id="consoleLink" class="nav-link" href="#" onclick="showConsole();"
-                            aria-selected="false" aria-controls="tabContainer" tabindex="-1">Console</a>
+                        <button role="tab" id="consoleLink" class="nav-link" type="button" data-bs-target="#console"
+                            data-bs-toggle="tab" aria-selected="false" aria-controls="tabContainer">Dashboard</button>
                     </li>
                 </ul>
             </div>
         </header>
-        <main id="tabContainer" class="container">
+        <main id="tabContainer" class="container tab-content">
             <!-- Dashboard Tab -->
-            <section id="dashboard" role="tabpanel" tabindex="0" aria-labelledby="dashLink">
+            <section role="tabpanel" id="dashboard" class="tab-pane fade show active" tabindex="0"
+                aria-labelledby="dashLink">
                 <div class="row mt-4">
                     <div class="col-6">
                         <!-- Game Info Card -->
@@ -92,7 +94,7 @@
                 </div>
             </section>
             <!-- Settings Tab -->
-            <section id="settings" role="tabpanel" tabindex="0" aria-labelledby="settingsLink" hidden>
+            <section role="tabpanel" id="settings" class="tab-pane fade" tabindex="0" aria-labelledby="settingsLink">
                 <!-- TODO: Only update wne tab initially activated -->
                 <div class="row mt-4 justify-content-center">
                     <div class="col-6">
@@ -184,7 +186,7 @@
                 </div>
             </section>
             <!-- Session Management Tab -->
-            <section id="sessions" role="tabpanel" tabindex="0" aria-labelledby="settingsLink" hidden>
+            <section role="tabpanel" id="sessions" class="tab-pane fade" tabindex="0" aria-labelledby="settingsLink">
                 <div class="row mt-4">
                     <div class="col-6">
                         <section class="card h-100">
@@ -203,7 +205,7 @@
                 </div>
             </section>
             <!-- Console Tab -->
-            <section id="console" role="tabpanel" tabindex="0" aria-labelledby="consoleLink" hidden>
+            <section role="tabpanel" id="console" class="tab-pane fade" tabindex="0" aria-labelledby="consoleLink">
                 <div class="row mt-4">
                     <div class="col-12">
                         <section class="card h-100">
