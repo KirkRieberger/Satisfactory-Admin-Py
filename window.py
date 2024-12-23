@@ -22,6 +22,7 @@ def loop(window: webview.Window):
     updateRate = window.dom.get_element("#updateRate")
 
     # Window Update Loop
+    # TODO: Check which tab is active, update accordingly
     while True:  # TODO: Use LW Query to determine if update is needed
         if server.loggedIn:
             server.pollServerState()
