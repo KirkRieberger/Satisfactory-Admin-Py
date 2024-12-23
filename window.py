@@ -36,7 +36,7 @@ def loop(window: webview.Window):
             maxCount.text = server.maxPlayers
             tickRate.text = server.tickRate
             changeList.text = server.clientVersion
-            sleep(updateRate.value)
+            sleep(int(updateRate.value))
         else:
             sleep(1)
 
