@@ -92,10 +92,69 @@
                         <!-- Server Options Card -->
                         <section class="card h-100">
                             <header class="card-header">
-                                <h3>Server Options</h3>
+                                <h3>Server Options
+                                    <!-- TODO: Show when pending options -->
+                                    <span class="badge text-bg-warning" hidden>SERVER RESTART REQUIRED</span>
+                                </h3>
                             </header>
-                            <div class="card-body">
-                            </div>
+                            <form class="card-body container-fluid">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="form-check form-switch">
+                                            <label for="autoPause" class="form-check-label">Auto Pause</label>
+                                            <input type="checkbox" role="switch" id="autoPause"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="autoSaveOnDC" class="form-check-label">Autosave on
+                                                Disconnect</label>
+                                            <input type="checkbox" role="switch" id="autoSaveOnDC"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="telemetry" class="form-check-label">Send Telemetry</label>
+                                            <input type="checkbox" role="switch" id="telemetry"
+                                                class="form-check-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label for="saveInterval" class="col-form-label">Autosave
+                                            Interval</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="number" id="saveInterval" class="form-control" value="300">
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="saveInterval" class="col-form-label">seconds</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label for="restartTime" class="col-form-label">Server Restart Time</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="number" id="restartTime" class="form-control" value="1440">
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="restartTime" class="col-form-label">minutes</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label for="networkQuality" class="col-form-label">Network Quality</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <select name="networkQuality" id="networkQuality" class="form-select">
+                                            <option value="0">Low</option>
+                                            <option value="1">Medium</option>
+                                            <option value="2">High</option>
+                                            <option value="3">Ultra</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </form>
                         </section>
                     </div>
                 </div>
@@ -132,13 +191,15 @@
                 </div>
             </section>
             <!-- Console Tab -->
-            <section id="console" class="row mt-4">
-                <div class="col-12">
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>&gt;_ Console</h3>
-                        </header>
-                    </section>
+            <section id="console" class="d-none">
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>&gt;_ Console</h3>
+                            </header>
+                        </section>
+                    </div>
                 </div>
             </section>
         </main>
@@ -148,8 +209,8 @@
             </div>
 
             <div id="rateContainer">
-                <label for="UpdateRate">Update rate: </label>
-                <select name="UpdateRate" id="updateRate">
+                <label for="updateRate" class="form-label">Update rate: </label>
+                <select name="UpdateRate" id="updateRate" class=form-select>
                     <option value="1">1</option>
                     <option value="5">5</option>
                     <option value="10" selected>10</option>
@@ -163,11 +224,11 @@
         <!-- Login Modal -->
 
         <section class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="" aria-hidden="true">
+            aria-labelledby="loginModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title">Login</h1>
+                        <h2 class="modal-title" id="loginModalTitle">Login</h2>
                     </div>
                     <div class="modal-body">
                         <!-- Login Form -->
