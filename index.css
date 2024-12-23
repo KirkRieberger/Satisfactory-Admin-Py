@@ -9,3 +9,7 @@ footer>#rateContainer {
     bottom: 2em;
     right: 2em;
 }
+
+section:focus {
+    outline: none;
+}
