@@ -508,7 +508,27 @@ class SatisfactoryServerAdmin:
 
     def _queryAdvancedGameSettings(self) -> None:
         # TODO:
-        pass
+        """
+        Query the server's options endpoint, and update class members
+        """
+        response = self._postJSONRequest(
+            self.headers, {"function": "GetServerOptions"})
+        # TODO: Check if valid response
+        self.logger.info(
+            f"Received {response.status_code} response from server")
+        ags = json.loads(response.content)["data"]["advancedGameSettings"]
+        self.creativeMode = ags["creativeModeEnabled"]
+        self.noPower = ags["advancedGameSettings"]["FG.GameRules.NoPower"]
+        self.disableArachnids = ags["advancedGameSettings"]["FG.GameRules.DisableArachnidCreatures"]
+        self.noUnlock = ags["advancedGameSettings"]["FG.GameRules.NoUnlockCost"]
+        self.allTiers = ags["advancedGameSettings"]["FG.GameRules.UnlockAllTiers"]
+        self.setPhase = ags["advancedGameSettings"]["FG.GameRules.SetGamePhase"]
+        self.unlockAllSchematics = ags["advancedGameSettings"]["FG.GameRules.UnlockAllResearchSchematics"]
+        self.unlockAllAlts = ags["advancedGameSettings"]["FG.GameRules.UnlockInstantAltRecipes"]
+        self.unlockAllShop = ags["advancedGameSettings"]["FG.GameRules.UnlockAllResourceSinkSchematics"]
+        self.noBuildCost = ags["advancedGameSettings"]["FG.PlayerRules.NoBuildCost"]
+        self.godMode = ags["advancedGameSettings"]["FG.PlayerRules.GodMode"]
+        self.flightMode = ags["advancedGameSettings"]["FG.PlayerRules.FlightMode"]
 
     def pollServerState(self) -> None:
         """
