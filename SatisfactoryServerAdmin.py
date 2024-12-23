@@ -497,11 +497,12 @@ class SatisfactoryServerAdmin:
         self.logger.info(
             f"Received {response.status_code} response from server")
         currentOptions = json.loads(response.content)["data"]["serverOptions"]
-        pendingOptions = json.loads(response.content)["data"]["pendingOptions"]
+        pendingOptions = json.loads(response.content)[
+            "data"]["pendingServerOptions"]
 
         self.autoPause = currentOptions["FG.DSAutoPause"]
         self.saveOnDisconnect = currentOptions["FG.DSAutoSaveOnDisconnect"]
-        self.autosaveInterval = currentOptions["FG.DSAutosaveInterval"]
+        self.autosaveInterval = currentOptions["FG.AutosaveInterval"]
         self.restartTime = currentOptions["FG.ServerRestartTimeSlot"]
         self.sendGameplayData = currentOptions["FG.SendGameplayData"]
         self.networkQuality = currentOptions["FG.NetworkQuality"]
@@ -509,26 +510,27 @@ class SatisfactoryServerAdmin:
     def _queryAdvancedGameSettings(self) -> None:
         # TODO:
         """
-        Query the server's options endpoint, and update class members
+        Query the server's advanced game settings endpoint, and update class members
         """
         response = self._postJSONRequest(
-            self.headers, {"function": "GetServerOptions"})
+            self.headers, {"function": "GetAdvancedGameSettings"})
         # TODO: Check if valid response
         self.logger.info(
             f"Received {response.status_code} response from server")
         ags = json.loads(response.content)["data"]["advancedGameSettings"]
-        self.creativeMode = ags["creativeModeEnabled"]
-        self.noPower = ags["advancedGameSettings"]["FG.GameRules.NoPower"]
-        self.disableArachnids = ags["advancedGameSettings"]["FG.GameRules.DisableArachnidCreatures"]
-        self.noUnlock = ags["advancedGameSettings"]["FG.GameRules.NoUnlockCost"]
-        self.allTiers = ags["advancedGameSettings"]["FG.GameRules.UnlockAllTiers"]
-        self.setPhase = ags["advancedGameSettings"]["FG.GameRules.SetGamePhase"]
-        self.unlockAllSchematics = ags["advancedGameSettings"]["FG.GameRules.UnlockAllResearchSchematics"]
-        self.unlockAllAlts = ags["advancedGameSettings"]["FG.GameRules.UnlockInstantAltRecipes"]
-        self.unlockAllShop = ags["advancedGameSettings"]["FG.GameRules.UnlockAllResourceSinkSchematics"]
-        self.noBuildCost = ags["advancedGameSettings"]["FG.PlayerRules.NoBuildCost"]
-        self.godMode = ags["advancedGameSettings"]["FG.PlayerRules.GodMode"]
-        self.flightMode = ags["advancedGameSettings"]["FG.PlayerRules.FlightMode"]
+        self.creativeMode = json.loads(response.content)[
+            "data"]["creativeModeEnabled"]
+        self.noPower = ags["FG.GameRules.NoPower"]
+        self.disableArachnids = ags["FG.GameRules.DisableArachnidCreatures"]
+        self.noUnlock = ags["FG.GameRules.NoUnlockCost"]
+        self.allTiers = ags["FG.GameRules.GiveAllTiers"]
+        self.setPhase = ags["FG.GameRules.SetGamePhase"]
+        self.unlockAllSchematics = ags["FG.GameRules.UnlockAllResearchSchematics"]
+        self.unlockAllAlts = ags["FG.GameRules.UnlockInstantAltRecipes"]
+        self.unlockAllShop = ags["FG.GameRules.UnlockAllResourceSinkSchematics"]
+        self.noBuildCost = ags["FG.PlayerRules.NoBuildCost"]
+        self.godMode = ags["FG.PlayerRules.GodMode"]
+        self.flightMode = ags["FG.PlayerRules.FlightMode"]
 
     def pollServerState(self) -> None:
         """
