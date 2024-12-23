@@ -34,59 +34,66 @@
                     Session Name
                 </h2>
             </div>
+            <!-- Tab List -->
             <div class="row">
-                <ul class="nav nav-tabs col">
+                <ul role="tablist" class="nav nav-tabs col">
                     <li class="nav-item">
-                        <a id="dashLink" class="nav-link active" aria-selected="tab" href="#"
-                            onclick="showDash();">Dashboard</a>
+                        <a role="tab" id="dashLink" class="nav-link active" href="#" onclick="showDash();"
+                            aria-selected="true" aria-controls="tabContainer" tabindex="0">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a id="settingsLink" class="nav-link" href="#" onclick="showSettings();">Settings</a>
+                        <a role="tab" id="settingsLink" class="nav-link" href="#" onclick="showSettings();"
+                            aria-selected="false" aria-controls="tabContainer" tabindex="-1">Settings</a>
                     </li>
                     <li class="nav-item">
-                        <a id="sessionsLink" class="nav-link" href="#" onclick="showSessions();">Sessions</a>
+                        <a role="tab" id="sessionsLink" class="nav-link" href="#" onclick="showSessions();"
+                            aria-selected="false" aria-controls="tabContainer" tabindex="-1">Sessions</a>
                     </li>
                     <li class="nav-item">
-                        <a id="consoleLink" class="nav-link" href="#" onclick="showConsole();">Console</a>
+                        <a role="tab" id="consoleLink" class="nav-link" href="#" onclick="showConsole();"
+                            aria-selected="false" aria-controls="tabContainer" tabindex="-1">Console</a>
                     </li>
                 </ul>
             </div>
         </header>
-        <main class="container">
+        <main id="tabContainer" class="container">
             <!-- Dashboard Tab -->
-            <section id="dashboard" class="row mt-4">
-                <div class="col-6">
-                    <!-- Game Info Card -->
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Game Info</h3>
-                        </header>
-                        <div class="card-body">
-                            <p class="card-text"><b>Phase:&nbsp;</b><span id="phase">3</span></p>
-                            <p class="card-text"><b>Tier:&nbsp;</b><span id="tier">5</span></p>
-                            <p class="card-text"><b>Schematic:&nbsp;</b><span id="schem">None</span></p>
-                        </div>
-                    </section>
-                </div>
-                <div class="col-6">
-                    <!-- Server State Card -->
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Server State</h3>
-                        </header>
-                        <div class="card-body">
-                            <p class="card-text"><span id="curPlayers">#</span>/<span id="maxPlayers">#</span>
-                                players
-                            </p>
-                            <!-- Pie Chart? https://www.w3schools.com/howto/howto_google_charts.asp 
+            <section id="dashboard" role="tabpanel" tabindex="0" aria-labelledby="dashLink">
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <!-- Game Info Card -->
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Game Info</h3>
+                            </header>
+                            <div class="card-body">
+                                <p class="card-text"><b>Phase:&nbsp;</b><span id="phase">3</span></p>
+                                <p class="card-text"><b>Tier:&nbsp;</b><span id="tier">5</span></p>
+                                <p class="card-text"><b>Schematic:&nbsp;</b><span id="schem">None</span></p>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-6">
+                        <!-- Server State Card -->
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Server State</h3>
+                            </header>
+                            <div class="card-body">
+                                <p class="card-text"><span id="curPlayers">#</span>/<span id="maxPlayers">#</span>
+                                    players
+                                </p>
+                                <!-- Pie Chart? https://www.w3schools.com/howto/howto_google_charts.asp 
                                  Line Chart of tickrate over time? -->
-                            <p class="card-text"><span id="ticks">27</span>/30 Ticks per second</p>
-                        </div>
-                    </section>
+                                <p class="card-text"><span id="ticks">27</span>/30 Ticks per second</p>
+                            </div>
+                        </section>
+                    </div>
                 </div>
             </section>
             <!-- Settings Tab -->
-            <section id="settings" class="d-none">
+            <section id="settings" role="tabpanel" tabindex="0" aria-labelledby="settingsLink" hidden>
+                <!-- TODO: Only update wne tab initially activated -->
                 <div class="row mt-4 justify-content-center">
                     <div class="col-6">
                         <!-- Server Options Card -->
@@ -154,6 +161,11 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="row justify-content-end">
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary">Apply</button>
+                                    </div>
+                                </div>
                             </form>
                         </section>
                     </div>
@@ -172,7 +184,7 @@
                 </div>
             </section>
             <!-- Session Management Tab -->
-            <section id="sessions" class="d-none">
+            <section id="sessions" role="tabpanel" tabindex="0" aria-labelledby="settingsLink" hidden>
                 <div class="row mt-4">
                     <div class="col-6">
                         <section class="card h-100">
@@ -191,7 +203,7 @@
                 </div>
             </section>
             <!-- Console Tab -->
-            <section id="console" class="d-none">
+            <section id="console" role="tabpanel" tabindex="0" aria-labelledby="consoleLink" hidden>
                 <div class="row mt-4">
                     <div class="col-12">
                         <section class="card h-100">

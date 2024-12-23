@@ -46,10 +46,21 @@ function showResponse(response) {
 }
 
 function showDash() {
-    $('#dashboard').removeClass("d-none");
-    $('#settings').addClass("d-none");
-    $('#sessions').addClass("d-none");
-    $('#console').addClass("d-none");
+    $('#dashboard').removeAttr("hidden");
+    $('#dashboard').attr("aria-selected", "true");
+    $('#dashboard').attr("tabindex", "0");
+
+    $('#settings').attr("hidden", "");
+    $('#settings').attr("aria-selected", "false");
+    $('#settings').attr("tabindex", "-1");
+
+    $('#sessions').attr("hidden", "");
+    $('#sessions').attr("aria-selected", "false");
+    $('#sessions').attr("tabindex", "-1");
+
+    $('#console').attr("hidden", "");
+    $('#console').attr("aria-selected", "false");
+    $('#console').attr("tabindex", "-1");
 
     $('#dashLink').addClass("active");
     $('#settingsLink').removeClass("active");
@@ -58,10 +69,21 @@ function showDash() {
 }
 
 function showSettings() {
-    $('#dashboard').addClass("d-none");
-    $('#settings').removeClass("d-none");
-    $('#sessions').addClass("d-none");
-    $('#console').addClass("d-none");
+    $('#dashboard').attr("hidden", "");
+    $('#dashboard').attr("aria-selected", "false");
+    $('#dashboard').attr("tabindex", "-1");
+
+    $('#settings').removeAttr("hidden");
+    $('#settings').attr("aria-selected", "true");
+    $('#settings').attr("tabindex", "0");
+
+    $('#sessions').attr("hidden", "");
+    $('#sessions').attr("aria-selected", "false");
+    $('#sessions').attr("tabindex", "-1");
+
+    $('#console').attr("hidden", "");
+    $('#console').attr("aria-selected", "false");
+    $('#console').attr("tabindex", "-1");
 
     $('#dashLink').removeClass("active");
     $('#settingsLink').addClass("active");
@@ -70,10 +92,21 @@ function showSettings() {
 }
 
 function showSessions() {
-    $('#dashboard').addClass("d-none");
-    $('#settings').addClass("d-none");
-    $('#sessions').removeClass("d-none");
-    $('#console').addClass("d-none");
+    $('#dashboard').attr("hidden", "");
+    $('#dashboard').attr("aria-selected", "false");
+    $('#dashboard').attr("tabindex", "-1");
+
+    $('#settings').attr("hidden", "");
+    $('#settings').attr("aria-selected", "false");
+    $('#settings').attr("tabindex", "-1");
+
+    $('#sessions').removeAttr("hidden");
+    $('#sessions').attr("aria-selected", "true");
+    $('#sessions').attr("tabindex", "0");
+
+    $('#console').attr("hidden", "");
+    $('#console').attr("aria-selected", "false");
+    $('#console').attr("tabindex", "-1");
 
     $('#dashLink').removeClass("active");
     $('#settingsLink').removeClass("active");
@@ -82,10 +115,21 @@ function showSessions() {
 }
 
 function showConsole() {
-    $('#dashboard').addClass("d-none");
-    $('#settings').addClass("d-none");
-    $('#sessions').addClass("d-none");
-    $('#console').removeClass("d-none");
+    $('#dashboard').attr("hidden", "");
+    $('#dashboard').attr("aria-selected", "false");
+    $('#dashboard').attr("tabindex", "-1");
+
+    $('#settings').attr("hidden", "");
+    $('#settings').attr("aria-selected", "false");
+    $('#settings').attr("tabindex", "-1");
+
+    $('#sessions').attr("hidden", "");
+    $('#sessions').attr("aria-selected", "false");
+    $('#sessions').attr("tabindex", "-1");
+
+    $('#console').removeAttr("hidden");
+    $('#console').attr("aria-selected", "true");
+    $('#console').attr("tabindex", "0");
 
     $('#dashLink').removeClass("active");
     $('#settingsLink').removeClass("active");
