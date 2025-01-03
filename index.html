@@ -104,7 +104,7 @@
                                     <span class="badge text-bg-warning" hidden>SERVER RESTART REQUIRED</span>
                                 </h3>
                             </header>
-                            <form class="card-body container-fluid">
+                            <form class="card-body container-fluid" action="javascript:applyOptions()">
                                 <div class="row">
                                     <div class="col-auto">
                                         <div class="form-check form-switch">
@@ -177,8 +177,71 @@
                             <header class="card-header">
                                 <h3>AGS</h3>
                             </header>
-                            <div class="card-body">
-                            </div>
+                            <form class="card-body">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="form-check form-switch">
+                                            <label for="disableSpiders" class="form-check-label">Disable
+                                                Arachnids</label>
+                                            <input type="checkbox" role="switch" id="disableSpiders"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="noPowerCost" class="form-check-label">No Power Cost</label>
+                                            <input type="checkbox" role="switch" id="noPowerCost"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="noUnlockCost" class="form-check-label">No Unlock Cost</label>
+                                            <input type="checkbox" role="switch" id="noUnlockCost"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="noBuildCost" class="form-check-label">No Build Cost</label>
+                                            <input type="checkbox" role="switch" id="noBuildCost"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="giveAllTiers" class="form-check-label">Give All Tiers</label>
+                                            <input type="checkbox" role="switch" id="giveAllTiers"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="unlockAllResearch" class="form-check-label">Unlock All
+                                                Research</label>
+                                            <input type="checkbox" role="switch" id="unlockAllResearch"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="instantAlts" class="form-check-label">Unlock Instant Alt
+                                                Recipes</label>
+                                            <input type="checkbox" role="switch" id="instantAlts"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="unlockSinkRewards" class="form-check-label">Unlock All
+                                                A.W.E.S.O.M.E.
+                                                Rewards</label>
+                                            <input type="checkbox" role="switch" id="unlockSinkRewards"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="flightMode" class="form-check-label">Flight Mode</label>
+                                            <input type="checkbox" role="switch" id="flightMode"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="godMode" class="form-check-label">God Mode</label>
+                                            <input type="checkbox" role="switch" id="godMode" class="form-check-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary">Apply</button>
+                                    </div>
+                                </div>
+                            </form>
                         </section>
                     </div>
                 </div>
@@ -268,11 +331,14 @@
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                            <input type="submit" hidden>
+                            <div class="row mt-2 justify-content-end">
+                                <div class="col-2">
+                                    <button id="loginButton" type="submit" form="loginForm"
+                                        class="btn btn-success">Login</button>
+                                </div>
+                            </div>
+                            <!-- <input type="submit" hidden> -->
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="loginButton" type="submit" form="loginForm" class="btn btn-success">Login</button>
                     </div>
                 </div>
             </div>
