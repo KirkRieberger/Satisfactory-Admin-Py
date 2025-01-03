@@ -44,3 +44,7 @@ function login() {
 function showResponse(response) {
     alert(response);
 }
+
+function applyOptions() {
+    alert("Apply Options");
+}
