@@ -27,7 +27,6 @@ function login() {
     let adr = $("#address").val();
     let key = $("#key").val();
     let port = $("#port").val();
-    alert(`Address: ${adr}:${port}`);
     let response = pywebview.api.login(adr, key, port);
 
     response.then(value => {
