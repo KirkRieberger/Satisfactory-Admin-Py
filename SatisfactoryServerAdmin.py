@@ -109,6 +109,7 @@ class SatisfactoryServerAdmin:
         self.headers = None
         self.loggedIn = False
         self.subStates = {}      # substate ID: state changelist
+        self.needsRestart = False  # Pending options
 
         #  Dashboard
         #   Header
@@ -518,6 +519,8 @@ class SatisfactoryServerAdmin:
         currentOptions = json.loads(response.content)["data"]["serverOptions"]
         pendingOptions = json.loads(response.content)[
             "data"]["pendingServerOptions"]
+        if pendingOptions:
+            self.needsRestart = True
 
         self.autoPause = currentOptions["FG.DSAutoPause"]
         self.saveOnDisconnect = currentOptions["FG.DSAutoSaveOnDisconnect"]
@@ -598,9 +601,7 @@ if __name__ == "__main__":
     # server.login("IP", "Key", 7777)
     # server.login(
     #     "192.168.1.17",
-    #     "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FF\
-    #         A88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649\
-    #         EED540230AFAA685958711",
+    #     "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
     #     "7777",
     # )
     server._queryServerOptions()
