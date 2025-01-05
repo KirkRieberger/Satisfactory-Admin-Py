@@ -279,14 +279,16 @@ class SatisfactoryServerAdmin:
 
         Args:
             headers (dict): A dict of standard HTTP headers to be
-            included with the request
+                included with the request
             payload (dict): A dict of dedicated server function data
 
         Returns:
             requests.Response: The HTTP response body if successful
+
             int: Cloudflare HTTP response 523 - Destination Unreachable
-            on timeout
+                on timeout
         """
+        # TODO: Move login check to each function, not POST
         if not self.loggedIn:
             self.logger.error("")  # TODO: Can't error. used for login
         try:
@@ -421,34 +423,51 @@ class SatisfactoryServerAdmin:
 
         return subStateStatus
 
-    def passwordlessLogin(self, headers: dict) -> tuple:
+    def _passwordlessLogin(self, ip: str, port: str = "7777") -> bool:
         """
-        Performs a passwordless login to the server. Grants User level
-        access. Should not be used for third-party app logins
+        Performs a passwordless login to the server. Grants InitialAdmin
+        access. Used to claim server.
 
         Args:
-            headers (dict): Default HTTP headers of calling object
+            ip (str): The IP address (or FQDN) of the dedicated server.
+            port (str, optional): The port the server is running on.
+                Defaults to "7777".
 
         Returns:
-            tuple (int, string): (1, authToken) on success,
-            (0, responseCode) on failure
+            bool: Whether the InitialAdmin login attempt was successful
         """
-        payload = json.dumps(
-            {
-                "function": "PasswordlessLogin",
-                "data": {"MinimumPrivilegeLevel": "client"},
-            }
+        self.address = "https://" + ip + ":" + str(port) + "/api/v1"
+        self.logger.info(f"Connecting to {self.address}...")
+        self.headers = {"Encoding": "utf-8",
+                        "Content-Type": "application/json"}
+        payload = {
+            "function": "PasswordlessLogin",
+            "data": {"MinimumPrivilegeLevel": "InitialAdmin"},
+        }
+        initResponse = self._postJSONRequest(
+            self.headers,
+            payload=payload
         )
-        headers.update({"Content-Type": "application/json"})
-        # Uses data=payload not, json=payload
-        response = self._postJSONRequest(headers, payload)
-        if response.status_code == requests.codes.ok:
-            # Strip out auth token
-            respJSON = response.json()
-            authToken = respJSON["data"]["authenticationToken"]
-            return (1, authToken)
+
+        data = initResponse.json()
+        if "errorCode" in data:
+            self.logger.error(data["errorCode"])
+            return False
         else:
-            return (0, response.status_code)
+            token = data["data"]["authenticationToken"]
+            self.headers.update({"Authorization": f"Bearer {token}"})
+            return True
+
+        # headers.update({"Content-Type": "application/json"})
+        # # Uses data=payload not, json=payload
+        # response = self._postJSONRequest(headers, payload)
+        # if response.status_code == requests.codes.ok:
+        #     # Strip out auth token
+        #     respJSON = response.json()
+        #     authToken = respJSON["data"]["authenticationToken"]
+        #     return (1, authToken)
+        # else:
+        #     return (0, response.status_code)
 
     def _queryServerState(self) -> None:
         """
@@ -553,15 +572,37 @@ class SatisfactoryServerAdmin:
         # Determine if update is necessary
         # Query parts that need updating
 
+    def claimServer(self, ip: str = None, port: str = "7777") -> None:
+        # Requires "Initial Admin" privilege
+        # Received when attempting passwordless login with no admin pswd set
+        if self._passwordlessLogin(ip, port):
+            payload = {
+                "function": "ClaimServer",
+                "data": {
+                    "ServerName": "Test",
+                    "AdminPassword": "Test#2-ElectricBoogaloo"
+                }
+            }
+            self._postJSONRequest(self.headers, payload)
+            # TODO: Extract new auth token. Provide to user
+            # TODO: Set user password
+        else:
+            # Login Failed, assume server claimed
+            pass
+        pass
+
 
 if __name__ == "__main__":
     server = SatisfactoryServerAdmin()
+    server.claimServer(ip="192.168.1.133")
     # server.login("IP", "Key", 7777)
-    server.login(
-        "192.168.1.17",
-        "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
-        "7777",
-    )
+    # server.login(
+    #     "192.168.1.17",
+    #     "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FF\
+    #         A88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649\
+    #         EED540230AFAA685958711",
+    #     "7777",
+    # )
     server._queryServerOptions()
     # print(server.queryServerState())
     # server._LightweightQuery()
