@@ -331,14 +331,24 @@
                                     <div class="invalid-feedback"></div>
                                 </div>
                             </div>
-                            <div class="row mt-2 justify-content-end">
-                                <div class="col-2">
+                            <input type="submit" hidden>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="container">
+                            <div class="row mt-2 justify-content-between">
+                                <div class="col-auto">
+                                    <button id="claimButton" type="button" class="btn btn-danger"
+                                        onclick="claimServer()">
+                                        Claim Server
+                                    </button>
+                                </div>
+                                <div class="col-auto">
                                     <button id="loginButton" type="submit" form="loginForm"
                                         class="btn btn-success">Login</button>
                                 </div>
                             </div>
-                            <!-- <input type="submit" hidden> -->
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
