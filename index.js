@@ -40,6 +40,10 @@ function login() {
     });
 }
 
+function claimServer() {
+    alert("Claim Server");
+}
+
 function showResponse(response) {
     alert(response);
 }
