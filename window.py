@@ -66,6 +66,6 @@ def updateStatusDisp(window: webview.Window, newState: str) -> None:
 if __name__ == "__main__":
     server = SatisfactoryServerAdmin()
     window = webview.create_window(
-        "Satisfactory Server Administrator V0.0.1", "./index.html", js_api=server
+        "Satisfactory Server Administrator V0.0.4", "./index.html", js_api=server
     )
     webview.start(loop, window, debug=False)  # Blocking after start
