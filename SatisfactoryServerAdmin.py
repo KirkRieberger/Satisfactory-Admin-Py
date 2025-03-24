@@ -9,8 +9,6 @@ import SatisfactoryLuT
 from random import randint
 from sys import exit as sys_ex
 
-# Possible to connect with payload+token and just token
-
 __author__ = "Kirk Rieberger"
 __version__ = "0.0.4"
 __date__ = "Dec 15, 2024"
@@ -108,50 +106,50 @@ class SatisfactoryServerAdmin:
         self.port = None
         self.headers = None
         self.loggedIn = False
-        self.subStates = {}      # substate ID: state changelist
+        self.subStates = {}  # substate ID: state changelist
         self.needsRestart = False  # Pending options
 
         #  Dashboard
         #   Header
-        self.serverName = None           # ✔
-        self.sessionName = None          # ✔
-        self.serverState = None          # Lightweight Query ✔
-        self.paused = None               # HTTPS Query ✔
+        self.serverName = None  # ✔
+        self.sessionName = None  # ✔
+        self.serverState = None  # Lightweight Query ✔
+        self.paused = None  # HTTPS Query ✔
         #   Game Info
-        self.gamePhase = None            # Number ✔
-        self.tier = None                 # String ✔
-        self.schematic = None            # String ✔
-        self.duration = None             #
+        self.gamePhase = None  # Number ✔
+        self.tier = None  # String ✔
+        self.schematic = None  # String ✔
+        self.duration = None  #
         #   Server State
-        self.numPlayers = None           # ✔
-        self.maxPlayers = None           # ✔
-        self.tickRate = None             # ✔
-        self.autoSessionName = None      #
+        self.numPlayers = None  # ✔
+        self.maxPlayers = None  # ✔
+        self.tickRate = None  # ✔
+        self.autoSessionName = None  #
 
         # Settings
         #  Server Options
-        self.autoPause = None            #
-        self.saveOnDisconnect = None     #
-        self.autosaveInterval = None     # In seconds
-        self.restartTime = None          # In minutes
-        self.sendGameplayData = None     #
-        self.networkQuality = None       #
+        self.autoPause = None  #
+        self.saveOnDisconnect = None  #
+        self.autosaveInterval = None  # In seconds
+        self.restartTime = None  # In minutes
+        self.sendGameplayData = None  #
+        self.networkQuality = None  #
         #  AGS
-        self.creativeMode = None         #
-        self.noPower = None              #
-        self.disableArachnids = None     #
-        self.noUnlock = None             #
-        self.allTiers = None             #
-        self.setPhase = None             #
+        self.creativeMode = None  #
+        self.noPower = None  #
+        self.disableArachnids = None  #
+        self.noUnlock = None  #
+        self.allTiers = None  #
+        self.setPhase = None  #
         self.unlockAllSchematics = None  #
-        self.unlockAllAlts = None        #
-        self.unlockAllShop = None        #
-        self.noBuildCost = None          #
-        self.godMode = None              #
-        self.flightMode = None           #
+        self.unlockAllAlts = None  #
+        self.unlockAllShop = None  #
+        self.noBuildCost = None  #
+        self.godMode = None  #
+        self.flightMode = None  #
 
         # Persistent
-        self.clientVersion = None        # Lightweight Query ✔
+        self.clientVersion = None  # Lightweight Query ✔
 
         # Initialize logger
         self.logger = logging.getLogger("Server-Connect")
@@ -174,10 +172,7 @@ class SatisfactoryServerAdmin:
         Returns:
             str: A string representation of the current object
         """
-        return (
-            f"Satisfactory Server management instance for server at {
-                self.address}"
-        )
+        return f"Satisfactory Server management instance for server at {self.address}"
 
     def __repr__(self) -> str:
         """
@@ -255,8 +250,7 @@ class SatisfactoryServerAdmin:
         # Check if connection successful
         if initResponse == 523:
             # Unable to contact server at given address
-            raise TimeoutError(
-                f"Connection to {self.address} failed with no response!")
+            raise TimeoutError(f"Connection to {self.address} failed with no response!")
         # TODO: Raise different exception based on HTTP code
         if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
@@ -270,7 +264,8 @@ class SatisfactoryServerAdmin:
             )
             raise ConnectionError(
                 f"Connection to {self.address} failed with status {
-                    initResponse.status_code}!"
+                    initResponse.status_code
+                }!"
             )
 
     def _postJSONRequest(self, headers: dict, payload: dict) -> requests.Response:
@@ -397,9 +392,9 @@ class SatisfactoryServerAdmin:
         i = 26  # Base offset of state array
         while i < (26 + numStates * 3):
             stateId = int.from_bytes(
-                data[i: i + 1]
+                data[i : i + 1]
             )  # Single byte - Order not necessary
-            stateData = int.from_bytes(data[i + 1: i + 4], byteorder="little")
+            stateData = int.from_bytes(data[i + 1 : i + 4], byteorder="little")
 
             if stateId in self.subStates:
                 if stateData != self.subStates[stateId]:
@@ -413,11 +408,11 @@ class SatisfactoryServerAdmin:
             i += 3
 
         respNameLen = int.from_bytes(
-            data[26 + (3 * numStates): 26 + (3 * numStates) + 2],
+            data[26 + (3 * numStates) : 26 + (3 * numStates) + 2],
             byteorder="little",
         )
         self.serverName = data[
-            26 + (3 * numStates) + 2: 26 + (3 * numStates) + 2 + respNameLen
+            26 + (3 * numStates) + 2 : 26 + (3 * numStates) + 2 + respNameLen
         ].decode("utf-8")
 
         # Terminator 0x01
@@ -439,16 +434,12 @@ class SatisfactoryServerAdmin:
         """
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
-        self.headers = {"Encoding": "utf-8",
-                        "Content-Type": "application/json"}
+        self.headers = {"Encoding": "utf-8", "Content-Type": "application/json"}
         payload = {
             "function": "PasswordlessLogin",
             "data": {"MinimumPrivilegeLevel": "InitialAdmin"},
         }
-        initResponse = self._postJSONRequest(
-            self.headers,
-            payload=payload
-        )
+        initResponse = self._postJSONRequest(self.headers, payload=payload)
 
         data = initResponse.json()
         if "errorCode" in data:
@@ -475,11 +466,9 @@ class SatisfactoryServerAdmin:
         Query the server's state endpoint, and update class members
         """
         # Get response
-        response = self._postJSONRequest(
-            self.headers, {"function": "QueryServerState"})
+        response = self._postJSONRequest(self.headers, {"function": "QueryServerState"})
         # TODO: Check if valid response
-        self.logger.info(
-            f"Received {response.status_code} response from server")
+        self.logger.info(f"Received {response.status_code} response from server")
         content = json.loads(response.content)["data"]["serverGameState"]
 
         # Update instance variables
@@ -490,8 +479,7 @@ class SatisfactoryServerAdmin:
 
         # Prettify phase and schematic
         if SatisfactoryLuT.getSchematic(content["activeSchematic"]):
-            self.schematic = SatisfactoryLuT.getSchematic(
-                content["activeSchematic"])
+            self.schematic = SatisfactoryLuT.getSchematic(content["activeSchematic"])
         else:
             self.schematic = "Schematic Error!"
 
@@ -511,14 +499,11 @@ class SatisfactoryServerAdmin:
         """
         Query the server's options endpoint, and update class members
         """
-        response = self._postJSONRequest(
-            self.headers, {"function": "GetServerOptions"})
+        response = self._postJSONRequest(self.headers, {"function": "GetServerOptions"})
         # TODO: Check if valid response
-        self.logger.info(
-            f"Received {response.status_code} response from server")
+        self.logger.info(f"Received {response.status_code} response from server")
         currentOptions = json.loads(response.content)["data"]["serverOptions"]
-        pendingOptions = json.loads(response.content)[
-            "data"]["pendingServerOptions"]
+        pendingOptions = json.loads(response.content)["data"]["pendingServerOptions"]
         if pendingOptions:
             self.needsRestart = True
 
@@ -535,13 +520,12 @@ class SatisfactoryServerAdmin:
         Query the server's advanced game settings endpoint, and update class members
         """
         response = self._postJSONRequest(
-            self.headers, {"function": "GetAdvancedGameSettings"})
+            self.headers, {"function": "GetAdvancedGameSettings"}
+        )
         # TODO: Check if valid response
-        self.logger.info(
-            f"Received {response.status_code} response from server")
+        self.logger.info(f"Received {response.status_code} response from server")
         ags = json.loads(response.content)["data"]["advancedGameSettings"]
-        self.creativeMode = json.loads(response.content)[
-            "data"]["creativeModeEnabled"]
+        self.creativeMode = json.loads(response.content)["data"]["creativeModeEnabled"]
         self.noPower = ags["FG.GameRules.NoPower"]
         self.disableArachnids = ags["FG.GameRules.DisableArachnidCreatures"]
         self.noUnlock = ags["FG.GameRules.NoUnlockCost"]
@@ -583,8 +567,8 @@ class SatisfactoryServerAdmin:
                 "function": "ClaimServer",
                 "data": {
                     "ServerName": "Test",
-                    "AdminPassword": "Test#2-ElectricBoogaloo"
-                }
+                    "AdminPassword": "Test#2-ElectricBoogaloo",
+                },
             }
             self._postJSONRequest(self.headers, payload)
             # TODO: Extract new auth token. Provide to user
