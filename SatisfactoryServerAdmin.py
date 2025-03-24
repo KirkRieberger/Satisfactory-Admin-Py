@@ -550,8 +550,15 @@ class SatisfactoryServerAdmin:
     def _applyAdvancedGameSettings(self) -> None:
         pass
 
-    def _renameServer(self) -> None:
-        pass
+    def _renameServer(self, newName: str) -> None:
+        if not newName:
+            self.logger.warning("No new server name provided!")
+            # TODO: Notify user newName is empty
+        payload = {"function": "RenameServer", "data": {"ServerName": newName}}
+        response = self._postJSONRequest(self.headers, payload)
+        data = response.json()
+        if "errorCode" in data:
+            self.logger.error(data["errorCode"])
 
     # New Server Tasks
 
