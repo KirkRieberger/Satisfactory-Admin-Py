@@ -45,7 +45,7 @@ This project aims to implement most* of the Satisfactory Dedicated Server API fu
 - [x] Basic Layout
 - [ ] Initial Server Claim / Config
 - [ ] Dashboard Tab
-- [ ] Settings Tab
+- [x] Settings Tab
 - [ ] Save Management Tab
 - [ ] Console Tab
 
