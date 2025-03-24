@@ -1,6 +1,7 @@
 # Satisfactory Admin Py
 ## A web app to manage Satisfactory Dedicated Servers
-THIS REPO IS A WORK IN PROGRESS! ONLY RUDIMENTARY FUNCTIONALITY EXISTS!
+> [!IMPORTANT]
+> This repo is a work in progress! Only rudimentary functionality exists!
 
 This project aims to implement most* of the Satisfactory Dedicated Server API functions in an easy-to-use interface.
 
