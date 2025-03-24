@@ -421,6 +421,8 @@ class SatisfactoryServerAdmin:
 
         return subStateStatus
 
+    # Basic Functionality
+
     def _passwordlessLogin(self, ip: str, port: str = "7777") -> bool:
         """
         Performs a passwordless login to the server. Grants InitialAdmin
@@ -497,6 +499,8 @@ class SatisfactoryServerAdmin:
         self.logger.info(content)
         return content  # Temp
 
+    # Modify Server Options
+
     def _queryServerOptions(self) -> None:
         """
         Query the server's options endpoint, and update class members
@@ -515,6 +519,9 @@ class SatisfactoryServerAdmin:
         self.restartTime = currentOptions["FG.ServerRestartTimeSlot"]
         self.sendGameplayData = currentOptions["FG.SendGameplayData"]
         self.networkQuality = currentOptions["FG.NetworkQuality"]
+
+    def _applyServerOptions(self) -> None:
+        pass
 
     def _queryAdvancedGameSettings(self) -> None:
         # TODO:
@@ -539,6 +546,59 @@ class SatisfactoryServerAdmin:
         self.noBuildCost = ags["FG.PlayerRules.NoBuildCost"]
         self.godMode = ags["FG.PlayerRules.GodMode"]
         self.flightMode = ags["FG.PlayerRules.FlightMode"]
+
+    def _applyAdvancedGameSettings(self) -> None:
+        pass
+
+    def _renameServer(self) -> None:
+        pass
+
+    # New Server Tasks
+
+    def _claimServer(self) -> None:
+        pass
+
+    def _setClientPassword(self) -> None:
+        pass
+
+    def _setAdminPassword(self) -> None:
+        pass
+
+    # Save/Session Management
+
+    def _setAutoLoadSessionName(self) -> None:
+        pass
+
+    def _createNewGame(self) -> None:
+        pass
+
+    def _saveGame(self) -> None:
+        pass
+
+    def _deleteSaveFile(self) -> None:
+        pass
+
+    def _enumerateSessions(self) -> None:
+        pass
+
+    def _loadGame(self) -> None:
+        pass
+
+    def _uploadSaveGame(self) -> None:
+        pass
+
+    def _downloadSaveGame(self) -> None:
+        pass
+
+    # Miscellaneous
+
+    def _runCommand(self) -> None:
+        pass
+
+    def _serverShutdown(self) -> None:
+        pass
+
+    # User Interface
 
     def pollServerState(self) -> None:
         """
