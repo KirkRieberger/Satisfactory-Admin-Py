@@ -103,6 +103,7 @@ class SatisfactoryServerAdmin:
         #  Class state
         self.address = None
         self.ip = None
+        self.token = None
         self.port = None
         self.headers = None
         self.loggedIn = False
@@ -181,7 +182,7 @@ class SatisfactoryServerAdmin:
         Returns:
            str: Object constructor representation of the current object
         """
-        return f"SatisfactoryServer('{self.address}', '{self.key}')"
+        return f"SatisfactoryServer('{self.address}', '{self.token}')"
 
     def login(self, ip: str = None, token: str = None, port: str = "7777") -> int:
         """
@@ -212,6 +213,7 @@ class SatisfactoryServerAdmin:
 
         self.ip = ip
         self.port = int(port)
+        self.token = token
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
         # Split token into payload and key
