@@ -11,5 +11,14 @@
         "editor.suggest.insertMode": "replace",
         "editor.wordWrapColumn": 120,
         "editor.rulers": [120]
+    },
+    "[python]": {
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.defaultColorDecorators": "never",
+        "editor.formatOnType": true,
+        "editor.wordBasedSuggestions": "off",
+        "editor.rulers": [
+            79, 72
+        ]
     }
 }
