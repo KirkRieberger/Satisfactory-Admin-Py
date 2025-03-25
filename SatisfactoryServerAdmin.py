@@ -265,9 +265,7 @@ class SatisfactoryServerAdmin:
                 {initResponse.status_code}! \nResponse: {initResponse.content}"
             )
             raise ConnectionError(
-                f"Connection to {self.address} failed with status {
-                    initResponse.status_code
-                }!"
+                f"Connection to {self.address} failed with status {initResponse.status_code}!"
             )
 
     def _postJSONRequest(self, headers: dict, payload: dict) -> requests.Response:
