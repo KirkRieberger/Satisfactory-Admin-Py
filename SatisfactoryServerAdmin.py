@@ -252,7 +252,8 @@ class SatisfactoryServerAdmin:
         # Check if connection successful
         if initResponse == 523:
             # Unable to contact server at given address
-            raise TimeoutError(f"Connection to {self.address} failed with no response!")
+            raise TimeoutError(
+                f"Connection to {self.address} failed with no response!")
         # TODO: Raise different exception based on HTTP code
         if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
@@ -392,9 +393,9 @@ class SatisfactoryServerAdmin:
         i = 26  # Base offset of state array
         while i < (26 + numStates * 3):
             stateId = int.from_bytes(
-                data[i : i + 1]
+                data[i: i + 1]
             )  # Single byte - Order not necessary
-            stateData = int.from_bytes(data[i + 1 : i + 4], byteorder="little")
+            stateData = int.from_bytes(data[i + 1: i + 4], byteorder="little")
 
             if stateId in self.subStates:
                 if stateData != self.subStates[stateId]:
@@ -408,11 +409,11 @@ class SatisfactoryServerAdmin:
             i += 3
 
         respNameLen = int.from_bytes(
-            data[26 + (3 * numStates) : 26 + (3 * numStates) + 2],
+            data[26 + (3 * numStates): 26 + (3 * numStates) + 2],
             byteorder="little",
         )
         self.serverName = data[
-            26 + (3 * numStates) + 2 : 26 + (3 * numStates) + 2 + respNameLen
+            26 + (3 * numStates) + 2: 26 + (3 * numStates) + 2 + respNameLen
         ].decode("utf-8")
 
         # Terminator 0x01
@@ -436,7 +437,8 @@ class SatisfactoryServerAdmin:
         """
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
-        self.headers = {"Encoding": "utf-8", "Content-Type": "application/json"}
+        self.headers = {"Encoding": "utf-8",
+                        "Content-Type": "application/json"}
         payload = {
             "function": "PasswordlessLogin",
             "data": {"MinimumPrivilegeLevel": "InitialAdmin"},
@@ -468,9 +470,11 @@ class SatisfactoryServerAdmin:
         Query the server's state endpoint, and update class members
         """
         # Get response
-        response = self._postJSONRequest(self.headers, {"function": "QueryServerState"})
+        response = self._postJSONRequest(
+            self.headers, {"function": "QueryServerState"})
         # TODO: Check if valid response
-        self.logger.info(f"Received {response.status_code} response from server")
+        self.logger.info(
+            f"Received {response.status_code} response from server")
         content = json.loads(response.content)["data"]["serverGameState"]
 
         # Update instance variables
@@ -481,7 +485,8 @@ class SatisfactoryServerAdmin:
 
         # Prettify phase and schematic
         if SatisfactoryLuT.getSchematic(content["activeSchematic"]):
-            self.schematic = SatisfactoryLuT.getSchematic(content["activeSchematic"])
+            self.schematic = SatisfactoryLuT.getSchematic(
+                content["activeSchematic"])
         else:
             self.schematic = "Schematic Error!"
 
@@ -503,11 +508,14 @@ class SatisfactoryServerAdmin:
         """
         Query the server's options endpoint, and update class members
         """
-        response = self._postJSONRequest(self.headers, {"function": "GetServerOptions"})
+        response = self._postJSONRequest(
+            self.headers, {"function": "GetServerOptions"})
         # TODO: Check if valid response
-        self.logger.info(f"Received {response.status_code} response from server")
+        self.logger.info(
+            f"Received {response.status_code} response from server")
         currentOptions = json.loads(response.content)["data"]["serverOptions"]
-        pendingOptions = json.loads(response.content)["data"]["pendingServerOptions"]
+        pendingOptions = json.loads(response.content)[
+            "data"]["pendingServerOptions"]
         if pendingOptions:
             self.needsRestart = True
 
@@ -530,9 +538,11 @@ class SatisfactoryServerAdmin:
             self.headers, {"function": "GetAdvancedGameSettings"}
         )
         # TODO: Check if valid response
-        self.logger.info(f"Received {response.status_code} response from server")
+        self.logger.info(
+            f"Received {response.status_code} response from server")
         ags = json.loads(response.content)["data"]["advancedGameSettings"]
-        self.creativeMode = json.loads(response.content)["data"]["creativeModeEnabled"]
+        self.creativeMode = json.loads(response.content)[
+            "data"]["creativeModeEnabled"]
         self.noPower = ags["FG.GameRules.NoPower"]
         self.disableArachnids = ags["FG.GameRules.DisableArachnidCreatures"]
         self.noUnlock = ags["FG.GameRules.NoUnlockCost"]
@@ -554,13 +564,31 @@ class SatisfactoryServerAdmin:
             # TODO: Notify user newName is empty
         payload = {"function": "RenameServer", "data": {"ServerName": newName}}
         response = self._postJSONRequest(self.headers, payload)
-        data = response.json()
-        if "errorCode" in data:
-            self.logger.error(data["errorCode"])
+        if response.status_code != 204:
+            self.logger.error(f"Connection to {self.address} failed with \
+                              status {response.status_code}! \nResponse: \
+                              {response.content}")
+        # TODO: Notify user of success
 
     # New Server Tasks
 
-    def _claimServer(self) -> None:
+    def claimServer(self, ip: str = None, port: str = "7777") -> None:
+        # Requires "Initial Admin" privilege
+        # Received when attempting passwordless login with no admin pswd set
+        if self._passwordlessLogin(ip, port):
+            payload = {
+                "function": "ClaimServer",
+                "data": {
+                    "ServerName": "Test",
+                    "AdminPassword": "Test#2-ElectricBoogaloo",
+                },
+            }
+            self._postJSONRequest(self.headers, payload)
+            # TODO: Extract new auth token. Provide to user
+            # TODO: Set user password
+        else:
+            # Login Failed, assume server claimed
+            pass
         pass
 
     def _setClientPassword(self) -> None:
@@ -626,35 +654,18 @@ class SatisfactoryServerAdmin:
         # Determine if update is necessary
         # Query parts that need updating
 
-    def claimServer(self, ip: str = None, port: str = "7777") -> None:
-        # Requires "Initial Admin" privilege
-        # Received when attempting passwordless login with no admin pswd set
-        if self._passwordlessLogin(ip, port):
-            payload = {
-                "function": "ClaimServer",
-                "data": {
-                    "ServerName": "Test",
-                    "AdminPassword": "Test#2-ElectricBoogaloo",
-                },
-            }
-            self._postJSONRequest(self.headers, payload)
-            # TODO: Extract new auth token. Provide to user
-            # TODO: Set user password
-        else:
-            # Login Failed, assume server claimed
-            pass
-        pass
-
 
 if __name__ == "__main__":
     server = SatisfactoryServerAdmin()
-    server.claimServer(ip="192.168.1.133")
+    # server.claimServer(ip="192.168.1.133")
     # server.login("IP", "Key", 7777)
-    # server.login(
-    #     "192.168.1.17",
-    #     "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711",
-    #     "7777",
-    # )
-    server._queryServerOptions()
+    server.login(
+        "192.168.1.133",
+        "ewoJInBsIjogIkFQSVRva2VuIgp9.335C2A54DBDDC5D25BAF1003C8F61BEF5CF62F275F9FE6A7770550137979D0730EF2CA062E2CA767B1A53D0DC9BC863E2C065ACF4E8757A19C7E9B730536A7D6",
+        "7777",
+    )
     # print(server.queryServerState())
     # server._LightweightQuery()
+    server._renameServer("Potatoes")
+    server._LightweightQuery
+    print(server.serverName)
