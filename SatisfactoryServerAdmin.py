@@ -572,23 +572,37 @@ class SatisfactoryServerAdmin:
 
     # New Server Tasks
 
-    def claimServer(self, ip: str = None, port: str = "7777") -> None:
+    def claimServerInit(self, ip: str = None, port: str = "7777") -> None:
         # Requires "Initial Admin" privilege
         # Received when attempting passwordless login with no admin pswd set
         if self._passwordlessLogin(ip, port):
-            payload = {
-                "function": "ClaimServer",
-                "data": {
-                    "ServerName": "Test",
-                    "AdminPassword": "Test#2-ElectricBoogaloo",
-                },
-            }
-            self._postJSONRequest(self.headers, payload)
+            return True  # TODO: Confirm to UI server is unclaimed
+            # UI to continue flow at claimServerSetup
+
             # TODO: Extract new auth token. Provide to user
-            # TODO: Set user password
+            # TODO: [OPTIONAL] Set user password
         else:
             # Login Failed, assume server claimed
             pass
+        pass
+
+    def claimServerSetup(self, newName: str, admPassword: str) -> None:
+        # TODO: Get ServerName and AdminPassword from UI
+        payload = {
+            "function": "ClaimServer",
+            "data": {
+                "ServerName": newName,
+                "AdminPassword": admPassword,
+            },
+        }
+        payload = {
+            "function": "ClaimServer",
+            "data": {
+                "ServerName": "Test",
+                "AdminPassword": "Test#2-ElectricBoogaloo",
+            },
+        }
+        self._postJSONRequest(self.headers, payload)
         pass
 
     def _setClientPassword(self) -> None:
