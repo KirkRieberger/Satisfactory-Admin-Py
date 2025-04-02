@@ -1,358 +1,371 @@
 <!DOCTYPE html>
 <html lang="en-CA" data-bs-theme="dark">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satisfactory</title>
-    <link rel="icon" href="./icon.png" type="image/png" />
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!-- Bootstrap core stylesheet -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Satisfactory</title>
+        <link rel="icon" href="./icon.png" type="image/png" />
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <!-- Bootstrap core stylesheet -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" href="./index.css" />
-</head>
+        <link rel="stylesheet" href="./index.css" />
+    </head>
 
-<body>
-    <header class="container-fluid sticky-top bg-body">
-        <div class="row justify-content-center">
-            <h1 class="col-4 text-center">
-                <span id="server">SERVER NAME</span>&nbsp;
-                <small id="run" class="bi bi-play-circle-fill text-success"></small>
-                <small id="start" class="bi bi-skip-end-circle-fill text-warning d-none"></small>
-                <small id="pause" class="bi bi-pause-circle-fill text-warning d-none"></small>
-                <small id="stop" class="bi bi-stop-circle-fill text-danger d-none"></small>
-            </h1>
-        </div>
-        <div class="row justify-content-center">
-            <h2 id="session" class="col-4 text-center">Session Name</h2>
-        </div>
-        <!-- Tab List -->
-        <div class="row">
-            <ul role="tablist" class="nav nav-tabs">
-                <li role="presentation" class="nav-item">
-                    <button role="tab" id="dashLink" class="nav-link active" type="button" data-bs-target="#dashboard"
-                        data-bs-toggle="tab" aria-selected="true" aria-controls="tabContainer">Dashboard</button>
-                </li>
-                <li class="nav-item">
-                    <button role="tab" id="settingsLink" class="nav-link" type="button" data-bs-target="#settings"
-                        data-bs-toggle="tab" aria-selected="false" aria-controls="tabContainer">Settings</button>
-                </li>
-                <li class="nav-item">
-                    <button role="tab" id="sessionsLink" class="nav-link" type="button" data-bs-target="#sessions"
-                        data-bs-toggle="tab" aria-selected="true" aria-controls="tabContainer">Saves</button>
-                </li>
-                <li class="nav-item">
-                    <button role="tab" id="consoleLink" class="nav-link" type="button" data-bs-target="#console"
-                        data-bs-toggle="tab" aria-selected="false" aria-controls="tabContainer">Console</button>
-                </li>
-            </ul>
-        </div>
-    </header>
-    <main id="tabContainer" class="container tab-content" tabindex="-1">
-        <!-- Dashboard Tab -->
-        <section role="tabpanel" id="dashboard" class="tab-pane show active" tabindex="-1" aria-labelledby="dashLink">
-            <h3 class="d-none">Dashboard</h3>
-            <div class="row mt-4">
-                <div class="col-6">
-                    <!-- Game Info Card -->
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Game Info</h3>
-                        </header>
-                        <div class="card-body">
-                            <p class="card-text"><b>Phase:&nbsp;</b><span id="phase">Main Body</span></p>
-                            <p class="card-text"><b>Tier:&nbsp;</b><span id="tier">5</span></p>
-                            <p class="card-text"><b>Schematic:&nbsp;</b><span id="schem">None</span></p>
-                        </div>
-                    </section>
-                </div>
-                <div class="col-6">
-                    <!-- Server State Card -->
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Server State</h3>
-                        </header>
-                        <div class="card-body">
-                            <p class="card-text"><span id="curPlayers">#</span>/<span id="maxPlayers">#</span>
-                                players
-                            </p>
-                            <!-- Pie Chart? https://www.w3schools.com/howto/howto_google_charts.asp 
+    <body>
+        <header class="container-fluid sticky-top bg-body">
+            <div class="row justify-content-center">
+                <h1 class="col-4 text-center">
+                    <span id="server">SERVER NAME</span>&nbsp;
+                    <small id="run" class="bi bi-play-circle-fill text-success"></small>
+                    <small id="start" class="bi bi-skip-end-circle-fill text-warning d-none"></small>
+                    <small id="pause" class="bi bi-pause-circle-fill text-warning d-none"></small>
+                    <small id="stop" class="bi bi-stop-circle-fill text-danger d-none"></small>
+                </h1>
+            </div>
+            <div class="row justify-content-center">
+                <h2 id="session" class="col-4 text-center">Session Name</h2>
+            </div>
+            <!-- Tab List -->
+            <div class="row">
+                <ul role="tablist" class="nav nav-tabs">
+                    <li role="presentation" class="nav-item">
+                        <button role="tab" id="dashLink" class="nav-link active" type="button"
+                            data-bs-target="#dashboard" data-bs-toggle="tab" aria-selected="true"
+                            aria-controls="tabContainer">Dashboard</button>
+                    </li>
+                    <li class="nav-item">
+                        <button role="tab" id="settingsLink" class="nav-link" type="button" data-bs-target="#settings"
+                            data-bs-toggle="tab" aria-selected="false" aria-controls="tabContainer">Settings</button>
+                    </li>
+                    <li class="nav-item">
+                        <button role="tab" id="sessionsLink" class="nav-link" type="button" data-bs-target="#sessions"
+                            data-bs-toggle="tab" aria-selected="true" aria-controls="tabContainer">Saves</button>
+                    </li>
+                    <li class="nav-item">
+                        <button role="tab" id="consoleLink" class="nav-link" type="button" data-bs-target="#console"
+                            data-bs-toggle="tab" aria-selected="false" aria-controls="tabContainer">Console</button>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <main id="tabContainer" class="container tab-content" tabindex="-1">
+            <!-- Dashboard Tab -->
+            <section role="tabpanel" id="dashboard" class="tab-pane show active" tabindex="-1"
+                aria-labelledby="dashLink">
+                <h3 class="d-none">Dashboard</h3>
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <!-- Game Info Card -->
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Game Info</h3>
+                            </header>
+                            <div class="card-body">
+                                <p class="card-text"><b>Phase:&nbsp;</b><span id="phase">Main Body</span></p>
+                                <p class="card-text"><b>Tier:&nbsp;</b><span id="tier">5</span></p>
+                                <p class="card-text"><b>Schematic:&nbsp;</b><span id="schem">None</span></p>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="col-6">
+                        <!-- Server State Card -->
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Server State</h3>
+                            </header>
+                            <div class="card-body">
+                                <p class="card-text"><span id="curPlayers">#</span>/<span id="maxPlayers">#</span>
+                                    players
+                                </p>
+                                <!-- Pie Chart? https://www.w3schools.com/howto/howto_google_charts.asp 
                                  Line Chart of tickrate over time? -->
-                            <p class="card-text"><span id="ticks">27</span>/30 Ticks per second</p>
-                        </div>
-                    </section>
+                                <p class="card-text"><span id="ticks">27</span>/30 Ticks per second</p>
+                            </div>
+                        </section>
+                    </div>
                 </div>
+            </section>
+            <!-- Settings Tab -->
+            <section role="tabpanel" id="settings" class="tab-pane" tabindex="-1" aria-labelledby="settingsLink">
+                <h3 class="d-none">Settings</h3>
+                <!-- TODO: Only update wne tab initially activated -->
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-6">
+                        <!-- Server Options Card -->
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Server Options
+                                    <!-- TODO: Show when pending options -->
+                                    <span class="badge text-bg-warning" hidden>SERVER RESTART REQUIRED</span>
+                                </h3>
+                            </header>
+                            <form class="card-body container-fluid" action="javascript:applyOptions()">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="form-check form-switch">
+                                            <label for="autoPause" class="form-check-label">Auto Pause</label>
+                                            <input type="checkbox" role="switch" id="autoPause"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="autoSaveOnDC" class="form-check-label">Autosave on
+                                                Disconnect</label>
+                                            <input type="checkbox" role="switch" id="autoSaveOnDC"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="telemetry" class="form-check-label">Send Telemetry</label>
+                                            <input type="checkbox" role="switch" id="telemetry"
+                                                class="form-check-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label for="saveInterval" class="col-form-label">Autosave
+                                            Interval</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="number" id="saveInterval" class="form-control" value="300">
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="saveInterval" class="col-form-label">seconds</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label for="restartTime" class="col-form-label">Server Restart Time</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="number" id="restartTime" class="form-control" value="1440">
+                                    </div>
+                                    <div class="col-auto">
+                                        <label for="restartTime" class="col-form-label">minutes</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <label for="networkQuality" class="col-form-label">Network Quality</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <select name="networkQuality" id="networkQuality" class="form-select">
+                                            <option value="0">Low</option>
+                                            <option value="1">Medium</option>
+                                            <option value="2">High</option>
+                                            <option value="3">Ultra</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary">Apply</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-6">
+                        <!-- Advanced Game Settings Card -->
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>AGS</h3>
+                            </header>
+                            <form class="card-body">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <div class="form-check form-switch">
+                                            <label for="disableSpiders" class="form-check-label">Disable
+                                                Arachnids</label>
+                                            <input type="checkbox" role="switch" id="disableSpiders"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="noPowerCost" class="form-check-label">No Power Cost</label>
+                                            <input type="checkbox" role="switch" id="noPowerCost"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="noUnlockCost" class="form-check-label">No Unlock Cost</label>
+                                            <input type="checkbox" role="switch" id="noUnlockCost"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="noBuildCost" class="form-check-label">No Build Cost</label>
+                                            <input type="checkbox" role="switch" id="noBuildCost"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="giveAllTiers" class="form-check-label">Give All Tiers</label>
+                                            <input type="checkbox" role="switch" id="giveAllTiers"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="unlockAllResearch" class="form-check-label">Unlock All
+                                                Research</label>
+                                            <input type="checkbox" role="switch" id="unlockAllResearch"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="instantAlts" class="form-check-label">Unlock Instant Alt
+                                                Recipes</label>
+                                            <input type="checkbox" role="switch" id="instantAlts"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="unlockSinkRewards" class="form-check-label">Unlock All
+                                                A.W.E.S.O.M.E.
+                                                Rewards</label>
+                                            <input type="checkbox" role="switch" id="unlockSinkRewards"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="flightMode" class="form-check-label">Flight Mode</label>
+                                            <input type="checkbox" role="switch" id="flightMode"
+                                                class="form-check-input">
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <label for="godMode" class="form-check-label">God Mode</label>
+                                            <input type="checkbox" role="switch" id="godMode" class="form-check-input">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary">Apply</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                </div>
+            </section>
+            <!-- Session Management Tab -->
+            <section role="tabpanel" id="sessions" class="tab-pane" tabindex="-1" aria-labelledby="settingsLink">
+                <h3 class="d-none">Sessions</h3>
+                <div class="row mt-4">
+                    <div class="col-6">
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Sessions</h3>
+                            </header>
+                        </section>
+                    </div>
+                    <div class="col-6">
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>Saves</h3>
+                            </header>
+                        </section>
+                    </div>
+                </div>
+            </section>
+            <!-- Console Tab -->
+            <section role="tabpanel" id="console" class="tab-pane" tabindex="-1" aria-labelledby="consoleLink">
+                <h3 class="d-none">Console</h3>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <section class="card h-100">
+                            <header class="card-header">
+                                <h3>&gt;_ Console</h3>
+                            </header>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <div id="changeList">
+                <p><b>Version:</b> CL#<span id="version">12345</span></p>
             </div>
-        </section>
-        <!-- Settings Tab -->
-        <section role="tabpanel" id="settings" class="tab-pane" tabindex="-1" aria-labelledby="settingsLink">
-            <h3 class="d-none">Settings</h3>
-            <!-- TODO: Only update wne tab initially activated -->
-            <div class="row mt-4 justify-content-center">
-                <div class="col-6">
-                    <!-- Server Options Card -->
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Server Options
-                                <!-- TODO: Show when pending options -->
-                                <span class="badge text-bg-warning" hidden>SERVER RESTART REQUIRED</span>
-                            </h3>
-                        </header>
-                        <form class="card-body container-fluid" action="javascript:applyOptions()">
+
+            <div id="rateContainer">
+                <label for="updateRate" class="form-label">Update rate: </label>
+                <select name="UpdateRate" id="updateRate" class=form-select>
+                    <option value="1">1</option>
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="15">15</option>
+                </select>
+            </div>
+        </footer>
+
+        <!-- Modals and miscellaneous pop-ups -->
+
+        <!-- Login Modal -->
+
+        <section class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="loginModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="loginModalTitle">Login</h2>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Login Form -->
+                        <form action="javascript:login()" id="loginForm" class="container needs-validation" novalidate>
                             <div class="row">
-                                <div class="col-auto">
-                                    <div class="form-check form-switch">
-                                        <label for="autoPause" class="form-check-label">Auto Pause</label>
-                                        <input type="checkbox" role="switch" id="autoPause" class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="autoSaveOnDC" class="form-check-label">Autosave on
-                                            Disconnect</label>
-                                        <input type="checkbox" role="switch" id="autoSaveOnDC" class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="telemetry" class="form-check-label">Send Telemetry</label>
-                                        <input type="checkbox" role="switch" id="telemetry" class="form-check-input">
-                                    </div>
+                                <div class="col-8">
+                                    <label for="address" class="form-label">Server Address</label>
+                                    <input id="address" name="address" type="text" class="form-control"
+                                        pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)+([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$"
+                                        required>
+                                    <div class="invalid-feedback">Server address must be either an ip address
+                                        (192.168.1.1)
+                                        or a domain name (satisfactory.example.com)</div>
                                 </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-4">
-                                    <label for="saveInterval" class="col-form-label">Autosave
-                                        Interval</label>
-                                </div>
-                                <div class="col-3">
-                                    <input type="number" id="saveInterval" class="form-control" value="300">
-                                </div>
-                                <div class="col-auto">
-                                    <label for="saveInterval" class="col-form-label">seconds</label>
+                                    <label for="port" class="form-label">Server Port</label>
+                                    <input id="port" name="port" type="number" class="form-control" value="7777" min="0"
+                                        required>
+                                    <div class="invalid-feedback">Port must be an integer between 0 and 65535</div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-4">
-                                    <label for="restartTime" class="col-form-label">Server Restart Time</label>
-                                </div>
-                                <div class="col-3">
-                                    <input type="number" id="restartTime" class="form-control" value="1440">
-                                </div>
-                                <div class="col-auto">
-                                    <label for="restartTime" class="col-form-label">minutes</label>
+                                <div class="col-12">
+                                    <label for="key" class="form-label">API Key</label>
+                                    <input id="key" name="key" type="password" class="form-control"
+                                        pattern="^[0-9A-Za-z+\/=]+[.][0-9A-F]{128}$" required>
+                                    <div class="invalid-feedback">API key must contain both the token and token payload
+                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-4">
-                                    <label for="networkQuality" class="col-form-label">Network Quality</label>
-                                </div>
-                                <div class="col-3">
-                                    <select name="networkQuality" id="networkQuality" class="form-select">
-                                        <option value="0">Low</option>
-                                        <option value="1">Medium</option>
-                                        <option value="2">High</option>
-                                        <option value="3">Ultra</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row justify-content-end">
-                                <div class="col-auto">
-                                    <button class="btn btn-primary">Apply</button>
-                                </div>
-                            </div>
+                            <input type="submit" hidden>
                         </form>
-                    </section>
-                </div>
-            </div>
-            <div class="row mt-4 justify-content-center">
-                <div class="col-6">
-                    <!-- Advanced Game Settings Card -->
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>AGS</h3>
-                        </header>
-                        <form class="card-body">
-                            <div class="row">
+                    </div>
+                    <div class="modal-footer">
+                        <div class="container">
+                            <div class="row mt-2 justify-content-between">
                                 <div class="col-auto">
-                                    <div class="form-check form-switch">
-                                        <label for="disableSpiders" class="form-check-label">Disable
-                                            Arachnids</label>
-                                        <input type="checkbox" role="switch" id="disableSpiders"
-                                            class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="noPowerCost" class="form-check-label">No Power Cost</label>
-                                        <input type="checkbox" role="switch" id="noPowerCost" class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="noUnlockCost" class="form-check-label">No Unlock Cost</label>
-                                        <input type="checkbox" role="switch" id="noUnlockCost" class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="noBuildCost" class="form-check-label">No Build Cost</label>
-                                        <input type="checkbox" role="switch" id="noBuildCost" class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="giveAllTiers" class="form-check-label">Give All Tiers</label>
-                                        <input type="checkbox" role="switch" id="giveAllTiers" class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="unlockAllResearch" class="form-check-label">Unlock All
-                                            Research</label>
-                                        <input type="checkbox" role="switch" id="unlockAllResearch"
-                                            class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="instantAlts" class="form-check-label">Unlock Instant Alt
-                                            Recipes</label>
-                                        <input type="checkbox" role="switch" id="instantAlts" class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="unlockSinkRewards" class="form-check-label">Unlock All
-                                            A.W.E.S.O.M.E.
-                                            Rewards</label>
-                                        <input type="checkbox" role="switch" id="unlockSinkRewards"
-                                            class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="flightMode" class="form-check-label">Flight Mode</label>
-                                        <input type="checkbox" role="switch" id="flightMode" class="form-check-input">
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <label for="godMode" class="form-check-label">God Mode</label>
-                                        <input type="checkbox" role="switch" id="godMode" class="form-check-input">
-                                    </div>
+                                    <button id="claimButton" type="button" class="btn btn-danger"
+                                        onclick="claimServer()">
+                                        Claim Server
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="row justify-content-end">
                                 <div class="col-auto">
-                                    <button class="btn btn-primary">Apply</button>
+                                    <button id="loginButton" type="submit" form="loginForm"
+                                        class="btn btn-success">Login</button>
                                 </div>
-                            </div>
-                        </form>
-                    </section>
-                </div>
-            </div>
-        </section>
-        <!-- Session Management Tab -->
-        <section role="tabpanel" id="sessions" class="tab-pane" tabindex="-1" aria-labelledby="settingsLink">
-            <h3 class="d-none">Sessions</h3>
-            <div class="row mt-4">
-                <div class="col-6">
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Sessions</h3>
-                        </header>
-                    </section>
-                </div>
-                <div class="col-6">
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>Saves</h3>
-                        </header>
-                    </section>
-                </div>
-            </div>
-        </section>
-        <!-- Console Tab -->
-        <section role="tabpanel" id="console" class="tab-pane" tabindex="-1" aria-labelledby="consoleLink">
-            <h3 class="d-none">Console</h3>
-            <div class="row mt-4">
-                <div class="col-12">
-                    <section class="card h-100">
-                        <header class="card-header">
-                            <h3>&gt;_ Console</h3>
-                        </header>
-                    </section>
-                </div>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <div id="changeList">
-            <p><b>Version:</b> CL#<span id="version">12345</span></p>
-        </div>
-
-        <div id="rateContainer">
-            <label for="updateRate" class="form-label">Update rate: </label>
-            <select name="UpdateRate" id="updateRate" class=form-select>
-                <option value="1">1</option>
-                <option value="5">5</option>
-                <option value="10" selected>10</option>
-                <option value="15">15</option>
-            </select>
-        </div>
-    </footer>
-
-    <!-- Modals and miscellaneous pop-ups -->
-
-    <!-- Login Modal -->
-
-    <section class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="loginModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title" id="loginModalTitle">Login</h2>
-                </div>
-                <div class="modal-body">
-                    <!-- Login Form -->
-                    <form action="javascript:login()" id="loginForm" class="container needs-validation" novalidate>
-                        <div class="row">
-                            <div class="col-8">
-                                <label for="address" class="form-label">Server Address</label>
-                                <input id="address" name="address" type="text" class="form-control"
-                                    pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)+([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])$"
-                                    required>
-                                <div class="invalid-feedback">Server address must be either an ip address (192.168.1.1)
-                                    or a domain name (satisfactory.example.com)</div>
-                            </div>
-                            <div class="col-4">
-                                <label for="port" class="form-label">Server Port</label>
-                                <input id="port" name="port" type="number" class="form-control" value="7777" min="0"
-                                    required>
-                                <div class="invalid-feedback">Port must be an integer between 0 and 65535</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <label for="key" class="form-label">API Key</label>
-                                <input id="key" name="key" type="password" class="form-control"
-                                    pattern="^[0-9A-Za-z+\/=]+[.][0-9A-F]{128}$" required>
-                                <div class="invalid-feedback">API key must contain both the token and token payload
-                                </div>
-                            </div>
-                        </div>
-                        <input type="submit" hidden>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <div class="container">
-                        <div class="row mt-2 justify-content-between">
-                            <div class="col-auto">
-                                <button id="claimButton" type="button" class="btn btn-danger" onclick="claimServer()">
-                                    Claim Server
-                                </button>
-                            </div>
-                            <div class="col-auto">
-                                <button id="loginButton" type="submit" form="loginForm"
-                                    class="btn btn-success">Login</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Bootstrap main script -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-    <script src="./index.js"></script>
-</body>
+        <!-- Bootstrap main script -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+        <script src="./index.js"></script>
+    </body>
 
 </html>
