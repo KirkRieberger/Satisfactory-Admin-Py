@@ -45,25 +45,29 @@ function login() {
 }
 
 function claimServer() {
-    alert("Claim Server");
+    // alert("Claim Server");
+    loginForm.classList.add('was-validated');
+
     let adr = $("#address").val();
     let port = $("#port").val();
-    let response = pywebview.api.claimServerInit(adr, port);
-    response.then((value) => {
-        if (value == 0) {
-            // Server not claimed
-            // Dismiss login modal, show claim modal
-            loginModal.hide();
-            claimModal.show();
-        } else if (value == -1) {
-            // Invalid args
-            // Clear form, try again
-        } else if (value == 1) {
-            // Claimed
-            // 
-        }
-    });
 
+    if (adr && port){
+        let response = pywebview.api.claimServerInit(adr, port);
+        response.then((value) => {
+            if (value == 0) {
+                // Server not claimed
+                // Dismiss login modal, show claim modal
+                loginModal.hide();
+                claimModal.show();
+            } else if (value == -1) {
+                // Invalid args
+                // Clear form, try again
+            } else if (value == 1) {
+                // Claimed
+                // 
+            }
+        });
+    }
 }
 
 function showResponse(response) {
