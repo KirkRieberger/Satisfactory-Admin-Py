@@ -451,6 +451,7 @@ class SatisfactoryServerAdmin:
             return False
         else:
             token = data["data"]["authenticationToken"]
+            self.token = token
             self.headers.update({"Authorization": f"Bearer {token}"})
             return True
 
@@ -572,22 +573,36 @@ class SatisfactoryServerAdmin:
 
     # New Server Tasks
 
-    def claimServerInit(self, ip: str = None, port: str = "7777") -> None:
+    def claimServerInit(self, adr: str = None, port: str = "7777") -> int:
+        """
+        TODO:
+        Begins the server claiming process. Determines if a server is
+        already claimed.
+
+        Args:
+            adr (str, optional): _description_. Defaults to None.
+            port (str, optional): _description_. Defaults to "7777".
+
+        Returns:
+            bool: _description_
+        """
         # Requires "Initial Admin" privilege
         # Received when attempting passwordless login with no admin pswd set
-        if self._passwordlessLogin(ip, port):
-            return True  # TODO: Confirm to UI server is unclaimed
+        if adr is None:
+            self.logger.error("claimServerInit - No address provided!")
+            return -1
+        if self._passwordlessLogin(adr, port):
+            # Do not give token here. This is initialAdmin token
+            return 0  # TODO: Confirm to UI server is unclaimed
             # UI to continue flow at claimServerSetup
-
-            # TODO: Extract new auth token. Provide to user
-            # TODO: [OPTIONAL] Set user password
         else:
             # Login Failed, assume server claimed
-            pass
+            return 1
         pass
 
     def claimServerSetup(self, newName: str, admPassword: str) -> None:
         # TODO: Get ServerName and AdminPassword from UI
+        # TODO: [OPTIONAL] Set user password
         payload = {
             "function": "ClaimServer",
             "data": {
@@ -603,6 +618,7 @@ class SatisfactoryServerAdmin:
             },
         }
         self._postJSONRequest(self.headers, payload)
+        # TODO: Extract new auth token. Provide to user
         pass
 
     def _setClientPassword(self) -> None:
@@ -671,7 +687,7 @@ class SatisfactoryServerAdmin:
 
 if __name__ == "__main__":
     server = SatisfactoryServerAdmin()
-    # server.claimServer(ip="192.168.1.133")
+    server.claimServerInit(adr="192.168.1.133")
     # server.login("IP", "Key", 7777)
     server.login(
         "192.168.1.133",
