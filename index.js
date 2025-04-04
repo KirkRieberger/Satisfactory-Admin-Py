@@ -3,6 +3,7 @@
 const loginModal = new bootstrap.Modal('#loginModal');
 const claimModal = new bootstrap.Modal('#claimModal');
 const loginForm = document.getElementById('loginForm');
+const claimForm = document.getElementById('claimForm');
 // Wait for Python API to be initialized
 window.addEventListener('pywebviewready', function () {
     loginModal.show();
@@ -16,7 +17,30 @@ window.addEventListener('pywebviewready', function () {
         }
 
         loginForm.classList.add('was-validated');
-    }, false)
+    }, false);
+
+    // Claim modal submit listener
+
+    claimForm.addEventListener('submit', event => {
+        // Set password field validity
+        let adminPassword = $('#adminPassword').val();
+        let adminPasswordConfirm = $('#adminPasswordConfirm').val();
+
+        if (adminPassword != adminPasswordConfirm) {
+            document.getElementById('adminPassword').setCustomValidity("BAD");
+            document.getElementById('adminPasswordConfirm').setCustomValidity("BAD");
+        } else {
+            document.getElementById('adminPassword').setCustomValidity("");
+            document.getElementById('adminPasswordConfirm').setCustomValidity("");
+        }
+
+        if (!claimForm.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        claimForm.classList.add('was-validated');
+    }, false);
 
     // Highlight all text on port field focus
     $('#port').on({
@@ -24,7 +48,6 @@ window.addEventListener('pywebviewready', function () {
             $('#port').select();
         }
     });
-
 });
 
 function login() {
@@ -51,7 +74,7 @@ function claimServer() {
     let adr = $("#address").val();
     let port = $("#port").val();
 
-    if (adr && port){
+    if (adr && port) {
         let response = pywebview.api.claimServerInit(adr, port);
         response.then((value) => {
             if (value == 0) {
@@ -61,13 +84,24 @@ function claimServer() {
                 claimModal.show();
             } else if (value == -1) {
                 // Invalid args
-                // Clear form, try again
+                // Works as intended with no change
             } else if (value == 1) {
                 // Claimed
-                // 
+                // Show toast requiring login
             }
         });
     }
+}
+
+function claimConfirm() {
+    // Only arrives here if passwords match
+    // Check passwords match .setCustomValidity()
+    let newName = $('#newName').val();
+    let adminPassword = $('#adminPassword').val();
+
+    pywebview.api.claimServerSetup(newName, adminPassword);
+
+    alert("Claim form submit event")
 }
 
 function showResponse(response) {
