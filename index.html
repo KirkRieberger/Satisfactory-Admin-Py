@@ -361,6 +361,8 @@
             </div>
         </section>
 
+        <!-- Claim Server modal -->
+
         <section class="modal fade" id="claimModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
             aria-labelledby="claimModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -368,8 +370,34 @@
                     <div class="modal-header">
                         <h2 class="modal-title" id="claimModalTitle">Claim Server</h2>
                     </div>
-                    <div class="modal-body"></div>
-                    <div class="modal-footer"></div>
+                    <div class="modal-body">
+                        <form action="javascript:claimConfirm()" id="claimForm" class="container needs-validation"
+                            novalidate>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="newName" class="form-label">New Server Name</label>
+                                    <input name="newName" id="newName" type="text" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="adminPassword" class="form-label">New Admin Password</label>
+                                    <input id="adminPassword" type="password" name="adminPassword" class="form-control"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="adminPasswordConfirm" class="form-label">Confirm Admin Password</label>
+                                    <input id="adminPasswordConfirm" name="adminPasswordConfirm" type="password"
+                                        class="form-control" required>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" form="claimForm" class="btn btn-danger">Claim Server</button>
+                    </div>
                 </div>
             </div>
         </section>
