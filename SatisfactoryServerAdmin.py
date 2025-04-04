@@ -589,7 +589,7 @@ class SatisfactoryServerAdmin:
         # Requires "Initial Admin" privilege
         # Received when attempting passwordless login with no admin pswd set
         if adr is None:
-            self.logger.error("claimServerInit - No address provided!")
+            self.logger.error("claimServerInit - Invalid address provided!")
             return -1
         if self._passwordlessLogin(adr, port):
             # Do not give token here. This is initialAdmin token
@@ -598,7 +598,6 @@ class SatisfactoryServerAdmin:
         else:
             # Login Failed, assume server claimed
             return 1
-        pass
 
     def claimServerSetup(self, newName: str, admPassword: str) -> None:
         # TODO: Get ServerName and AdminPassword from UI
