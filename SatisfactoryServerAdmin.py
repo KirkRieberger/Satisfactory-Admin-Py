@@ -609,16 +609,18 @@ class SatisfactoryServerAdmin:
                 "AdminPassword": admPassword,
             },
         }
-        payload = {
-            "function": "ClaimServer",
-            "data": {
-                "ServerName": "Test",
-                "AdminPassword": "Test#2-ElectricBoogaloo",
-            },
-        }
-        self._postJSONRequest(self.headers, payload)
+        # payload = {
+        #     "function": "ClaimServer",
+        #     "data": {
+        #         "ServerName": "Test",
+        #         "AdminPassword": "Test#2-ElectricBoogaloo",
+        #     },
+        # }
+        response = self._postJSONRequest(self.headers, payload)
         # TODO: Extract new auth token. Provide to user
-        pass
+        # Update token to drop initial admin
+        self.token = response.json()["data"]["authenticationToken"]
+        return self.token
 
     def _setClientPassword(self) -> None:
         pass
