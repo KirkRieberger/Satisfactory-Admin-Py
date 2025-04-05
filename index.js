@@ -99,9 +99,17 @@ function claimConfirm() {
     let newName = $('#newName').val();
     let adminPassword = $('#adminPassword').val();
 
-    pywebview.api.claimServerSetup(newName, adminPassword);
+    let response = pywebview.api.claimServerSetup(newName, adminPassword);
 
-    alert("Claim form submit event")
+    // Replace with a modal so it looks nice
+
+    response.then((value) => {
+        alert(`This is your new API token. This will only be shown once: be sure to write it down!\n${value}`);
+        claimModal.hide();
+        loginModal.show();
+    })
+
+
 }
 
 function showResponse(response) {
