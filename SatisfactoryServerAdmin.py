@@ -375,6 +375,8 @@ class SatisfactoryServerAdmin:
         respState = int.from_bytes(data[12:13])
         if respState not in range(0, 4):
             self.logger.error("Invalid lightweight query server state!")
+            # Assume corrupt data. Skip this update
+            return [0, 0, 0, 0]
         else:
             self.serverState = serverStates[respState]
 
