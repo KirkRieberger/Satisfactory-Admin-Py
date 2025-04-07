@@ -252,8 +252,7 @@ class SatisfactoryServerAdmin:
         # Check if connection successful
         if initResponse == 523:
             # Unable to contact server at given address
-            raise TimeoutError(
-                f"Connection to {self.address} failed with no response!")
+            raise TimeoutError(f"Connection to {self.address} failed with no response!")
         # TODO: Raise different exception based on HTTP code
         if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
@@ -393,14 +392,16 @@ class SatisfactoryServerAdmin:
         i = 26  # Base offset of state array
         while i < (26 + numStates * 3):
             stateId = int.from_bytes(
-                data[i: i + 1]
+                data[i : i + 1]
             )  # Single byte - Order not necessary
-            stateData = int.from_bytes(data[i + 1: i + 4], byteorder="little")
+            stateData = int.from_bytes(data[i + 1 : i + 4], byteorder="little")
 
             if stateId in self.subStates:
                 if stateData != self.subStates[stateId]:
                     # Settings changed
                     subStateStatus[stateId] = 1
+                else:
+                    subStateStatus[stateId] = 0
             else:
                 # Initial run
                 self.subStates[stateId] = stateData
@@ -409,11 +410,11 @@ class SatisfactoryServerAdmin:
             i += 3
 
         respNameLen = int.from_bytes(
-            data[26 + (3 * numStates): 26 + (3 * numStates) + 2],
+            data[26 + (3 * numStates) : 26 + (3 * numStates) + 2],
             byteorder="little",
         )
         self.serverName = data[
-            26 + (3 * numStates) + 2: 26 + (3 * numStates) + 2 + respNameLen
+            26 + (3 * numStates) + 2 : 26 + (3 * numStates) + 2 + respNameLen
         ].decode("utf-8")
 
         # Terminator 0x01
@@ -437,8 +438,7 @@ class SatisfactoryServerAdmin:
         """
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
-        self.headers = {"Encoding": "utf-8",
-                        "Content-Type": "application/json"}
+        self.headers = {"Encoding": "utf-8", "Content-Type": "application/json"}
         payload = {
             "function": "PasswordlessLogin",
             "data": {"MinimumPrivilegeLevel": "InitialAdmin"},
@@ -471,11 +471,9 @@ class SatisfactoryServerAdmin:
         Query the server's state endpoint, and update class members
         """
         # Get response
-        response = self._postJSONRequest(
-            self.headers, {"function": "QueryServerState"})
+        response = self._postJSONRequest(self.headers, {"function": "QueryServerState"})
         # TODO: Check if valid response
-        self.logger.info(
-            f"Received {response.status_code} response from server")
+        self.logger.info(f"Received {response.status_code} response from server")
         content = json.loads(response.content)["data"]["serverGameState"]
 
         # Update instance variables
@@ -486,8 +484,7 @@ class SatisfactoryServerAdmin:
 
         # Prettify phase and schematic
         if SatisfactoryLuT.getSchematic(content["activeSchematic"]):
-            self.schematic = SatisfactoryLuT.getSchematic(
-                content["activeSchematic"])
+            self.schematic = SatisfactoryLuT.getSchematic(content["activeSchematic"])
         else:
             self.schematic = "Schematic Error!"
 
@@ -509,14 +506,11 @@ class SatisfactoryServerAdmin:
         """
         Query the server's options endpoint, and update class members
         """
-        response = self._postJSONRequest(
-            self.headers, {"function": "GetServerOptions"})
+        response = self._postJSONRequest(self.headers, {"function": "GetServerOptions"})
         # TODO: Check if valid response
-        self.logger.info(
-            f"Received {response.status_code} response from server")
+        self.logger.info(f"Received {response.status_code} response from server")
         currentOptions = json.loads(response.content)["data"]["serverOptions"]
-        pendingOptions = json.loads(response.content)[
-            "data"]["pendingServerOptions"]
+        pendingOptions = json.loads(response.content)["data"]["pendingServerOptions"]
         if pendingOptions:
             self.needsRestart = True
 
@@ -539,11 +533,9 @@ class SatisfactoryServerAdmin:
             self.headers, {"function": "GetAdvancedGameSettings"}
         )
         # TODO: Check if valid response
-        self.logger.info(
-            f"Received {response.status_code} response from server")
+        self.logger.info(f"Received {response.status_code} response from server")
         ags = json.loads(response.content)["data"]["advancedGameSettings"]
-        self.creativeMode = json.loads(response.content)[
-            "data"]["creativeModeEnabled"]
+        self.creativeMode = json.loads(response.content)["data"]["creativeModeEnabled"]
         self.noPower = ags["FG.GameRules.NoPower"]
         self.disableArachnids = ags["FG.GameRules.DisableArachnidCreatures"]
         self.noUnlock = ags["FG.GameRules.NoUnlockCost"]
@@ -566,9 +558,11 @@ class SatisfactoryServerAdmin:
         payload = {"function": "RenameServer", "data": {"ServerName": newName}}
         response = self._postJSONRequest(self.headers, payload)
         if response.status_code != 204:
-            self.logger.error(f"Connection to {self.address} failed with \
+            self.logger.error(
+                f"Connection to {self.address} failed with \
                               status {response.status_code}! \nResponse: \
-                              {response.content}")
+                              {response.content}"
+            )
         # TODO: Notify user of success
 
     # New Server Tasks
