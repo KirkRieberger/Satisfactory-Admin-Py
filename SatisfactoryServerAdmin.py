@@ -354,15 +354,20 @@ class SatisfactoryServerAdmin:
         )  # Should be 0xf6d5  -  Unbound local
         if respMagic != 0xF6D5:
             self.logger.error("Invalid lightweight query magic number!")
-            # Update self if necessary
+            # Assume corrupt data. Skip this update
+            return [0, 0, 0, 0]
 
         respType = int.from_bytes(data[2:3])  # Should be 0x01
         if respType != 0x01:
             self.logger.error("Invalid lightweight query response type!")
+            # Assume corrupt data. Skip this update
+            return [0, 0, 0, 0]
 
         respVer = int.from_bytes(data[3:4])  # Should be 0x01
         if respVer != 0x01:
             self.logger.error("Invalid lightweight query response version!")
+            # Assume corrupt data. Skip this update
+            return [0, 0, 0, 0]
 
         # Current time in Unreal Engine game ticks. Not terribly useful
         # respCookie = hex(int.from_bytes(data[4:12], byteorder="little"))
@@ -417,7 +422,10 @@ class SatisfactoryServerAdmin:
             26 + (3 * numStates) + 2 : 26 + (3 * numStates) + 2 + respNameLen
         ].decode("utf-8")
 
-        # Terminator 0x01
+        terminator = data[26 + (3 * numStates) + 2 + respNameLen]
+        if terminator != 0x01:
+            # Assume corrupt data. Skip this update
+            return [0, 0, 0, 0]
 
         return subStateStatus
 
