@@ -21,6 +21,9 @@ def main(window: webview.Window):
     changeList = window.dom.get_element("#version")
     updateRate = window.dom.get_element("#updateRate")
 
+    # Tracking variables
+    updateSettings = None
+
     # Window Update Loop
     # TODO: Check which tab is active, update accordingly
     while True:  # TODO: Use LW Query to determine if update is needed
@@ -29,6 +32,10 @@ def main(window: webview.Window):
             serverName.text = server.serverName
             sessionName.text = server.sessionName
             updateStatusDisp(window, server.serverState)
+            # Update dashboard
+            # TODO: Factor into bespoke function
+            if updateSettings:
+                updateSettingsDisp(window)
             phase.text = server.gamePhase
             tier.text = server.tier
             schematic.text = server.schematic
@@ -36,6 +43,7 @@ def main(window: webview.Window):
             maxCount.text = server.maxPlayers
             tickRate.text = server.tickRate
             changeList.text = server.clientVersion
+
             sleep(int(updateRate.value))
         else:
             sleep(1)
@@ -56,7 +64,7 @@ def updateStatusDisp(window: webview.Window, newState: str) -> None:
                 status.classes = ["bi", "bi-play-circle-fill", "text-success"]
 
 
-def updateSettingsDisp() -> None:
+def updateSettingsDisp(window: webview.Window) -> None:
     # Standard Settings
     settingsAutoPause = window.dom.get_element("#autoPause")
     settingsAutoSaveDC = window.dom.get_element("#autoSaveOnDC")
