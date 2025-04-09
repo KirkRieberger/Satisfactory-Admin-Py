@@ -77,17 +77,25 @@ function claimServer() {
     if (adr && port) {
         let response = pywebview.api.claimServerInit(adr, port);
         response.then((value) => {
-            if (value == 0) {
-                // Server not claimed
-                // Dismiss login modal, show claim modal
-                loginModal.hide();
-                claimModal.show();
-            } else if (value == -1) {
-                // Invalid args
-                // Works as intended with no change
-            } else if (value == 1) {
-                // Claimed
-                // Show toast requiring login
+
+            switch (value){
+                case -1:
+                    // Invalid args
+                    // Works as intended with no change
+                    break;
+
+                case 0:
+                    // Server not claimed
+                    // Dismiss login modal, show claim modal
+                    loginModal.hide();
+                    claimModal.show();
+                    break;
+                
+                case 1:
+                    // Claimed
+                    // Show toast requiring login
+                    alert("Server Claimed!");
+                    break;
             }
         });
     }
@@ -107,9 +115,12 @@ function claimConfirm() {
         alert(`This is your new API token. This will only be shown once: be sure to write it down!\n${value}`);
         claimModal.hide();
         loginModal.show();
-    })
+    });
+}
 
-
+function updateSettingsDisp() {
+    alert("Tab clicked");
+    pywebview.api.updateSettingsDisp();
 }
 
 function showResponse(response) {
