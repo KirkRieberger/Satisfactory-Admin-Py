@@ -42,25 +42,18 @@ def main(window: webview.Window):
 
 
 def updateStatusDisp(window: webview.Window, newState: str) -> None:
-    statusRun = window.dom.get_element("#run")
-    statusStart = window.dom.get_element("#start")
-    statusPause = window.dom.get_element("#pause")
-    statusStop = window.dom.get_element("#stop")
+    status = window.dom.get_element("#status")
 
-    statusRun.classes.append("d-none")
-    statusStart.classes.append("d-none")
-    statusPause.classes.append("d-none")
-    statusStop.classes.append("d-none")
     match newState:
         case "idle":
-            statusStop.classes.remove("d-none")
+            status.classes = ["bi", "bi-stop-circle-fill", "text-danger"]
         case "loading":
-            statusStart.classes.remove("d-none")
+            status.classes = ["bi", "bi-skip-end-circle-fill", "text-warning"]
         case "playing":
             if server.paused:
-                statusPause.classes.remove("d-none")
+                status.classes = ["bi", "bi-pause-circle-fill", "text-warning"]
             else:
-                statusRun.classes.remove("d-none")
+                status.classes = ["bi", "bi-play-circle-fill", "text-success"]
 
 
 def updateSettingsDisp() -> None:
@@ -80,4 +73,4 @@ if __name__ == "__main__":
     window = webview.create_window(
         "Satisfactory Server Administrator V0.0.4", "./index.html", js_api=server
     )
-    webview.start(main, window, debug=False)  # Blocking after start
+    webview.start(main, window, debug=True)  # Blocking after start
