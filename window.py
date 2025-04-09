@@ -63,6 +63,18 @@ def updateStatusDisp(window: webview.Window, newState: str) -> None:
                 statusRun.classes.remove("d-none")
 
 
+def updateSettingsDisp() -> None:
+    # Standard Settings
+    settingsAutoPause = window.dom.get_element("#autoPause")
+    settingsAutoSaveDC = window.dom.get_element("#autoSaveOnDC")
+    settingsTelemetry = window.dom.get_element("#telemetry")
+    settingsSaveInterval = window.dom.get_element("#saveInterval")
+    settingsrestartTime = window.dom.get_element("#restartTime")
+    settingsNetworkQuality = window.dom.get_element("#networkQuality")
+    print(settingsAutoPause.text)
+    pass
+
+
 if __name__ == "__main__":
     server = SatisfactoryServerAdmin()
     window = webview.create_window(
