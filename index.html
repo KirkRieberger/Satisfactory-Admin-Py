@@ -42,7 +42,8 @@
                     </li>
                     <li class="nav-item">
                         <button role="tab" id="settingsLink" class="nav-link" type="button" data-bs-target="#settings"
-                            data-bs-toggle="tab" aria-selected="false" aria-controls="tabContainer">Settings</button>
+                            data-bs-toggle="tab" aria-selected="false" aria-controls="tabContainer"
+                            onclick="updateSettingsDisp()">Settings</button>
                     </li>
                     <li class="nav-item">
                         <button role="tab" id="sessionsLink" class="nav-link" type="button" data-bs-target="#sessions"
@@ -95,7 +96,7 @@
             <!-- Settings Tab -->
             <section role="tabpanel" id="settings" class="tab-pane" tabindex="-1" aria-labelledby="settingsLink">
                 <h3 class="d-none">Settings</h3>
-                <!-- TODO: Only update wne tab initially activated -->
+                <!-- TODO: Only update when tab initially activated -->
                 <div class="row mt-4 justify-content-center">
                     <div class="col-6">
                         <!-- Server Options Card -->
