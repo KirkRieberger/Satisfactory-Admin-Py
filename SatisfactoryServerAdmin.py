@@ -10,8 +10,8 @@ from random import randint
 from sys import exit as sys_ex
 
 __author__ = "Kirk Rieberger"
-__version__ = "0.0.4"
-__date__ = "Dec 15, 2024"
+__version__ = "0.0.154"
+__date__ = "Apr 09, 2025"
 
 
 class SatisfactoryServerAdmin:

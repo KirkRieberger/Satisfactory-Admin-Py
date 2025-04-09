@@ -71,6 +71,6 @@ def updateSettingsDisp() -> None:
 if __name__ == "__main__":
     server = SatisfactoryServerAdmin()
     window = webview.create_window(
-        "Satisfactory Server Administrator V0.0.4", "./index.html", js_api=server
+        "Satisfactory Server Administrator V0.0.154", "./index.html", js_api=server
     )
     webview.start(main, window, debug=True)  # Blocking after start
