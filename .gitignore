@@ -4,3 +4,4 @@ QueryState.json
 *.pem
 .*.*
 .venv
+test.*
