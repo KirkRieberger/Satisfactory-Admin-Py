@@ -78,10 +78,11 @@ function claimServer() {
         let response = pywebview.api.claimServerInit(adr, port);
         response.then((value) => {
 
-            switch (value){
+            switch (value) {
                 case -1:
                     // Invalid args
                     // Works as intended with no change
+                    // Form validation stops propagation
                     break;
 
                 case 0:
@@ -90,7 +91,7 @@ function claimServer() {
                     loginModal.hide();
                     claimModal.show();
                     break;
-                
+
                 case 1:
                     // Claimed
                     // Show toast requiring login
@@ -119,7 +120,6 @@ function claimConfirm() {
 }
 
 function updateSettingsDisp() {
-    alert("Tab clicked");
     pywebview.api.updateSettingsDisp();
 }
 
@@ -129,4 +129,8 @@ function showResponse(response) {
 
 function applyOptions() {
     alert("Apply Options");
+}
+
+function applyAGS() {
+    alert("Apply AGS");
 }
