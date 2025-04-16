@@ -540,7 +540,10 @@ class SatisfactoryServerAdmin:
         self.saveOnDisconnect = currentOptions["FG.DSAutoSaveOnDisconnect"]
         self.autosaveInterval = currentOptions["FG.AutosaveInterval"]
         self.restartTime = currentOptions["FG.ServerRestartTimeSlot"]
-        self.sendGameplayData = currentOptions["FG.SendGameplayData"]
+        if currentOptions["FG.SendGameplayData"] == "True":
+            self.sendGameplayData = True
+        else:
+            self.sendGameplayData = False
         self.networkQuality = currentOptions["FG.NetworkQuality"]
 
     def _applyServerOptions(self) -> None:
@@ -705,16 +708,5 @@ class SatisfactoryServerAdmin:
 
 
 if __name__ == "__main__":
+    # All Transient
     server = SatisfactoryServerAdmin()
-    server.claimServerInit(adr="192.168.1.133")
-    # server.login("IP", "Key", 7777)
-    server.login(
-        "192.168.1.133",
-        "ewoJInBsIjogIkFQSVRva2VuIgp9.335C2A54DBDDC5D25BAF1003C8F61BEF5CF62F275F9FE6A7770550137979D0730EF2CA062E2CA767B1A53D0DC9BC863E2C065ACF4E8757A19C7E9B730536A7D6",
-        "7777",
-    )
-    # print(server.queryServerState())
-    # server._LightweightQuery()
-    server._renameServer("Potatoes")
-    server._LightweightQuery
-    print(server.serverName)
