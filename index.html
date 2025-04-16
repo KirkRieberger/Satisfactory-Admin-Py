@@ -104,7 +104,7 @@
                                     <span class="badge text-bg-warning" hidden>SERVER RESTART REQUIRED</span>
                                 </h3>
                             </header>
-                            <form class="card-body container-fluid" action="javascript:applyOptions()">
+                            <form class="card-body container-fluid" action="javascript:applyOptions()" id="optionsForm">
                                 <div class="row">
                                     <div class="col-auto">
                                         <div class="form-check form-switch">
@@ -161,23 +161,20 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="row justify-content-end">
-                                    <div class="col-auto">
-                                        <button class="btn btn-primary">Apply</button>
-                                    </div>
-                                </div>
                             </form>
+                            <div class="card-footer text-end">
+                                <button type="submit" form="optionsForm" class="btn btn-primary">Apply</button>
+                            </div>
                         </section>
                     </div>
-                </div>
-                <div class="row mt-4 justify-content-center">
+
                     <div class="col-6">
                         <!-- Advanced Game Settings Card -->
                         <section class="card h-100">
                             <header class="card-header">
                                 <h3>AGS</h3>
                             </header>
-                            <form class="card-body">
+                            <form class="card-body" action="javascript:applyAGS()" id="agsForm">
                                 <div class="row">
                                     <div class="col-auto">
                                         <div class="form-check form-switch">
@@ -236,12 +233,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row justify-content-end">
-                                    <div class="col-auto">
-                                        <button class="btn btn-primary">Apply</button>
-                                    </div>
-                                </div>
                             </form>
+                            <div class="card-footer text-end">
+                                <button type="submit" class="btn btn-primary" form="agsForm">Apply</button>
+                            </div>
                         </section>
                     </div>
                 </div>
