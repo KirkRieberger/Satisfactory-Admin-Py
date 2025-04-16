@@ -5,7 +5,7 @@ from SatisfactoryServerAdmin import SatisfactoryServerAdmin
 
 class WindowController:
 
-    def __init__(self, server):
+    def __init__(self, server: SatisfactoryServerAdmin):
         self.server = server
 
     def main(self, window: webview.Window):
@@ -77,18 +77,44 @@ class WindowController:
         settingsAutoSaveDC = self.window.dom.get_element("#autoSaveOnDC")
         settingsTelemetry = self.window.dom.get_element("#telemetry")
         settingsSaveInterval = self.window.dom.get_element("#saveInterval")
-        settingsrestartTime = self.window.dom.get_element("#restartTime")
+        settingsRestartTime = self.window.dom.get_element("#restartTime")
         settingsNetworkQuality = self.window.dom.get_element("#networkQuality")
-        print(self.window.dom.get_element("#status"))
-        pass
+
+        if self.server.autoPause:
+            settingsAutoPause.attributes["checked"] = ""
+        else:
+            settingsAutoPause.attributes["checked"] = None
+
+        if self.server.saveOnDisconnect:
+            settingsAutoSaveDC.attributes["checked"] = ""
+        else:
+            settingsAutoSaveDC.attributes["checked"] = None
+
+        if self.server.sendGameplayData:
+            settingsTelemetry.attributes["checked"] = ""
+        else:
+            settingsTelemetry.attributes["checked"] = None
+
+        settingsSaveInterval.value = int(float(self.server.autosaveInterval))
+        settingsRestartTime.value = int(float(self.server.restartTime))
+
+        if self.server.networkQuality == 0:
+            settingsNetworkQuality.value = 0
+        elif self.server.networkQuality == 1:
+            settingsNetworkQuality.value = 1
+        elif self.server.networkQuality == 2:
+            settingsNetworkQuality.value = 2
+        elif self.server.networkQuality == 3:
+            settingsNetworkQuality.value = 3
 
 
 if __name__ == "__main__":
     server = SatisfactoryServerAdmin()
     windowController = WindowController(server)
     window = webview.create_window(
-        "Satisfactory Server Administrator V0.0.154", "./index.html", js_api=server
+        "Satisfactory Server Administrator V0.0.154", "./index.html",
+        js_api=server, min_size=(1024, 800)
     )
     window.expose(windowController.updateSettingsDisp)
     webview.start(windowController.main, window,
-                  debug=False)  # Blocking after start
+                  debug=True)  # Blocking after start
