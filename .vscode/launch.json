@@ -2,6 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Python",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
             "name": "Launch localhost",
             "type": "firefox",
             "request": "launch",
@@ -10,13 +18,5 @@
             "webRoot": "${workspaceFolder}",
             "tmpDir": "/home/kirk/firefoxTmp"
         },
-        {
-            "name": "Launch Python",
-            "type": "debugpy",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal",
-            "justMyCode": false
-        }
     ]
 }
