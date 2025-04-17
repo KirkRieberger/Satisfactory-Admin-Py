@@ -115,6 +115,7 @@ function claimConfirm() {
     response.then((value) => {
         alert(`This is your new API token. This will only be shown once: be sure to write it down!\n${value}`);
         claimModal.hide();
+        pywebview.api.login();
         loginModal.show();
     });
 }

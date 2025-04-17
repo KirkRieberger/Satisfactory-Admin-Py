@@ -210,10 +210,20 @@ class SatisfactoryServerAdmin:
         # TODO: Verify input before attempting connect
         if not port.isnumeric():
             raise ValueError("Provided port is not numeric")
+        if ip is None:
+            # Use ip already stored
+            pass
+        else:
+            self.ip = ip
 
-        self.ip = ip
         self.port = int(port)
-        self.token = token
+
+        if token is None:
+            # Use token already stored
+            pass
+        else:
+            self.token = token
+
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
         # Split token into payload and key
