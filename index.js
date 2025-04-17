@@ -95,7 +95,7 @@ function claimServer() {
                 case 1:
                     // Claimed
                     // Show toast requiring login
-                    alert("Server Claimed!");
+                    alert("Server Claimed! The log may have more information");
                     break;
             }
         });
