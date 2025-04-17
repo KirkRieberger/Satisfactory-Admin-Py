@@ -480,17 +480,6 @@ class SatisfactoryServerAdmin:
             self.headers.update({"Authorization": f"Bearer {token}"})
             return True
 
-        # headers.update({"Content-Type": "application/json"})
-        # # Uses data=payload not, json=payload
-        # response = self._postJSONRequest(headers, payload)
-        # if response.status_code == requests.codes.ok:
-        #     # Strip out auth token
-        #     respJSON = response.json()
-        #     authToken = respJSON["data"]["authenticationToken"]
-        #     return (1, authToken)
-        # else:
-        #     return (0, response.status_code)
-
     def _queryServerState(self) -> None:
         """
         Query the server's state endpoint, and update class members
@@ -643,13 +632,7 @@ class SatisfactoryServerAdmin:
                 "AdminPassword": admPassword,
             },
         }
-        # payload = {
-        #     "function": "ClaimServer",
-        #     "data": {
-        #         "ServerName": "Test",
-        #         "AdminPassword": "Test#2-ElectricBoogaloo",
-        #     },
-        # }
+
         response = self._postJSONRequest(self.headers, payload)
         # TODO: Extract new auth token. Provide to user
         # Update token to drop initial admin
