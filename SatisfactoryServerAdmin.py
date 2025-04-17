@@ -293,6 +293,12 @@ class SatisfactoryServerAdmin:
                 self.address, headers=headers, json=payload, verify=True
             )
             return response
+        except requests.exceptions.SSLError as e:
+            self.logger.error(
+                f"Connection to {self.address} failed with error 495: SSL\
+                    Certificate error!")
+            self.logger.error(e.args[0].reason)
+            return 495
         except requests.exceptions.ConnectionError:
             self.logger.critical("Unable to contact server")
             # CloudFlare HTTP response 523: Origin Unreachable
@@ -456,6 +462,13 @@ class SatisfactoryServerAdmin:
             "data": {"MinimumPrivilegeLevel": "InitialAdmin"},
         }
         initResponse = self._postJSONRequest(self.headers, payload=payload)
+
+        if initResponse == 495:
+            # SSL Error
+            return False
+        elif initResponse == 523:
+            # Other connection error
+            return False
 
         data = initResponse.json()
         if "errorCode" in data:
@@ -710,3 +723,4 @@ class SatisfactoryServerAdmin:
 if __name__ == "__main__":
     # All Transient
     server = SatisfactoryServerAdmin()
+    server.claimServerInit("192.168.1.133")
