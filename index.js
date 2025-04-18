@@ -56,14 +56,22 @@ function login() {
     let port = $("#port").val();
     let response = pywebview.api.login(adr, key, port);
 
-    response.then(function () {
+    response.then(function (value) {
+        console.log(value)
+        if (value != 204) {
+            // Clear fields
+            $("#address").val("");
+            $("#key").val("");
+            $("#port").val("7777");
+            return
+        }
         loginModal.hide();
     }).catch(error => {
         showResponse(error);
         // Clear fields
         $("#address").val("");
         $("#key").val("");
-        $("#port").val("");
+        $("#port").val("7777");
     });
 }
 
@@ -116,7 +124,7 @@ function claimConfirm() {
         alert(`This is your new API token. This will only be shown once: be sure to write it down!\n${value}`);
         claimModal.hide();
         pywebview.api.login();
-        loginModal.show();
+        // loginModal.show();
     });
 }
 
