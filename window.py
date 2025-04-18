@@ -109,12 +109,13 @@ class WindowController:
 
 
 if __name__ == "__main__":
-    server = SatisfactoryServerAdmin()
+    server = SatisfactoryServerAdmin(validateSSL=False)
     windowController = WindowController(server)
     window = webview.create_window(
-        "Satisfactory Server Administrator V0.0.154", "./index.html",
+        "Satisfactory Server Administrator V0.0.170", "./index.html",
         js_api=server, min_size=(1024, 800)
     )
     window.expose(windowController.updateSettingsDisp)
     webview.start(windowController.main, window,
                   debug=True)  # Blocking after start
+    print("closed")

@@ -10,7 +10,7 @@ from random import randint
 from sys import exit as sys_ex
 
 __author__ = "Kirk Rieberger"
-__version__ = "0.0.154"
+__version__ = "0.0.170"
 __date__ = "Apr 09, 2025"
 
 
@@ -85,7 +85,8 @@ class SatisfactoryServerAdmin:
         # Requires name of save file to download
     ]
 
-    def __init__(self, ip: str = None, token: str = None, port: int = 7777):
+    def __init__(self, ip: str = None, token: str = None, port: int = 7777,
+                 validateSSL: bool = True):
         """
         Initializes a new instance of the server object
 
@@ -100,6 +101,7 @@ class SatisfactoryServerAdmin:
         """
 
         # Instance variables
+        self.validateSSL = validateSSL
         #  Class state
         self.address = None
         self.ip = None
@@ -224,6 +226,11 @@ class SatisfactoryServerAdmin:
         else:
             self.token = token
 
+        if (ip is None) or (token is None):
+            # Cannot perform interactive login without both address and
+            #   token. Return
+            return
+
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
         self.logger.info(f"Connecting to {self.address}...")
         # Split token into payload and key
@@ -300,7 +307,7 @@ class SatisfactoryServerAdmin:
             self.logger.error("")  # TODO: Can't error. used for login
         try:
             response = requests.post(
-                self.address, headers=headers, json=payload, verify=True
+                self.address, headers=headers, json=payload, verify=self.validateSSL
             )
             return response
         except requests.exceptions.SSLError as e:
@@ -646,6 +653,9 @@ class SatisfactoryServerAdmin:
         response = self._postJSONRequest(self.headers, payload)
         # TODO: Extract new auth token. Provide to user
         # Update token to drop initial admin
+
+        # Gives "administrator" token, not API token.
+        # TODO: Request API token
         self.token = response.json()["data"]["authenticationToken"]
         return self.token
 
