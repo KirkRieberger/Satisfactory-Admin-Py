@@ -11,7 +11,7 @@ from sys import exit as sys_ex
 
 __author__ = "Kirk Rieberger"
 __version__ = "0.0.170"
-__date__ = "Apr 09, 2025"
+__date__ = "Apr 18, 2025"
 
 
 class SatisfactoryServerAdmin:
@@ -157,8 +157,11 @@ class SatisfactoryServerAdmin:
         # Initialize logger
         self.logger = logging.getLogger("Server-Connect")
         logging.basicConfig(
-            filename="serverConnect.log", encoding="utf-8", level=logging.DEBUG
-        )
+            filename="serverConnect.log",
+            encoding="utf-8",
+            level=logging.DEBUG,
+            format="[%(asctime)s] %(levelname)s:%(filename)s:%(message)s",
+            datefmt="%Y/%m/%d - %H:%M:%S")
 
         if ip is None:
             self.logger.info("No address given! Creating empty object")
