@@ -70,7 +70,7 @@ _prettySchematic = {
 }
 
 
-def getSchematic(serverSchematic: str):
+def getSchematic(serverSchematic: str) -> str:
     """
         Converts given Satisfactory Dedicated Server format schematic
         string to a human-readable form
@@ -78,10 +78,10 @@ def getSchematic(serverSchematic: str):
     if serverSchematic in _prettySchematic:
         return _prettySchematic[serverSchematic]
     else:
-        return None
+        return "None selected"
 
 
-def getPhase(serverPhase: str):
+def getPhase(serverPhase: str) -> str:
     """
         Converts given Satisfactory Dedicated Server format phase string
         to a human-readable form
@@ -89,4 +89,4 @@ def getPhase(serverPhase: str):
     if serverPhase in _prettyPhase:
         return _prettyPhase[serverPhase]
     else:
-        return None
+        return "Phase Error!"

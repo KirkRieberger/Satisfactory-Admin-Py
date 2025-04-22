@@ -519,27 +519,16 @@ class SatisfactoryServerAdmin:
         self.tier = content["techTier"]
 
         # Prettify phase and schematic
-        if SatisfactoryLuT.getSchematic(content["activeSchematic"]):
-            # print(content["activeSchematic"])
-            self.schematic = SatisfactoryLuT.getSchematic(
-                content["activeSchematic"])
-        else:
-            self.schematic = "None selected"
+        self.schematic = SatisfactoryLuT.getSchematic(
+            content["activeSchematic"])
 
-        # print(content["gamePhase"])
-
-        if SatisfactoryLuT.getPhase(content["gamePhase"]):
-            # print(content["gamePhase"])
-            self.gamePhase = SatisfactoryLuT.getPhase(content["gamePhase"])
-        else:
-            self.gamePhase = "Phase Error!"
+        self.gamePhase = SatisfactoryLuT.getPhase(content["gamePhase"])
 
         self.duration = content["totalGameDuration"]
         self.tickRate = round(content["averageTickRate"], 2)
         self.paused = content["isGamePaused"]
         self.autoSessionName = content["autoLoadSessionName"]
         self.logger.info(content)
-        return content  # Temp
 
     # Modify Server Options
 
