@@ -189,6 +189,9 @@ class SatisfactoryServerAdmin:
         """
         return f"SatisfactoryServer('{self.address}', '{self.token}')"
 
+    def __del__(self):
+        self.logger.info("Server Admin killed")
+
     def login(self, ip: str = None, token: str = None, port: str = "7777") -> int:
         """
         Attempts to perform an API key login with the specified server.
