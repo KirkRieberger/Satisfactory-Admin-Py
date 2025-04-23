@@ -7,6 +7,7 @@ import base64
 import logging
 import SatisfactoryLuT
 from random import randint
+from logging.handlers import RotatingFileHandler
 from sys import exit as sys_ex
 
 __author__ = "Kirk Rieberger"
@@ -157,11 +158,17 @@ class SatisfactoryServerAdmin:
         # Initialize logger
         self.logger = logging.getLogger("Server-Connect")
         logging.basicConfig(
-            filename="serverConnect.log",
-            encoding="utf-8",
             level=logging.DEBUG,
             format="[%(asctime)s] %(levelname)s:%(filename)s:%(message)s",
-            datefmt="%Y/%m/%d - %H:%M:%S")
+            datefmt="%Y/%m/%d - %H:%M:%S",
+            handlers=[
+                RotatingFileHandler(filename="SatisfactoryServerAdmin.log",
+                                    mode="a",
+                                    maxBytes=10485760,
+                                    backupCount=3,
+                                    encoding='UTF-8')
+            ]
+        )
 
         if ip is None:
             self.logger.info("No address given! Creating empty object")
@@ -310,7 +317,8 @@ class SatisfactoryServerAdmin:
         """
         # TODO: Move login check to each function, not POST
         if not self.loggedIn:
-            self.logger.error("")  # TODO: Can't error. used for login
+            # TODO: Can't error. used for login
+            self.logger.error("Not logged in!")
         try:
             response = requests.post(
                 self.address, headers=headers, json=payload, verify=self.validateSSL
