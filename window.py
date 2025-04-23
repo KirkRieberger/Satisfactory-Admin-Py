@@ -8,6 +8,21 @@ class WindowController:
 
     def __init__(self, server: SatisfactoryServerAdmin):
         self.server = server
+        self.run = True
+
+    def __str__(self):
+        pass
+
+    def __repr__(self):
+        pass
+
+    def __del__(self):
+        server.logger.info("Window Controller Deleted")
+        print("Controller __del__")
+        del self.server
+
+    def stop(self):
+        self.run = False
 
     def main(self, window: webview.Window):
         self.window = window
@@ -33,7 +48,7 @@ class WindowController:
 
         # Window Update Loop
         # TODO: Check which tab is active, update accordingly
-        while True:  # TODO: Use LW Query to determine if update is needed
+        while self.run:  # TODO: Use LW Query to determine if update is needed
             if server.loggedIn:
                 server.pollServerState()
                 serverName.text = self.server.serverName
@@ -118,5 +133,8 @@ if __name__ == "__main__":
     )
     window.expose(windowController.updateSettingsDisp)
     webview.start(windowController.main, window,
-                  debug=True)  # Blocking after start
+                  debug=False, gui='qt')  # Blocking after start
+
+    windowController.stop()
     print("closed")
+    del windowController
