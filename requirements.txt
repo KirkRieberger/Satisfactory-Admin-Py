@@ -1,4 +1,6 @@
-# requirements.txt v0.0.1
+# requirements.txt v0.0.2
 numpy
 pywebview
 requests
+QtPy
+PySide6
