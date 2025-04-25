@@ -47,15 +47,13 @@ class WindowController:
         updateSettings = None
 
         # Window Update Loop
-        # TODO: Check which tab is active, update accordingly
-        while self.run:  # TODO: Use LW Query to determine if update is needed
+        while self.run:
             if server.loggedIn:
                 server.pollServerState()
                 serverName.text = self.server.serverName
                 sessionName.text = self.server.sessionName
                 self.updateStatusDisp(self.server.serverState)
                 # Update dashboard
-                # TODO: Factor into bespoke function
                 if updateSettings:
                     self.updateSettingsDisp(window)
                 phase.text = self.server.gamePhase

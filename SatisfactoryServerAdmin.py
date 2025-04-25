@@ -222,7 +222,6 @@ class SatisfactoryServerAdmin:
         Returns:
             int: HTTP status code 204 if successful
         """
-        # TODO: Verify input before attempting connect
         if not port.isnumeric():
             raise ValueError("Provided port is not numeric")
         if ip is None:
@@ -258,7 +257,6 @@ class SatisfactoryServerAdmin:
                 self.logger.fatal(
                     "Provided token payload is not Base 64 encoded. Exiting..."
                 )
-                # TODO: Shouldn't exit. Should raise exception for UI to handle
                 sys_ex()
 
             try:
@@ -268,7 +266,6 @@ class SatisfactoryServerAdmin:
                     "Provided token payload is invalid. Did you provide a\
                         Satisfactory Server API Token?"
                 )
-                # TODO: Shouldn't exit. Should raise exception for UI to handle
                 sys_ex()
         # else, assume just key in token
         else:
@@ -284,7 +281,6 @@ class SatisfactoryServerAdmin:
             # Unable to contact server at given address
             raise TimeoutError(
                 f"Connection to {self.address} failed with no response!")
-        # TODO: Raise different exception based on HTTP code
         if initResponse.status_code == requests.codes.no_content:
             self.logger.info("Connection Successful")
             self.logger.info(f"Authenticated with {authLevel} privilege")
@@ -315,9 +311,7 @@ class SatisfactoryServerAdmin:
             int: Cloudflare HTTP response 523 - Destination Unreachable
                 on timeout
         """
-        # TODO: Move login check to each function, not POST
         if not self.loggedIn:
-            # TODO: Can't error. used for login
             self.logger.error("Not logged in!")
         try:
             response = requests.post(
@@ -518,7 +512,6 @@ class SatisfactoryServerAdmin:
         # Get response
         response = self._postJSONRequest(
             self.headers, {"function": "QueryServerState"})
-        # TODO: Check if valid response
         self.logger.info(
             f"Received {response.status_code} response from server")
         content = json.loads(response.content)["data"]["serverGameState"]
@@ -549,7 +542,6 @@ class SatisfactoryServerAdmin:
         """
         response = self._postJSONRequest(
             self.headers, {"function": "GetServerOptions"})
-        # TODO: Check if valid response
         self.logger.info(
             f"Received {response.status_code} response from server")
         currentOptions = json.loads(response.content)["data"]["serverOptions"]
@@ -572,14 +564,12 @@ class SatisfactoryServerAdmin:
         pass
 
     def _queryAdvancedGameSettings(self) -> None:
-        # TODO:
         """
         Query the server's advanced game settings endpoint, and update class members
         """
         response = self._postJSONRequest(
             self.headers, {"function": "GetAdvancedGameSettings"}
         )
-        # TODO: Check if valid response
         self.logger.info(
             f"Received {response.status_code} response from server")
         ags = json.loads(response.content)["data"]["advancedGameSettings"]
@@ -603,7 +593,6 @@ class SatisfactoryServerAdmin:
     def _renameServer(self, newName: str) -> None:
         if not newName:
             self.logger.warning("No new server name provided!")
-            # TODO: Notify user newName is empty
         payload = {"function": "RenameServer", "data": {"ServerName": newName}}
         response = self._postJSONRequest(self.headers, payload)
         if response.status_code != 204:
@@ -612,13 +601,11 @@ class SatisfactoryServerAdmin:
                               status {response.status_code}! \nResponse: \
                               {response.content}"
             )
-        # TODO: Notify user of success
 
     # New Server Tasks
 
     def claimServerInit(self, adr: str = None, port: str = "7777") -> int:
         """
-        TODO:
         Begins the server claiming process. Determines if a server is
         already claimed.
 
@@ -636,15 +623,13 @@ class SatisfactoryServerAdmin:
             return -1
         if self._passwordlessLogin(adr, port):
             # Do not give token here. This is initialAdmin token
-            return 0  # TODO: Confirm to UI server is unclaimed
+            return 0  # Confirm to UI server is unclaimed
             # UI to continue flow at claimServerSetup
         else:
             # Login Failed, assume server claimed
             return 1
 
     def claimServerSetup(self, newName: str, admPassword: str) -> None:
-        # TODO: Get ServerName and AdminPassword from UI
-        # TODO: [OPTIONAL] Set user password
         payload = {
             "function": "ClaimServer",
             "data": {
@@ -654,11 +639,9 @@ class SatisfactoryServerAdmin:
         }
 
         response = self._postJSONRequest(self.headers, payload)
-        # TODO: Extract new auth token. Provide to user
         # Update token to drop initial admin
 
         # Gives "administrator" token, not API token.
-        # TODO: Request API token
         self.token = response.json()["data"]["authenticationToken"]
         return self.token
 
