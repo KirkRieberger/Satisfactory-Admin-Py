@@ -87,6 +87,7 @@ class WindowController:
 
     def updateSettingsDisp(self) -> None:
         # Standard Settings
+        print("Update settings display")
         settingsAutoPause = self.window.dom.get_element("#autoPause")
         settingsAutoSaveDC = self.window.dom.get_element("#autoSaveOnDC")
         settingsTelemetry = self.window.dom.get_element("#telemetry")
@@ -123,7 +124,7 @@ class WindowController:
 
 
 if __name__ == "__main__":
-    server = SatisfactoryServerAdmin(validateSSL=False)
+    server = SatisfactoryServerAdmin()
     windowController = WindowController(server)
     window = webview.create_window(
         f"Satisfactory Server Administrator V{version}", "./index.html",
