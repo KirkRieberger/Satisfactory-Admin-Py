@@ -638,11 +638,17 @@ class SatisfactoryServerAdmin:
             },
         }
 
-        response = self._postJSONRequest(self.headers, payload)
+        # response = self._postJSONRequest(self.headers, payload)
+        # Need to do the post, not necessarily keep the response.
+        # Possibly parse out a response code
+        self._postJSONRequest(self.headers, payload)
         # Update token to drop initial admin
 
         # Gives "administrator" token, not API token.
-        self.token = response.json()["data"]["authenticationToken"]
+        # adminToken = response.json()["data"]["authenticationToken"]
+        commandOut = json.loads(self._runCommand("server.GenerateAPIToken"))[
+            'data']['commandResult']
+        self.token = str(commandOut).split(" ")[5]
         return self.token
 
     def _setClientPassword(self) -> None:
@@ -679,8 +685,15 @@ class SatisfactoryServerAdmin:
 
     # Miscellaneous
 
-    def _runCommand(self) -> None:
-        pass
+    def _runCommand(self, command: str) -> str:
+        payload = {
+            "function": "runCommand",
+            "data": {
+                "command": command
+            }
+        }
+        response = self._postJSONRequest(self.headers, payload)
+        return response.text
 
     def _serverShutdown(self) -> None:
         pass
@@ -711,5 +724,7 @@ class SatisfactoryServerAdmin:
 
 if __name__ == "__main__":
     # All Transient
-    server = SatisfactoryServerAdmin()
+    server = SatisfactoryServerAdmin(validateSSL=False)
     server.claimServerInit("192.168.1.133")
+    server.claimServerSetup("Bad Server", "BadPassword")
+    print(server._runCommand("server.generateAPIToken"))
