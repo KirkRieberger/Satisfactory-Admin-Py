@@ -1,6 +1,6 @@
 # requirements.txt v0.0.3
 numpy ~= 2.2
 pywebview ~= 5.4
-requests ~= 2.32.3
+requests ~= 2.32.4
 QtPy ~= 2.4.3
 PySide6 ~= 6.9.0
