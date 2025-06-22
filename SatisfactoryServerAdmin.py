@@ -695,8 +695,17 @@ class SatisfactoryServerAdmin:
         response = self._postJSONRequest(self.headers, payload)
         return response.text
 
-    def _serverShutdown(self) -> None:
-        pass
+    def serverShutdown(self) -> int:
+        payload = {
+            "function": "shutdown"
+        }
+
+        response = self._postJSONRequest(self.headers, payload)
+        if response.status_code != 204:
+            self.logger.error(
+                "Server did not process shutdown command properly!")
+
+        return response.status_code
 
     # User Interface
 
@@ -725,6 +734,9 @@ class SatisfactoryServerAdmin:
 if __name__ == "__main__":
     # All Transient
     server = SatisfactoryServerAdmin(validateSSL=False)
+    server.login("192.168.1.17", "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711")
+    server._serverShutdown()
+
     server.claimServerInit("192.168.1.133")
     server.claimServerSetup("Bad Server", "BadPassword")
     print(server._runCommand("server.generateAPIToken"))
