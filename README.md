@@ -1,9 +1,23 @@
 # Satisfactory Admin Py
 ## A web app to manage Satisfactory Dedicated Servers
 > [!IMPORTANT]
-> This repo is a work in progress! Only rudimentary functionality exists!
+> This repo is a work in progress! Only rudimentary functionality exists! API changes may be made frequently.
 
 This project aims to implement most* of the Satisfactory Dedicated Server API functions in an easy-to-use interface.
+
+The project consists of a few modules:
+- Frontend
+  - HTML/CSS/JavaScript
+    - frontend/index.html
+    - frontend/index.css
+    - frontend/index.js
+- Backend
+  - Python
+    - backend/SatisfactoryServerAdmin.py
+    - backend/SatisfactoryLuT.py
+- Business Logic
+  - Python
+    - window.py
 
 ## TODO:
 #### Lightweight Query API
