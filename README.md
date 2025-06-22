@@ -24,7 +24,7 @@ This project aims to implement most* of the Satisfactory Dedicated Server API fu
 - [ ] ApplyAdvancedGameSettings
 - [x] RenameServer
 ##### New Server Tasks
-- [ ] ClaimServer
+- [x] ClaimServer
 - [ ] SetClientPassword
 - [ ] SetAdminPassword
 ##### Save/Session Management
