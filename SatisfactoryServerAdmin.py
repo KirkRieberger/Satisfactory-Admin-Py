@@ -164,7 +164,7 @@ class SatisfactoryServerAdmin:
             handlers=[
                 RotatingFileHandler(filename="SatisfactoryServerAdmin.log",
                                     mode="a",
-                                    maxBytes=10485760,
+                                    maxBytes=10485760,  # 10 MiB
                                     backupCount=3,
                                     encoding='UTF-8')
             ]
@@ -232,15 +232,18 @@ class SatisfactoryServerAdmin:
 
         self.port = int(port)
 
-        if token is None:
+        if (token is None) or (token == "REUSE"):
             # Use token already stored
-            pass
+            token = self.token
         else:
             self.token = token
+
+        print(token)
 
         if (ip is None) or (token is None):
             # Cannot perform interactive login without both address and
             #   token. Return
+            self.logger.error("No IP provided. Cannot log in!")
             return
 
         self.address = "https://" + ip + ":" + str(port) + "/api/v1"
@@ -629,7 +632,7 @@ class SatisfactoryServerAdmin:
             # Login Failed, assume server claimed
             return 1
 
-    def claimServerSetup(self, newName: str, admPassword: str) -> None:
+    def claimServerSetup(self, newName: str, admPassword: str) -> str:
         payload = {
             "function": "ClaimServer",
             "data": {
@@ -648,7 +651,7 @@ class SatisfactoryServerAdmin:
         # adminToken = response.json()["data"]["authenticationToken"]
         commandOut = json.loads(self._runCommand("server.GenerateAPIToken"))[
             'data']['commandResult']
-        self.token = str(commandOut).split(" ")[5]
+        self.token = str(commandOut).split(" ")[5].strip()
         return self.token
 
     def _setClientPassword(self) -> None:
@@ -734,8 +737,13 @@ class SatisfactoryServerAdmin:
 if __name__ == "__main__":
     # All Transient
     server = SatisfactoryServerAdmin(validateSSL=False)
-    server.login("192.168.1.17", "ewoJInBsIjogIkFQSVRva2VuIgp9.8A737E3138243B97CE20CA13BC1A8075EDFBF1FFA88EA7797A4AB9BF2683495B47286F2188769B50B43ECC6E0C8210F18F8A85F649EED540230AFAA685958711")
-    server._serverShutdown()
+    res = server.claimServerInit("192.168.1.133")
+    if res != 0:
+        print(f"Server claim error! Code {res}")
+        exit()
+    res = server.claimServerSetup("Name", "Pass")
+    print(res)
+    pass
 
     server.claimServerInit("192.168.1.133")
     server.claimServerSetup("Bad Server", "BadPassword")

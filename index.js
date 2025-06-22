@@ -113,6 +113,9 @@ function claimServer() {
 function claimConfirm() {
     // Only arrives here if passwords match
     // Check passwords match .setCustomValidity()
+    let adr = $("#address").val();
+    let token = "REUSE";
+    let port = $("#port").val();
     let newName = $('#newName').val();
     let adminPassword = $('#adminPassword').val();
 
@@ -121,9 +124,9 @@ function claimConfirm() {
     // Replace with a modal so it looks nice
 
     response.then((value) => {
-        alert(`This is your new API token. This will only be shown once: be sure to write it down!\n${value}`);
+        alert(`This is your new API token. This will only be shown once: be sure to write it down! ${value}`);
         claimModal.hide();
-        pywebview.api.login();
+        pywebview.api.login(adr, token, port);
         // loginModal.show();
     });
 }

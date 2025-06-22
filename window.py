@@ -124,7 +124,7 @@ class WindowController:
 
 
 if __name__ == "__main__":
-    server = SatisfactoryServerAdmin()
+    server = SatisfactoryServerAdmin(validateSSL=False)
     windowController = WindowController(server)
     window = webview.create_window(
         f"Satisfactory Server Administrator V{version}", "./index.html",
