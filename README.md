@@ -38,8 +38,8 @@ This project aims to implement most* of the Satisfactory Dedicated Server API fu
 - [ ] UploadSaveGame
 - [ ] DownloadSaveGame
 ##### Miscellaneous
-- [ ] RunCommand
-- [ ] Shutdown
+- [x] RunCommand
+- [x] Shutdown
 
 #### User Interface
 - [x] Basic Layout
