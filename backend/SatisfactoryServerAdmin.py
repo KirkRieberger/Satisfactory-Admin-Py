@@ -5,7 +5,7 @@ import select
 import json
 import base64
 import logging
-import SatisfactoryLuT
+import backend.SatisfactoryLuT as SatisfactoryLuT
 from random import randint
 from logging.handlers import RotatingFileHandler
 from sys import exit as sys_ex

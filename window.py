@@ -1,7 +1,7 @@
 from time import sleep
 import webview
-from SatisfactoryServerAdmin import SatisfactoryServerAdmin
-from SatisfactoryServerAdmin import __version__ as version
+from backend.SatisfactoryServerAdmin import SatisfactoryServerAdmin
+from backend.SatisfactoryServerAdmin import __version__ as version
 
 
 class WindowController:
@@ -127,8 +127,10 @@ if __name__ == "__main__":
     server = SatisfactoryServerAdmin(validateSSL=False)
     windowController = WindowController(server)
     window = webview.create_window(
-        f"Satisfactory Server Administrator V{version}", "./index.html",
-        js_api=server, min_size=(1024, 800)
+        f"Satisfactory Server Administrator V{version}",
+        "./frontend/index.html",
+        js_api=server,
+        min_size=(1024, 800)
     )
     window.expose(windowController.updateSettingsDisp)
     webview.start(windowController.main, window,
