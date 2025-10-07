@@ -1,5 +1,5 @@
 # requirements.txt v0.0.3
-numpy ~= 2.2
+numpy ~= 2.3
 pywebview ~= 5.4
 requests ~= 2.32.4
 QtPy ~= 2.4.3
